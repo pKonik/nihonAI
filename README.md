@@ -1,7 +1,8 @@
 # NihonAI
 
-NihonAI es una aplicación web personal para guardar y organizar vocabulario
-encontrado durante el estudio y la inmersión en japonés.
+NihonAI es una plataforma personal para aprender japonés. Su objetivo principal
+es integrar un lector de manga con minería de vocabulario y repetición
+espaciada, manteniendo también la incorporación manual de palabras.
 
 El proyecto también funciona como un recorrido práctico para aprender
 desarrollo web moderno paso a paso. La primera versión guardará las palabras
@@ -10,8 +11,9 @@ incorporarán en fases posteriores.
 
 ## Estado actual
 
-Fase 1 completada: proyecto inicial configurado. La aplicación muestra una
-pantalla de bienvenida, pero todavía no incluye el formulario de vocabulario.
+Fase 2 completada: la aplicación permite añadir vocabulario, mostrarlo en una
+lista y eliminarlo. Los datos viven únicamente en el estado de React y
+desaparecen al recargar la página.
 
 ## Tecnologías
 
@@ -27,7 +29,8 @@ La interfaz utiliza las fuentes del sistema para que la compilación no dependa
 de descargar archivos tipográficos externos.
 
 Supabase, PostgreSQL y Vercel están previstos para fases posteriores, pero
-todavía no forman parte de la aplicación.
+todavía no forman parte de la aplicación. `localStorage` no se utilizará como
+persistencia principal.
 
 ## Requisitos
 
@@ -92,11 +95,18 @@ Los archivos `.env*` están excluidos por `.gitignore`.
 nihonai/
 ├── public/                 # Archivos estáticos
 ├── src/
-│   └── app/
-│       ├── favicon.ico     # Icono del sitio
-│       ├── globals.css     # Estilos globales y Tailwind CSS
-│       ├── layout.tsx      # Estructura y metadatos compartidos
-│       └── page.tsx        # Página principal
+│   ├── app/
+│   │   ├── favicon.ico     # Icono del sitio
+│   │   ├── globals.css     # Estilos globales y Tailwind CSS
+│   │   ├── layout.tsx      # Estructura y metadatos compartidos
+│   │   └── page.tsx        # Página principal
+│   ├── components/
+│   │   └── vocabulary/
+│   │       ├── VocabularyApp.tsx
+│   │       ├── VocabularyForm.tsx
+│   │       └── VocabularyList.tsx
+│   └── types/
+│       └── vocabulary.ts   # Modelo de una entrada de vocabulario
 ├── AGENTS.md               # Instrucciones permanentes para agentes
 ├── CLAUDE.md               # Referencia a AGENTS.md creada por Next.js
 ├── next.config.ts          # Configuración de Next.js
@@ -105,15 +115,16 @@ nihonai/
 └── README.md               # Documentación del proyecto
 ```
 
+## Funcionalidades actuales
+
+- formulario para palabra, lectura, significado, tipo, JLPT, ejemplo y fuente;
+- validación de palabra, lectura y significado;
+- lista reactiva de vocabulario;
+- eliminación de entradas;
+- estado vacío cuando todavía no hay vocabulario.
+
 ## Próxima fase
 
-La fase 2 añadirá, después de su aprobación:
-
-- el tipo TypeScript de una entrada de vocabulario;
-- un formulario con validación básica;
-- estado local de React;
-- una lista de palabras;
-- eliminación de registros.
-
-Los datos desaparecerán al recargar la página hasta que se implemente
-`localStorage` en una fase posterior.
+La fase 3 configurará Supabase, autenticación y las políticas de seguridad que
+servirán como base para la persistencia. Después se conectará el modelo de
+vocabulario y, en fases separadas, se construirá el lector de manga.
