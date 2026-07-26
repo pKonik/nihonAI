@@ -47,3 +47,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Las Skills deben consumir la documentación relevante de `docs/` como fuente de verdad y no duplicar sus reglas.
 - Mantén las decisiones permanentes del proyecto en `docs/` y reserva las Skills para procedimientos estables.
 - No crees nuevas Skills sin aprobación explícita.
+
+## Revisión de seguridad
+
+- Antes de finalizar cualquier implementación, actúa como Senior Application Security Engineer.
+- Revisa críticamente autenticación, autorización, validación de datos, secretos, dependencias y superficies de ataque relacionadas con el cambio.
+- Corrige los riesgos relevantes cuando sea posible sin ampliar innecesariamente el alcance.
+- Si no detectas riesgos relevantes, indícalo brevemente.

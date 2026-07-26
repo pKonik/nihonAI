@@ -17,17 +17,18 @@ Su propósito es servir como la fuente de verdad sobre cómo está organizado el
 
 ## Estado actual
 
-Actualmente la fase 3 está completada.
-
 La aplicación dispone de:
 
 - registro e inicio de sesión mediante Supabase Auth;
 - confirmación de correo electrónico;
 - renovación automática de sesión mediante cookies SSR;
 - protección de rutas autenticadas;
-- integración verificada con el proyecto remoto de Supabase.
+- integración verificada con el proyecto remoto de Supabase;
+- modelo persistente de vocabulario versionado mediante migraciones;
+- aislamiento de las entradas por usuario mediante RLS.
 
-La siguiente fase incorporará la persistencia del sistema de vocabulario.
+El formulario y la colección todavía funcionan únicamente en memoria. La
+integración del CRUD con Supabase pertenece a una fase posterior.
 
 ---
 
@@ -58,6 +59,8 @@ Actualmente el proyecto utiliza:
 - ESLint
 - Supabase Auth
 - Cliente SSR de Supabase
+- PostgreSQL de Supabase
+- Supabase CLI
 - Node.js
 - npm
 - Git
@@ -76,6 +79,9 @@ nihonai/
 │   ├── types/
 │   └── ...
 ├── docs/
+├── supabase/
+│   ├── migrations/
+│   └── tests/
 ├── AGENTS.md
 ├── README.md
 └── ...
@@ -91,7 +97,7 @@ La arquitectura crecerá de forma incremental conforme avance el proyecto.
 
 Las próximas fases incorporarán módulos como:
 
-- persistencia del vocabulario;
+- integración del CRUD de vocabulario;
 - OCR;
 - lector de manga;
 - sistema de repetición espaciada (FSRS);

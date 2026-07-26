@@ -33,6 +33,28 @@ Estos campos podrán ampliarse en el futuro, pero los cambios deberán mantener 
 
 ---
 
+## Modelo persistente
+
+La migración
+`supabase/migrations/20260726000000_create_vocabulary_entries.sql` define la
+tabla `public.vocabulary_entries`.
+
+Cada fila contiene:
+
+- `id`: identificador UUID generado por PostgreSQL;
+- `user_id`: propietario relacionado con `auth.users(id)`;
+- `word`, `reading` y `meaning`: textos obligatorios y no vacíos;
+- `part_of_speech`: uno de los tipos de palabra admitidos por el dominio;
+- `jlpt_level`: nivel entre `N5` y `N1`, o `Sin clasificar`;
+- `example` y `source`: textos opcionales;
+- `created_at` y `updated_at`: fechas gestionadas por PostgreSQL.
+
+Los valores permitidos de `part_of_speech` y `jlpt_level` coinciden con los
+valores actuales de la aplicación. Un trigger actualiza `updated_at` cuando
+cambia una entrada.
+
+---
+
 ## Principios del dominio
 
 Toda modificación del sistema de vocabulario debe respetar los siguientes principios:
@@ -60,19 +82,25 @@ La aplicación dispone de:
 - eliminación de entradas;
 - estado vacío cuando no existen palabras.
 
-La persistencia todavía no forma parte del sistema.
+La interfaz todavía no consulta ni modifica el modelo persistente.
 
 ---
 
 ## Persistencia
 
-La siguiente fase incorporará PostgreSQL mediante Supabase.
+La persistencia utiliza PostgreSQL mediante Supabase. La migración se despliega
+con Supabase CLI para conservar el historial del esquema.
 
-Cada entrada almacenará un propietario.
-
-El acceso deberá protegerse mediante Row Level Security (RLS), garantizando que cada usuario únicamente pueda acceder a su propio vocabulario.
+`user_id` utiliza `auth.uid()` como valor predeterminado. Row Level Security
+(RLS) restringe las operaciones de lectura, creación, actualización y
+eliminación a las filas del usuario autenticado. El rol `anon` no tiene acceso a
+la tabla y `authenticated` solo recibe los permisos necesarios para esas cuatro
+operaciones.
 
 `localStorage` no forma parte de la arquitectura de persistencia del proyecto.
+
+El formulario y el listado todavía no utilizan esta tabla. La integración del
+CRUD desde la interfaz pertenece a una fase posterior.
 
 ---
 

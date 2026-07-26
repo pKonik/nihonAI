@@ -94,3 +94,22 @@ En el panel de Supabase:
 
 Los proyectos alojados suelen requerir confirmar el correo antes del primer
 inicio de sesión.
+
+## Migraciones de Supabase
+
+El esquema remoto se versiona en `supabase/migrations/` y se administra con la
+Supabase CLI instalada como dependencia de desarrollo.
+
+Después de autenticar y vincular el proyecto:
+
+```bash
+npx supabase migration list
+npx supabase db push --dry-run
+npx supabase db push
+npx supabase db lint --linked --level warning
+```
+
+`db push --dry-run` permite revisar las migraciones pendientes antes de
+aplicarlas. No introduzcas contraseñas ni tokens como comandos de PowerShell;
+cuando una herramienta solicite una contraseña, escríbela únicamente en su
+prompt seguro.
