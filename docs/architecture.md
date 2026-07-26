@@ -25,10 +25,14 @@ La aplicación dispone de:
 - protección de rutas autenticadas;
 - integración verificada con el proyecto remoto de Supabase;
 - modelo persistente de vocabulario versionado mediante migraciones;
-- aislamiento de las entradas por usuario mediante RLS.
+- aislamiento de las entradas por usuario mediante RLS;
+- lectura del vocabulario desde un Server Component;
+- creación, actualización y eliminación mediante Server Actions;
+- acceso a Supabase centralizado en módulos exclusivos del servidor.
 
-El formulario y la colección todavía funcionan únicamente en memoria. La
-integración del CRUD con Supabase pertenece a una fase posterior.
+La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
+capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
+PostgreSQL, y cada mutación vuelve a verificar la identidad del usuario.
 
 ---
 
@@ -97,7 +101,6 @@ La arquitectura crecerá de forma incremental conforme avance el proyecto.
 
 Las próximas fases incorporarán módulos como:
 
-- integración del CRUD de vocabulario;
 - OCR;
 - lector de manga;
 - sistema de repetición espaciada (FSRS);

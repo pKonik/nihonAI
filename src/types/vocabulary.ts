@@ -31,4 +31,10 @@ export type VocabularyDraft = {
 
 export type VocabularyEntry = VocabularyDraft & {
   id: string;
+  createdAt: string;
+  updatedAt: string;
 };
+
+export type VocabularyResult<Data> =
+  | { ok: true; data: Data }
+  | { ok: false; error: string };

@@ -1,7 +1,10 @@
 import { VocabularyApp } from "@/components/vocabulary/VocabularyApp";
 import { signOut } from "@/app/login/actions";
+import { listVocabularyEntries } from "@/lib/vocabulary/data";
+import { VocabularyAuthenticationError } from "@/lib/vocabulary/errors";
 import { getSupabaseConfig } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
+import type { VocabularyEntry } from "@/types/vocabulary";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
@@ -19,6 +22,21 @@ export default async function Home() {
 
   const email =
     typeof claims.email === "string" ? claims.email : "usuario";
+
+  let initialEntries: VocabularyEntry[] = [];
+  let initialLoadError: string | null = null;
+
+  try {
+    initialEntries = await listVocabularyEntries();
+  } catch (error) {
+    if (error instanceof VocabularyAuthenticationError) {
+      redirect("/login");
+    }
+
+    console.error("No se pudo cargar el vocabulario.", error);
+    initialLoadError =
+      "No se pudo cargar tu vocabulario. Recarga la página para intentarlo de nuevo.";
+  }
 
   return (
     <main className="min-h-screen px-4 py-10 sm:px-6 sm:py-16">
@@ -52,7 +70,10 @@ export default async function Home() {
           </div>
         </header>
 
-        <VocabularyApp />
+        <VocabularyApp
+          initialEntries={initialEntries}
+          initialLoadError={initialLoadError}
+        />
       </div>
     </main>
   );

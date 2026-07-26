@@ -1,0 +1,20 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "incremental": false,
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "noEmit": false,
+    "outDir": ".next/tests",
+    "rewriteRelativeImportExtensions": true,
+    "target": "ES2022"
+  },
+  "include": [
+    "src/types/vocabulary.ts",
+    "src/lib/vocabulary/collection.ts",
+    "src/lib/vocabulary/domain.test.ts",
+    "src/lib/vocabulary/errors.ts",
+    "src/lib/vocabulary/mapper.ts",
+    "src/lib/vocabulary/validation.ts"
+  ]
+}

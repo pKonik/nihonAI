@@ -23,15 +23,32 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Mantén `.env*`, `node_modules` y archivos sensibles fuera de Git.
 - Conserva `README.md` como guía de instalación y uso; coloca el conocimiento especializado en `docs/`.
 
-## Workflow de desarrollo
+## Desarrollo
 
-1. Inspecciona el estado actual antes de modificar archivos.
-2. Consulta únicamente la documentación relevante para la tarea.
-3. Explica el plan antes de implementar cuando la fase lo requiera.
-4. Realiza el cambio mínimo necesario sin adelantar funcionalidades.
-5. Ejecuta las comprobaciones aplicables y comunica sus resultados con honestidad.
-6. Actualiza la documentación responsable cuando cambien el comportamiento, la estructura o el uso.
-7. Antes de un commit, revisa el estado, el diff y la presencia de secretos.
+- Prioriza la simplicidad, claridad y desarrollo incremental.
+- Implementa únicamente el alcance aprobado.
+- Mantén los planes breves y orientados a arquitectura.
+- No generes documentación extensa ni planes ejecutables salvo que lo solicite el usuario.
+- No copies grandes bloques de código en archivos Markdown.
+- No invoques Skills adicionales automáticamente si no aportan un beneficio claro.
+- Ejecuta pruebas, lint, typecheck y build cuando sean necesarios para validar la fase, evitando repeticiones innecesarias.
+- Aplica TDD únicamente cuando la lógica lo justifique.
+- Usa `systematic-debugging` solo cuando exista un problema real.
+- Mantén los cambios pequeños, autocontenidos y fáciles de revisar.
+
+El flujo predeterminado consiste en inspeccionar el estado, consultar solo la
+documentación relevante, explicar brevemente la arquitectura cuando sea
+necesario, implementar el cambio mínimo y ejecutar una única verificación final
+proporcional al alcance.
+
+No uses por defecto brainstorming formal, planes ejecutables, subagentes,
+worktrees, revisiones externas ni flujos de cierre de rama. Resérvalos para
+cambios de alto riesgo, varios subsistemas independientes, un problema real
+que los justifique o una solicitud expresa del usuario.
+
+No repitas suites completas si no hubo cambios posteriores que puedan afectar
+sus resultados. Antes de un commit autorizado, revisa el estado, el diff y la
+presencia de secretos.
 
 ## Routing de documentación
 
@@ -40,17 +57,25 @@ This version has breaking changes — APIs, conventions, and file structure may 
 - Para el modelo, formulario, colección o futura persistencia de vocabulario, consulta [`docs/vocabulary.md`](docs/vocabulary.md).
 - No cargues todos los documentos por defecto; usa solo los relacionados con la tarea actual.
 
-## Futuras Skills
+## Skills
 
-- Si el repositorio incorpora Skills oficiales de Codex, usa únicamente la que coincida claramente con la tarea.
-- La existencia de una Skill no obliga a leer ni utilizar las demás.
+- Usa únicamente una Skill cuando coincida claramente con la tarea y aporte un beneficio directo.
+- Las Skills, incluidas las de Superpowers, son una guía y no un protocolo obligatorio; adáptalas al contexto del proyecto.
+- La existencia de una Skill no obliga a utilizarla ni a encadenar otras Skills.
 - Las Skills deben consumir la documentación relevante de `docs/` como fuente de verdad y no duplicar sus reglas.
 - Mantén las decisiones permanentes del proyecto en `docs/` y reserva las Skills para procedimientos estables.
+- No crees archivos en `docs/superpowers/` salvo solicitud explícita.
 - No crees nuevas Skills sin aprobación explícita.
 
 ## Revisión de seguridad
 
-- Antes de finalizar cualquier implementación, actúa como Senior Application Security Engineer.
-- Revisa críticamente autenticación, autorización, validación de datos, secretos, dependencias y superficies de ataque relacionadas con el cambio.
-- Corrige los riesgos relevantes cuando sea posible sin ampliar innecesariamente el alcance.
-- Si no detectas riesgos relevantes, indícalo brevemente.
+Antes de finalizar una implementación, realiza una revisión básica de seguridad
+y buenas prácticas. Verifica únicamente que no existan vulnerabilidades
+evidentes, exposición de información sensible, errores de autorización o
+validaciones faltantes relacionadas con los cambios realizados.
+
+Si detectas un problema, corrígelo cuando sea posible y menciónalo brevemente.
+Si no detectas riesgos relevantes, indícalo en una línea.
+
+La revisión debe ser proporcional al alcance de la fase y no convertirse en una
+auditoría completa de seguridad.

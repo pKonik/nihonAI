@@ -53,11 +53,13 @@ Para detener el servidor, vuelve a la terminal y pulsa `Ctrl + C`.
 ## Comprobaciones
 
 ```bash
+npm test
 npm run lint
 npm run typecheck
 npm run build
 ```
 
+- `test` ejecuta las pruebas unitarias del dominio de vocabulario.
 - `lint` revisa problemas de calidad y convenciones.
 - `typecheck` comprueba los tipos de TypeScript sin generar archivos.
 - `build` crea y valida la versión optimizada para producción.

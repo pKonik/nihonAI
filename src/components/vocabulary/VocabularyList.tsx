@@ -1,14 +1,42 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+
 import type { VocabularyEntry } from "@/types/vocabulary";
 
 type VocabularyListProps = {
+  confirmingDeleteId: string | null;
+  deleteError: { id: string; message: string } | null;
+  deletingId: string | null;
   entries: VocabularyEntry[];
-  onDelete: (id: string) => void;
+  isSaving: boolean;
+  loadError: string | null;
+  onCancelDelete: () => void;
+  onConfirmDelete: (id: string) => Promise<void>;
+  onEdit: (entry: VocabularyEntry) => void;
+  onRequestDelete: (id: string) => void;
 };
 
 export function VocabularyList({
+  confirmingDeleteId,
+  deleteError,
+  deletingId,
   entries,
-  onDelete,
+  isSaving,
+  loadError,
+  onCancelDelete,
+  onConfirmDelete,
+  onEdit,
+  onRequestDelete,
 }: VocabularyListProps) {
+  const confirmDeleteButtonRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (confirmingDeleteId) {
+      confirmDeleteButtonRef.current?.focus();
+    }
+  }, [confirmingDeleteId]);
+
   return (
     <section
       aria-labelledby="vocabulary-list-title"
@@ -26,7 +54,16 @@ export function VocabularyList({
         </h2>
       </div>
 
-      {entries.length === 0 ? (
+      {loadError ? (
+        <p
+          className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-700"
+          role="alert"
+        >
+          {loadError}
+        </p>
+      ) : null}
+
+      {entries.length === 0 && !loadError ? (
         <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
           <p className="font-medium text-slate-800">
             Todavía no hay palabras guardadas.
@@ -35,7 +72,7 @@ export function VocabularyList({
             Completa el formulario para crear tu primera entrada.
           </p>
         </div>
-      ) : (
+      ) : entries.length > 0 ? (
         <ul className="space-y-4">
           {entries.map((entry) => (
             <li key={entry.id}>
@@ -49,15 +86,74 @@ export function VocabularyList({
                       {entry.reading}
                     </p>
                   </div>
-                  <button
-                    aria-label={`Eliminar ${entry.word}`}
-                    className="rounded-lg px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
-                    onClick={() => onDelete(entry.id)}
-                    type="button"
-                  >
-                    Eliminar
-                  </button>
+                  {confirmingDeleteId !== entry.id ? (
+                    <div className="flex flex-wrap justify-end gap-1">
+                      <button
+                        aria-label={`Editar ${entry.word}`}
+                        className="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={isSaving || deletingId !== null}
+                        onClick={() => onEdit(entry)}
+                        type="button"
+                      >
+                        Editar
+                      </button>
+                      <button
+                        aria-label={`Eliminar ${entry.word}`}
+                        className="rounded-lg px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={isSaving || deletingId !== null}
+                        onClick={() => onRequestDelete(entry.id)}
+                        type="button"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
+                  ) : null}
                 </div>
+
+                {confirmingDeleteId === entry.id ? (
+                  <div
+                    aria-label={`Confirmar eliminación de ${entry.word}`}
+                    className="mt-4 rounded-xl bg-red-50 p-4"
+                    role="group"
+                  >
+                    <p className="text-sm font-medium text-red-900">
+                      ¿Eliminar esta entrada?
+                    </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <button
+                        className="rounded-lg bg-red-700 px-3 py-2 text-sm font-semibold text-white transition hover:bg-red-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={
+                          isSaving || deletingId === entry.id
+                        }
+                        onClick={() => void onConfirmDelete(entry.id)}
+                        ref={confirmDeleteButtonRef}
+                        type="button"
+                      >
+                        {deletingId === entry.id
+                          ? "Eliminando..."
+                          : "Eliminar"}
+                      </button>
+                      <button
+                        className="rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:border-red-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+                        disabled={
+                          isSaving || deletingId === entry.id
+                        }
+                        onClick={onCancelDelete}
+                        type="button"
+                      >
+                        Cancelar
+                      </button>
+                    </div>
+                    {deleteError?.id === entry.id ? (
+                      <p
+                        className="mt-3 text-sm text-red-700"
+                        role="alert"
+                      >
+                        {deleteError.message}
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
 
                 <p className="mt-4 text-lg text-slate-800">{entry.meaning}</p>
 
@@ -85,7 +181,7 @@ export function VocabularyList({
             </li>
           ))}
         </ul>
-      )}
+      ) : null}
     </section>
   );
 }

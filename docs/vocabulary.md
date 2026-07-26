@@ -16,8 +16,8 @@ Toda funcionalidad relacionada con palabras debe respetar las reglas definidas e
 
 ## Modelo del dominio
 
-Cada entrada representa una palabra o expresión japonesa. Cuando exista
-persistencia, cada entrada almacenada pertenecerá a un único usuario.
+Cada entrada representa una palabra o expresión japonesa. Cada entrada
+almacenada pertenece a un único usuario.
 
 Actualmente una entrada contiene como mínimo:
 
@@ -72,17 +72,19 @@ Toda modificación del sistema de vocabulario debe respetar los siguientes princ
 
 ## Estado actual
 
-Actualmente el vocabulario existe únicamente en memoria mediante el estado de React.
-
 La aplicación dispone de:
 
-- formulario de creación;
-- validación básica;
-- listado reactivo;
-- eliminación de entradas;
+- lectura persistente de la colección del usuario autenticado;
+- formulario reutilizado para crear y editar;
+- validación equivalente en cliente y servidor;
+- listado ordenado por fecha de creación descendente;
+- confirmación integrada antes de eliminar;
+- estados de carga y errores comprensibles;
 - estado vacío cuando no existen palabras.
 
-La interfaz todavía no consulta ni modifica el modelo persistente.
+El estado local de React se actualiza únicamente con resultados confirmados por
+Supabase. Recargar la página conserva las entradas creadas, editadas o
+eliminadas.
 
 ---
 
@@ -99,8 +101,9 @@ operaciones.
 
 `localStorage` no forma parte de la arquitectura de persistencia del proyecto.
 
-El formulario y el listado todavía no utilizan esta tabla. La integración del
-CRUD desde la interfaz pertenece a una fase posterior.
+La página consulta esta tabla en el servidor. Las operaciones de creación,
+actualización y eliminación utilizan Server Actions y una capa de acceso a datos
+exclusiva del servidor. La interfaz no envía ni recibe `user_id`.
 
 ---
 
