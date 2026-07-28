@@ -17,6 +17,7 @@ export function MainNavigation({
   const pathname = usePathname();
   const navigationItems = [
     { href: "/inicio", label: text.home },
+    { href: "/kana", label: text.kana },
     { href: "/leer", label: text.read },
     { href: "/anadir", label: text.add },
     { href: "/mazos", label: text.decks },

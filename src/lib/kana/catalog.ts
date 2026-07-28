@@ -5,6 +5,7 @@ import type {
   KanaExample,
   KanaRow,
   KanaScript,
+  KanaSoundRow,
 } from "@/types/kana";
 
 function example(
@@ -141,6 +142,34 @@ export function isKanaKey(value: unknown): value is string {
   return typeof value === "string" && VALID_KANA_KEYS.has(value);
 }
 
+export const KANA_SOUND_ROW_ORDER: readonly KanaSoundRow[] = [
+  "vowels",
+  "k",
+  "s",
+  "t",
+  "n",
+  "h",
+  "m",
+  "y",
+  "r",
+  "w",
+  "g",
+  "z",
+  "d",
+  "b",
+  "p",
+];
+
+function getSoundRow(row: KanaRow): KanaSoundRow {
+  if (row.group === "handakuten") return "p";
+  if (row.group !== "dakuten") return row.group as KanaSoundRow;
+
+  if (row.id.startsWith("g")) return "g";
+  if (["za", "ji", "zu", "ze", "zo"].includes(row.id)) return "z";
+  if (row.id.startsWith("d")) return "d";
+  return "b";
+}
+
 export function getKanaCharacters(
   script: KanaScript,
   locale: Locale,
@@ -160,6 +189,7 @@ export function getKanaCharacters(
       key: kanaKey(script, row.id),
       romaji: row.romaji,
       script,
+      soundRow: getSoundRow(row),
     };
   });
 }

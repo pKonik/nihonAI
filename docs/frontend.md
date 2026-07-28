@@ -73,8 +73,8 @@ Toda interfaz nueva debe funcionar correctamente en escritorio y dispositivos m�
 El comportamiento responsive debe considerarse desde el inicio.
 
 La aplicación autenticada utiliza una navegación lateral en escritorio y una
-navegación horizontal en la cabecera móvil. Sus cinco destinos principales son
-Inicio, Leer manga, Añadir, Mazos y Repasar. El destino activo debe estar
+navegación horizontal en la cabecera móvil. Sus seis destinos principales son
+Inicio, Kana, Leer manga, Añadir, Mazos y Repasar. El destino activo debe estar
 identificado visualmente y mediante `aria-current`.
 
 ## Accesibilidad
@@ -164,20 +164,23 @@ opcional de cuatro pasos acompañada por Kitsu, la mascota de NihonAI. La guía
 distingue las funciones disponibles de las planificadas y guarda su finalización
 en el perfil privado.
 
-El botón Ayuda permanece separado de los cinco destinos principales y permite
+El botón Ayuda permanece separado de los seis destinos principales y permite
 abrir nuevamente la guía en cualquier momento. El diálogo conserva navegación
 por teclado, cierre explícito, adaptación móvil y textos en español e inglés.
 
 ## Aprendizaje de kana
 
 La ruta privada `/kana` presenta los sonidos base y modificados de hiragana y
-katakana, con lectura en rōmaji y un ejemplo por carácter. El acceso se ofrece
-desde Inicio sin ampliar los cinco destinos principales de navegación.
+katakana, con lectura en rōmaji y un ejemplo por carácter. La ruta forma parte
+de la navegación principal para que el contenido sea accesible desde cualquier
+pantalla privada.
 
 La pantalla permite alternar silabario, filtrar caracteres aprendidos o
 pendientes y marcar el progreso personal. Dentro de cada silabario, la enseñanza
 avanza en tres bloques: 46 sonidos básicos, 20 sonidos con dakuten y 5 sonidos
-con handakuten. Las 33 combinaciones yōon estándar y las reglas de consonante
+con handakuten. Cada bloque separa sus filas vocálicas o consonánticas y permite
+marcar o desmarcar el progreso de una fila completa mediante una sola acción.
+Las 33 combinaciones yōon estándar y las reglas de consonante
 doble, vocal larga y lectura de partículas se muestran como referencias
 posteriores. Los quizzes, la escritura con teclado, la precisión y las rachas
 pertenecen a la fase siguiente.

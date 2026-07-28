@@ -2,6 +2,23 @@ import type { Locale } from "@/lib/i18n/config";
 
 export type KanaScript = "hiragana" | "katakana";
 
+export type KanaSoundRow =
+  | "vowels"
+  | "k"
+  | "s"
+  | "t"
+  | "n"
+  | "h"
+  | "m"
+  | "y"
+  | "r"
+  | "w"
+  | "g"
+  | "z"
+  | "d"
+  | "b"
+  | "p";
+
 export type KanaExample = {
   meaning: Record<Locale, string>;
   reading: string;
@@ -34,6 +51,7 @@ export type KanaCharacter = {
   key: string;
   romaji: string;
   script: KanaScript;
+  soundRow: KanaSoundRow;
 };
 
 export type KanaMutationResult = {

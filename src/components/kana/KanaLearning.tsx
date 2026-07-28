@@ -2,8 +2,12 @@
 
 import { useMemo, useState, useTransition } from "react";
 
-import { setKanaProgressAction } from "@/app/kana/actions";
+import {
+  setKanaGroupProgressAction,
+  setKanaProgressAction,
+} from "@/app/kana/actions";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { KANA_SOUND_ROW_ORDER } from "@/lib/kana/catalog";
 import type {
   KanaCharacter,
   KanaScript,
@@ -66,16 +70,32 @@ export function KanaLearning({
   );
   const categories = (
     ["basic", "dakuten", "handakuten"] as const
-  ).map((category) => ({
-    characters: filteredCharacters.filter(
+  ).map((category) => {
+    const categoryCharacters = characters.filter(
       (character) => getKanaCategory(character) === category,
-    ),
-    description: text.chart.categories[category].description,
-    id: `${script}-${category}`,
-    title: text.chart.categories[category].title,
-  }));
+    );
+
+    return {
+      characterCount: categoryCharacters.length,
+      description: text.chart.categories[category].description,
+      id: `${script}-${category}`,
+      rows: KANA_SOUND_ROW_ORDER.map((soundRow) => ({
+        allCharacters: categoryCharacters.filter(
+          (character) => character.soundRow === soundRow,
+        ),
+        characters: filteredCharacters.filter(
+          (character) =>
+            getKanaCategory(character) === category &&
+            character.soundRow === soundRow,
+        ),
+        id: `${script}-${category}-${soundRow}`,
+        soundRow,
+      })).filter((row) => row.characters.length),
+      title: text.chart.categories[category].title,
+    };
+  });
   const visibleCategories = categories.filter(
-    (category) => category.characters.length,
+    (category) => category.rows.length,
   );
 
   function toggleLearned(character: KanaCharacter) {
@@ -100,6 +120,43 @@ export function KanaLearning({
           const next = new Set(current);
           if (wasLearned) next.add(character.key);
           else next.delete(character.key);
+          return next;
+        });
+        setFeedback(result.error ?? text.feedback.saveFailed);
+      }
+    });
+  }
+
+  function toggleRowLearned(rowCharacters: KanaCharacter[]) {
+    const rowKeys = rowCharacters.map((character) => character.key);
+    const previouslyLearned = new Set(
+      rowKeys.filter((key) => learnedKeys.has(key)),
+    );
+    const nextLearned = previouslyLearned.size !== rowKeys.length;
+
+    setFeedback("");
+    setLearnedKeys((current) => {
+      const next = new Set(current);
+      rowKeys.forEach((key) => {
+        if (nextLearned) next.add(key);
+        else next.delete(key);
+      });
+      return next;
+    });
+
+    startTransition(async () => {
+      const result = await setKanaGroupProgressAction(
+        rowKeys,
+        nextLearned,
+      );
+
+      if (!result.ok) {
+        setLearnedKeys((current) => {
+          const next = new Set(current);
+          rowKeys.forEach((key) => {
+            if (previouslyLearned.has(key)) next.add(key);
+            else next.delete(key);
+          });
           return next;
         });
         setFeedback(result.error ?? text.feedback.saveFailed);
@@ -248,60 +305,106 @@ export function KanaLearning({
                     <span className="shrink-0 text-sm font-semibold text-sumi-500">
                       {text.chart.characterCount.replace(
                         "{count}",
-                        String(category.characters.length),
+                        String(category.characterCount),
                       )}
                     </span>
                   </div>
 
-                  <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                    {category.characters.map((character) => {
-                      const learned = learnedKeys.has(character.key);
+                  <div className="mt-6 space-y-6">
+                    {category.rows.map((row) => {
+                      const rowLearned = row.allCharacters.every(
+                        (character) => learnedKeys.has(character.key),
+                      );
+
                       return (
-                        <article
-                          className={`rounded-2xl border p-5 transition ${
-                            learned
-                              ? "border-shu-200 bg-shu-50/60"
-                              : "border-washi-200 bg-white"
-                          }`}
-                          key={character.key}
+                        <section
+                          aria-labelledby={row.id}
+                          className="rounded-2xl border border-washi-200 bg-washi-50/70 p-4 sm:p-5"
+                          key={row.id}
                         >
-                          <div className="flex items-start justify-between gap-4">
-                            <div className="flex items-center gap-4">
-                              <span className="font-[var(--font-noto-sans-jp)] text-5xl font-bold leading-none text-sumi-950">
-                                {character.character}
-                              </span>
-                              <span className="rounded-full bg-washi-100 px-3 py-1 text-sm font-bold text-sumi-700">
-                                {character.romaji}
-                              </span>
+                          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                            <div>
+                              <h4
+                                className="font-[var(--font-noto-sans-jp)] text-xl font-bold text-sumi-950"
+                                id={row.id}
+                              >
+                                {row.allCharacters
+                                  .map((character) => character.character)
+                                  .join("・")}
+                              </h4>
                             </div>
                             <button
-                              aria-pressed={learned}
-                              className={`rounded-lg px-3 py-2 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600 ${
-                                learned
-                                  ? "bg-shu-600 text-white hover:bg-shu-700"
-                                  : "border border-washi-300 text-sumi-700 hover:border-shu-300 hover:bg-shu-50"
+                              aria-pressed={rowLearned}
+                              className={`self-start rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600 sm:self-auto ${
+                                rowLearned
+                                  ? "border border-shu-200 bg-white text-shu-700 hover:bg-shu-50"
+                                  : "bg-shu-600 text-white hover:bg-shu-700"
                               } disabled:cursor-wait disabled:opacity-60`}
                               disabled={isPending}
-                              onClick={() => toggleLearned(character)}
+                              onClick={() =>
+                                toggleRowLearned(row.allCharacters)
+                              }
                               type="button"
                             >
-                              {learned
-                                ? text.chart.learned
-                                : text.chart.markLearned}
+                              {rowLearned
+                                ? text.chart.unmarkRow
+                                : text.chart.markRowLearned}
                             </button>
                           </div>
-                          <div className="mt-5 border-t border-washi-200 pt-4">
-                            <p className="font-[var(--font-noto-sans-jp)] text-lg font-semibold text-sumi-950">
-                              {character.exampleWord}
-                            </p>
-                            <p className="mt-1 text-sm text-sumi-500">
-                              {character.exampleReading}
-                            </p>
-                            <p className="mt-2 text-sm font-medium text-sumi-700">
-                              {character.exampleMeaning}
-                            </p>
+
+                          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+                            {row.characters.map((character) => {
+                              const learned = learnedKeys.has(character.key);
+                              return (
+                                <article
+                                  className={`rounded-2xl border p-5 transition ${
+                                    learned
+                                      ? "border-shu-200 bg-shu-50/60"
+                                      : "border-washi-200 bg-white"
+                                  }`}
+                                  key={character.key}
+                                >
+                                  <div className="flex items-start justify-between gap-4">
+                                    <div className="flex items-center gap-4">
+                                      <span className="font-[var(--font-noto-sans-jp)] text-5xl font-bold leading-none text-sumi-950">
+                                        {character.character}
+                                      </span>
+                                      <span className="rounded-full bg-washi-100 px-3 py-1 text-sm font-bold text-sumi-700">
+                                        {character.romaji}
+                                      </span>
+                                    </div>
+                                    <button
+                                      aria-pressed={learned}
+                                      className={`rounded-lg px-3 py-2 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600 ${
+                                        learned
+                                          ? "bg-shu-600 text-white hover:bg-shu-700"
+                                          : "border border-washi-300 text-sumi-700 hover:border-shu-300 hover:bg-shu-50"
+                                      } disabled:cursor-wait disabled:opacity-60`}
+                                      disabled={isPending}
+                                      onClick={() => toggleLearned(character)}
+                                      type="button"
+                                    >
+                                      {learned
+                                        ? text.chart.learned
+                                        : text.chart.markLearned}
+                                    </button>
+                                  </div>
+                                  <div className="mt-5 border-t border-washi-200 pt-4">
+                                    <p className="font-[var(--font-noto-sans-jp)] text-lg font-semibold text-sumi-950">
+                                      {character.exampleWord}
+                                    </p>
+                                    <p className="mt-1 text-sm text-sumi-500">
+                                      {character.exampleReading}
+                                    </p>
+                                    <p className="mt-2 text-sm font-medium text-sumi-700">
+                                      {character.exampleMeaning}
+                                    </p>
+                                  </div>
+                                </article>
+                              );
+                            })}
                           </div>
-                        </article>
+                        </section>
                       );
                     })}
                   </div>

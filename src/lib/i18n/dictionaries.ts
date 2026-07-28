@@ -47,6 +47,7 @@ const spanishDictionary = {
   navigation: {
     label: "Navegación principal",
     home: "Inicio",
+    kana: "Kana",
     read: "Leer manga",
     add: "Añadir",
     decks: "Mazos",
@@ -336,6 +337,8 @@ const spanishDictionary = {
       },
       markLearned: "Marcar aprendido",
       learned: "Aprendido",
+      markRowLearned: "Aprender todo",
+      unmarkRow: "Desmarcar toda la fila",
       empty: "No hay caracteres que coincidan con este filtro.",
       characterCount: "{count} caracteres",
       categories: {
@@ -581,6 +584,7 @@ const englishDictionary: Dictionary = {
   navigation: {
     label: "Main navigation",
     home: "Home",
+    kana: "Kana",
     read: "Read manga",
     add: "Add",
     decks: "Decks",
@@ -870,6 +874,8 @@ const englishDictionary: Dictionary = {
       },
       markLearned: "Mark learned",
       learned: "Learned",
+      markRowLearned: "Learn all",
+      unmarkRow: "Unmark the whole row",
       empty: "No characters match this filter.",
       characterCount: "{count} characters",
       categories: {

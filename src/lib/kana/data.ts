@@ -63,3 +63,33 @@ export async function setKanaLearned(
 
   if (error) throw error;
 }
+
+export async function setKanaGroupLearned(
+  characterKeys: string[],
+  learned: boolean,
+): Promise<void> {
+  const { supabase, user } = await getAuthenticatedContext();
+
+  if (learned) {
+    const learnedAt = new Date().toISOString();
+    const { error } = await supabase.from("kana_progress").upsert(
+      characterKeys.map((characterKey) => ({
+        character_key: characterKey,
+        learned_at: learnedAt,
+        user_id: user.id,
+      })),
+      { onConflict: "user_id,character_key" },
+    );
+
+    if (error) throw error;
+    return;
+  }
+
+  const { error } = await supabase
+    .from("kana_progress")
+    .delete()
+    .eq("user_id", user.id)
+    .in("character_key", characterKeys);
+
+  if (error) throw error;
+}
