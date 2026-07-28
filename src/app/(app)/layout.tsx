@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 
 import { AppShell } from "@/components/navigation/AppShell";
+import { getShellProfile } from "@/lib/account/data";
 import { getI18n } from "@/lib/i18n/server";
 import { getSupabaseConfig } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
@@ -23,14 +24,24 @@ export default async function AuthenticatedLayout({
   }
 
   const { locale, dictionary } = await getI18n();
+  const userId =
+    typeof claims.sub === "string" ? claims.sub : "";
   const email =
     typeof claims.email === "string"
       ? claims.email
       : dictionary.shell.userFallback;
+  const profile = userId ? await getShellProfile(userId) : null;
+  const displayName =
+    profile?.displayName ||
+    email.split("@")[0] ||
+    dictionary.shell.userFallback;
 
   return (
     <AppShell
+      avatarVersion={profile?.updatedAt}
+      displayName={displayName}
       email={email}
+      hasAvatar={Boolean(profile?.avatarPath)}
       locale={locale}
       text={dictionary}
     >

@@ -34,6 +34,8 @@ La aplicación dispone de:
 - interfaz persistente de vocabulario ubicada en la ruta `/anadir`;
 - interfaz bilingüe español–inglés con preferencia persistente;
 - landing pública en `/` e Inicio autenticado en `/inicio`.
+- perfil privado con nombre visible, avatar y configuración de cuenta;
+- estadísticas de cuenta calculadas desde la actividad persistida.
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -143,7 +145,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
    y bilingüe de NihonAI antes del inicio de sesión, trasladar el Inicio privado
    a `/inicio` y explicar de forma visual y original el recorrido
    `leer → seleccionar → reconocer → minar → repasar`.
-7. **Perfil y configuración de cuenta — pendiente.** Incorporar foto de perfil,
+7. **Perfil y configuración de cuenta — completada.** Incorporar foto de perfil,
    nombre visible, configuración de la cuenta, acceso desde el avatar y
    estadísticas basadas únicamente en actividad real. No incluir niveles, XP,
    rankings ni perfiles públicos.
@@ -189,7 +191,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 7: Perfil y configuración de cuenta**.
+La siguiente fase oficial es la **fase 8: Bienvenida y mascota**.
 Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance

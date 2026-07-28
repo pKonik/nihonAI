@@ -143,6 +143,20 @@ correspondan a información real. Funciona principalmente como contenido
 renderizado en servidor, evita vídeos y JavaScript innecesarios, respeta
 `prefers-reduced-motion` y mantiene buen rendimiento en móvil.
 
+## Perfil y cuenta
+
+La ruta privada `/cuenta` reúne el nombre visible, la foto de perfil y un resumen
+de cuenta. El avatar de la navegación abre esta pantalla tanto en escritorio
+como en móvil.
+
+Las fotos se almacenan en un bucket privado y se sirven mediante una ruta que
+vuelve a verificar la sesión. La interfaz solo acepta JPG, PNG o WebP de hasta
+2 MB. Las estadísticas muestran únicamente información persistida: fecha real
+de creación de la cuenta y cantidad actual de palabras guardadas.
+
+No se muestran niveles, XP, rankings, perfiles públicos ni métricas derivadas de
+funciones que todavía no existen.
+
 ## Evolución
 
 Si este documento crece significativamente, podrá dividirse en:

@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { signOut } from "@/app/login/actions";
+import { UserAvatar } from "@/components/account/UserAvatar";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { LanguageSelector } from "@/components/i18n/LanguageSelector";
 import { MainNavigation } from "@/components/navigation/MainNavigation";
@@ -9,33 +10,61 @@ import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 type AppShellProps = {
   children: React.ReactNode;
+  avatarVersion?: string;
+  displayName: string;
   email: string;
+  hasAvatar: boolean;
   locale: Locale;
   text: Dictionary;
 };
 
 function AccountControls({
+  avatarVersion,
+  displayName,
   email,
+  hasAvatar,
   locale,
   text,
 }: {
+  avatarVersion?: string;
+  displayName: string;
   email: string;
+  hasAvatar: boolean;
   locale: Locale;
   text: Dictionary;
 }) {
   return (
     <div className="border-t border-white/15 pt-5">
-      <LanguageSelector
-        inverted
-        locale={locale}
-        text={text.language}
-      />
-      <p
-        className="mt-4 truncate text-sm text-washi-300"
-        title={email}
+      <Link
+        aria-label={text.shell.accountLabel.replace(
+          "{name}",
+          displayName,
+        )}
+        className="flex items-center gap-3 rounded-xl p-1 transition hover:bg-white/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-300"
+        href="/cuenta"
       >
-        {email}
-      </p>
+        <UserAvatar
+          alt={text.account.avatarAlt.replace("{name}", displayName)}
+          avatarVersion={avatarVersion}
+          displayName={displayName}
+          hasAvatar={hasAvatar}
+        />
+        <span className="min-w-0">
+          <span className="block truncate text-sm font-semibold text-washi-50">
+            {displayName}
+          </span>
+          <span className="block truncate text-xs text-washi-300">
+            {email}
+          </span>
+        </span>
+      </Link>
+      <div className="mt-4">
+        <LanguageSelector
+          inverted
+          locale={locale}
+          text={text.language}
+        />
+      </div>
       <form action={signOut} className="mt-3">
         <button
           className="w-full rounded-xl border border-white/20 bg-white/5 px-4 py-2 text-sm font-semibold text-washi-50 transition hover:border-shu-300 hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-300"
@@ -50,7 +79,10 @@ function AccountControls({
 
 export function AppShell({
   children,
+  avatarVersion,
+  displayName,
   email,
+  hasAvatar,
   locale,
   text,
 }: AppShellProps) {
@@ -82,7 +114,10 @@ export function AppShell({
 
         <div className="relative">
           <AccountControls
+            avatarVersion={avatarVersion}
+            displayName={displayName}
             email={email}
+            hasAvatar={hasAvatar}
             locale={locale}
             text={text}
           />
@@ -101,6 +136,24 @@ export function AppShell({
             </Link>
             <div className="flex items-center gap-2">
               <LanguageSelector locale={locale} text={text.language} />
+              <Link
+                aria-label={text.shell.accountLabel.replace(
+                  "{name}",
+                  displayName,
+                )}
+                className="rounded-full focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600"
+                href="/cuenta"
+              >
+                <UserAvatar
+                  alt={text.account.avatarAlt.replace(
+                    "{name}",
+                    displayName,
+                  )}
+                  avatarVersion={avatarVersion}
+                  displayName={displayName}
+                  hasAvatar={hasAvatar}
+                />
+              </Link>
               <form action={signOut}>
                 <button
                   aria-label={text.shell.signOutAccount.replace(
