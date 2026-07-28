@@ -38,6 +38,8 @@ La aplicación dispone de:
 - estadísticas de cuenta calculadas desde la actividad persistida.
 - bienvenida opcional y bilingüe para cuentas nuevas, reabrible desde Ayuda;
 - estado de finalización de la bienvenida persistido en el perfil privado.
+- módulo privado de hiragana y katakana con ejemplos, combinaciones y progreso
+  persistente por carácter;
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -154,7 +156,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 8. **Bienvenida y mascota — completada.** Mostrar a los usuarios nuevos una guía
    opcional de los módulos de NihonAI acompañada por una mascota propia, y
    permitir abrirla nuevamente desde Ayuda.
-9. **Aprendizaje de hiragana y katakana — pendiente.** Crear un módulo para
+9. **Aprendizaje de hiragana y katakana — completada.** Crear un módulo para
    estudiar kana, combinaciones, lecturas y ejemplos, con progreso por carácter.
 10. **Quiz y progreso de kana — pendiente.** Practicar la lectura escrita con
     teclado, corregir respuestas, repetir errores y registrar precisión,
@@ -193,7 +195,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 9: Aprendizaje de hiragana y katakana**.
+La siguiente fase oficial es la **fase 10: Quiz y progreso de kana**.
 Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance

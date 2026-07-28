@@ -18,6 +18,7 @@ const spanishDictionary = {
     decksTitle: "Mazos | NihonAI",
     reviewTitle: "Repasar | NihonAI",
     accountTitle: "Cuenta | NihonAI",
+    kanaTitle: "Hiragana y katakana | NihonAI",
   },
   language: {
     label: "Seleccionar idioma",
@@ -147,7 +148,7 @@ const spanishDictionary = {
       primaryAction: "Empezar con NihonAI",
       secondaryAction: "Ver cómo funciona",
       availability:
-        "Disponible ahora: vocabulario personal. El lector, OCR y repaso se incorporarán por fases.",
+        "Disponible ahora: vocabulario personal y aprendizaje de kana. El lector, OCR y repaso se incorporarán por fases.",
       carouselLabel: "Ejemplos de lectura y vocabulario",
       carouselControls: "Controles de las diapositivas",
       previousSlide: "Mostrar el panel anterior",
@@ -244,7 +245,7 @@ const spanishDictionary = {
       title: "Antes de comenzar",
       availableQuestion: "¿Qué puedo utilizar ahora?",
       availableAnswer:
-        "Puedes crear una cuenta y administrar una colección privada de vocabulario con palabra, lectura, significado, ejemplo, tipo y nivel JLPT.",
+        "Puedes administrar una colección privada de vocabulario y estudiar hiragana y katakana con ejemplos y progreso personal.",
       readerQuestion: "¿El lector y el OCR ya están disponibles?",
       readerAnswer:
         "Todavía no. La landing muestra el recorrido previsto y diferencia claramente las herramientas actuales de las próximas fases.",
@@ -295,6 +296,9 @@ const spanishDictionary = {
       addTitle: "Añadir vocabulario",
       addDescription:
         "Guarda palabras, lecturas y ejemplos en tu colección personal.",
+      kanaTitle: "Aprender kana",
+      kanaDescription:
+        "Estudia hiragana y katakana con lecturas, ejemplos y progreso personal.",
       readTitle: "Leer manga",
       readDescription:
         "Importa y recorre páginas de manga para aprender desde su contexto.",
@@ -304,6 +308,79 @@ const spanishDictionary = {
       reviewTitle: "Repasar",
       reviewDescription:
         "Practica tus palabras en sesiones de repetición espaciada.",
+    },
+  },
+  kana: {
+    eyebrow: "Fundamentos · かな",
+    title: "Aprende hiragana y katakana a tu ritmo.",
+    description:
+      "Explora los sonidos básicos, reconoce cada forma y apóyate en ejemplos reales. Marca un carácter cuando ya puedas identificarlo.",
+    loadError:
+      "No se pudo cargar tu progreso. Puedes consultar el contenido, pero recarga la página antes de marcar cambios.",
+    progress: {
+      eyebrow: "Tu progreso",
+      title: "{learned} de {total} caracteres aprendidos",
+      label: "{learned} de {total} caracteres aprendidos en este silabario",
+    },
+    chart: {
+      eyebrow: "Ruta de aprendizaje",
+      title: "Sonidos y ejemplos",
+      scriptLabel: "Seleccionar silabario",
+      hiragana: "Hiragana",
+      katakana: "Katakana",
+      filterLabel: "Filtrar caracteres",
+      filters: {
+        all: "Todos",
+        pending: "Por aprender",
+        learned: "Aprendidos",
+      },
+      markLearned: "Marcar aprendido",
+      learned: "Aprendido",
+      empty: "No hay caracteres que coincidan con este filtro.",
+      characterCount: "{count} caracteres",
+      categories: {
+        basic: {
+          title: "1. Sonidos básicos",
+          description:
+            "Empieza por estas 46 formas. Son la base para leer todas las demás categorías.",
+        },
+        dakuten: {
+          title: "2. Sonidos con dakuten",
+          description:
+            "Las dos marcas ゛ transforman las filas K, S, T y H en sonidos sonoros.",
+        },
+        handakuten: {
+          title: "3. Sonidos con handakuten",
+          description:
+            "El pequeño círculo ゜ transforma la fila H en los cinco sonidos de la fila P.",
+        },
+      },
+    },
+    combinations: {
+      eyebrow: "Sonidos combinados",
+      title: "Yōon: dos formas, un solo sonido",
+      description:
+        "Una kana terminada en i se une a ゃ, ゅ o ょ pequeños. La combinación se pronuncia como una sola unidad.",
+    },
+    specialRules: {
+      eyebrow: "Reglas esenciales",
+      title: "Formas que cambian la lectura",
+      sokuonTitle: "Consonante doble",
+      sokuonDescription:
+        "La っ o ッ pequeña crea una pausa breve y duplica la consonante siguiente.",
+      longVowelTitle: "Vocal larga en katakana",
+      longVowelDescription:
+        "La marca ー prolonga la vocal anterior y se utiliza principalmente en katakana.",
+      particlesTitle: "Lecturas como partículas",
+      particlesDescription:
+        "Cuando funcionan como partículas, は, へ y を se pronuncian wa, e y o.",
+    },
+    feedback: {
+      invalidCharacter: "El carácter seleccionado no es válido.",
+      authExpired:
+        "Tu sesión ya no es válida. Inicia sesión de nuevo para guardar el progreso.",
+      saveFailed:
+        "No se pudo guardar el progreso. Inténtalo de nuevo.",
     },
   },
   feature: {
@@ -475,6 +552,7 @@ const englishDictionary: Dictionary = {
     decksTitle: "Decks | NihonAI",
     reviewTitle: "Review | NihonAI",
     accountTitle: "Account | NihonAI",
+    kanaTitle: "Hiragana and katakana | NihonAI",
   },
   language: {
     label: "Select language",
@@ -604,7 +682,7 @@ const englishDictionary: Dictionary = {
       primaryAction: "Start with NihonAI",
       secondaryAction: "See how it works",
       availability:
-        "Available now: personal vocabulary. The reader, OCR, and review will arrive in phases.",
+        "Available now: personal vocabulary and kana learning. The reader, OCR, and review will arrive in phases.",
       carouselLabel: "Reading and vocabulary examples",
       carouselControls: "Slideshow controls",
       previousSlide: "Show the previous panel",
@@ -701,7 +779,7 @@ const englishDictionary: Dictionary = {
       title: "Before you begin",
       availableQuestion: "What can I use today?",
       availableAnswer:
-        "You can create an account and manage a private vocabulary collection with words, readings, meanings, examples, word types, and JLPT levels.",
+        "You can manage a private vocabulary collection and study hiragana and katakana with examples and personal progress.",
       readerQuestion: "Are the reader and OCR available already?",
       readerAnswer:
         "Not yet. The landing page shows the planned journey and clearly separates current tools from upcoming phases.",
@@ -752,6 +830,9 @@ const englishDictionary: Dictionary = {
       addTitle: "Add vocabulary",
       addDescription:
         "Save words, readings, and examples in your personal collection.",
+      kanaTitle: "Learn kana",
+      kanaDescription:
+        "Study hiragana and katakana with readings, examples, and personal progress.",
       readTitle: "Read manga",
       readDescription:
         "Import and explore manga pages to learn from their context.",
@@ -761,6 +842,78 @@ const englishDictionary: Dictionary = {
       reviewTitle: "Review",
       reviewDescription:
         "Practice your words through spaced-repetition sessions.",
+    },
+  },
+  kana: {
+    eyebrow: "Foundations · かな",
+    title: "Learn hiragana and katakana at your own pace.",
+    description:
+      "Explore the basic sounds, recognize each shape, and learn from real examples. Mark a character once you can identify it.",
+    loadError:
+      "Your progress could not be loaded. You can browse the content, but reload the page before marking changes.",
+    progress: {
+      eyebrow: "Your progress",
+      title: "{learned} of {total} characters learned",
+      label: "{learned} of {total} characters learned in this script",
+    },
+    chart: {
+      eyebrow: "Learning path",
+      title: "Sounds and examples",
+      scriptLabel: "Select script",
+      hiragana: "Hiragana",
+      katakana: "Katakana",
+      filterLabel: "Filter characters",
+      filters: {
+        all: "All",
+        pending: "To learn",
+        learned: "Learned",
+      },
+      markLearned: "Mark learned",
+      learned: "Learned",
+      empty: "No characters match this filter.",
+      characterCount: "{count} characters",
+      categories: {
+        basic: {
+          title: "1. Basic sounds",
+          description:
+            "Start with these 46 forms. They are the foundation for reading every later category.",
+        },
+        dakuten: {
+          title: "2. Sounds with dakuten",
+          description:
+            "The two ゛ marks turn the K, S, T, and H rows into voiced sounds.",
+        },
+        handakuten: {
+          title: "3. Sounds with handakuten",
+          description:
+            "The small ゜ circle turns the H row into the five P-row sounds.",
+        },
+      },
+    },
+    combinations: {
+      eyebrow: "Combined sounds",
+      title: "Yōon: two shapes, one sound",
+      description:
+        "An i-column kana joins a small ゃ, ゅ, or ょ. The combination is pronounced as a single unit.",
+    },
+    specialRules: {
+      eyebrow: "Essential rules",
+      title: "Forms that change the reading",
+      sokuonTitle: "Double consonant",
+      sokuonDescription:
+        "A small っ or ッ creates a brief pause and doubles the following consonant.",
+      longVowelTitle: "Long vowel in katakana",
+      longVowelDescription:
+        "The ー mark extends the previous vowel and is used mainly in katakana.",
+      particlesTitle: "Particle readings",
+      particlesDescription:
+        "When used as particles, は, へ, and を are pronounced wa, e, and o.",
+    },
+    feedback: {
+      invalidCharacter: "The selected character is not valid.",
+      authExpired:
+        "Your session is no longer valid. Sign in again to save progress.",
+      saveFailed: "Your progress could not be saved. Try again.",
     },
   },
   feature: {

@@ -57,6 +57,8 @@ está disponible en **Añadir**. El avatar abre `/cuenta`, donde se puede config
 el nombre visible y una foto privada, además de consultar estadísticas reales.
 Las cuentas nuevas reciben una bienvenida opcional con Kitsu, que puede abrirse
 de nuevo mediante el botón **Ayuda**.
+Desde Inicio también se puede abrir `/kana` para estudiar hiragana y katakana,
+consultar ejemplos y conservar el progreso por carácter.
 Las demás áreas se completarán siguiendo el roadmap de
 [`docs/architecture.md`](docs/architecture.md).
 
@@ -69,8 +71,8 @@ npm run typecheck
 npm run build
 ```
 
-- `test` ejecuta las pruebas unitarias de cuenta, rutas públicas, idiomas y
-  vocabulario.
+- `test` ejecuta las pruebas unitarias de cuenta, rutas públicas, idiomas, kana
+  y vocabulario.
 - `lint` revisa problemas de calidad y convenciones.
 - `typecheck` comprueba los tipos de TypeScript sin generar archivos.
 - `build` crea y valida la versión optimizada para producción.

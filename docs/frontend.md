@@ -168,6 +168,20 @@ El botón Ayuda permanece separado de los cinco destinos principales y permite
 abrir nuevamente la guía en cualquier momento. El diálogo conserva navegación
 por teclado, cierre explícito, adaptación móvil y textos en español e inglés.
 
+## Aprendizaje de kana
+
+La ruta privada `/kana` presenta los sonidos base y modificados de hiragana y
+katakana, con lectura en rōmaji y un ejemplo por carácter. El acceso se ofrece
+desde Inicio sin ampliar los cinco destinos principales de navegación.
+
+La pantalla permite alternar silabario, filtrar caracteres aprendidos o
+pendientes y marcar el progreso personal. Dentro de cada silabario, la enseñanza
+avanza en tres bloques: 46 sonidos básicos, 20 sonidos con dakuten y 5 sonidos
+con handakuten. Las 33 combinaciones yōon estándar y las reglas de consonante
+doble, vocal larga y lectura de partículas se muestran como referencias
+posteriores. Los quizzes, la escritura con teclado, la precisión y las rachas
+pertenecen a la fase siguiente.
+
 ## Evolución
 
 Si este documento crece significativamente, podrá dividirse en:

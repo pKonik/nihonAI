@@ -119,8 +119,8 @@ export default async function LandingPage() {
       symbol: "あ",
       title: text.features.kanaTitle,
       description: text.features.kanaDescription,
-      status: text.features.upcoming,
-      available: false,
+      status: text.features.available,
+      available: true,
     },
     {
       symbol: "組",

@@ -23,6 +23,14 @@ export default async function PrivateHomePage() {
       symbol: "語",
     },
     {
+      href: "/kana",
+      title: text.areas.kanaTitle,
+      description: text.areas.kanaDescription,
+      status: text.status.available,
+      isAvailable: true,
+      symbol: "あ",
+    },
+    {
       href: "/leer",
       title: text.areas.readTitle,
       description: text.areas.readDescription,
