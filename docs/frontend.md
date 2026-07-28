@@ -182,8 +182,18 @@ con handakuten. Cada bloque separa sus filas vocálicas o consonánticas y permi
 marcar o desmarcar el progreso de una fila completa mediante una sola acción.
 Las 33 combinaciones yōon estándar y las reglas de consonante
 doble, vocal larga y lectura de partículas se muestran como referencias
-posteriores. Los quizzes, la escritura con teclado, la precisión y las rachas
-pertenecen a la fase siguiente.
+posteriores.
+
+La misma ruta incluye un quiz de lectura en rōmaji con sesiones de 10
+caracteres del silabario elegido. El usuario puede limitar la sesión a
+caracteres aprendidos, una categoría, una fila, todo el silabario o errores
+anteriores. Dentro del alcance elegido, la selección da más peso a caracteres
+nuevos o con menor precisión. El alcance de errores reúne los caracteres que
+todavía permanecen por debajo del 80 % de precisión. Cada respuesta se corrige
+antes de avanzar y los errores regresan al final de la sesión hasta resolverse.
+Los intentos se guardan como actividad privada e inmutable para calcular
+respuestas totales, precisión, días de estudio y racha actual a partir de datos
+reales.
 
 ## Evolución
 

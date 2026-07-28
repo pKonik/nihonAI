@@ -4,14 +4,24 @@ import "server-only";
 
 import { revalidatePath } from "next/cache";
 
-import { isKanaKey } from "@/lib/kana/catalog";
 import {
+  checkKanaQuizAnswer,
+  getKanaQuizAnswers,
+  isKanaKey,
+  normalizeKanaQuizAnswer,
+} from "@/lib/kana/catalog";
+import {
+  getKanaQuizStats,
   KanaAuthenticationError,
+  recordKanaQuizAttempt,
   setKanaGroupLearned,
   setKanaLearned,
 } from "@/lib/kana/data";
 import { getI18n } from "@/lib/i18n/server";
-import type { KanaMutationResult } from "@/types/kana";
+import type {
+  KanaMutationResult,
+  KanaQuizAnswerResult,
+} from "@/types/kana";
 
 export async function setKanaProgressAction(
   characterKey: unknown,
@@ -78,6 +88,66 @@ export async function setKanaGroupProgressAction(
         error instanceof KanaAuthenticationError
           ? dictionary.kana.feedback.authExpired
           : dictionary.kana.feedback.saveFailed,
+    };
+  }
+}
+
+export async function answerKanaQuizAction(
+  characterKey: unknown,
+  answer: unknown,
+): Promise<KanaQuizAnswerResult> {
+  const { dictionary } = await getI18n();
+  const normalizedAnswer =
+    typeof answer === "string" ? normalizeKanaQuizAnswer(answer) : "";
+
+  if (
+    !isKanaKey(characterKey) ||
+    !normalizedAnswer ||
+    normalizedAnswer.length > 12 ||
+    !/^[a-z]+$/.test(normalizedAnswer)
+  ) {
+    return {
+      ok: false,
+      error: dictionary.kana.quiz.invalidAnswer,
+    };
+  }
+
+  const acceptedAnswers = getKanaQuizAnswers(characterKey);
+  if (!acceptedAnswers) {
+    return {
+      ok: false,
+      error: dictionary.kana.feedback.invalidCharacter,
+    };
+  }
+
+  try {
+    const correct = checkKanaQuizAnswer(characterKey, normalizedAnswer);
+    await recordKanaQuizAttempt(characterKey, correct);
+    let stats;
+
+    try {
+      stats = await getKanaQuizStats();
+    } catch (statsError) {
+      console.error(
+        "La respuesta se guardó, pero no se pudieron actualizar las estadísticas.",
+        statsError,
+      );
+    }
+
+    return {
+      correct,
+      expectedAnswer: acceptedAnswers.join(" / "),
+      ok: true,
+      stats,
+    };
+  } catch (error) {
+    console.error("No se pudo registrar la respuesta del quiz de kana.", error);
+    return {
+      ok: false,
+      error:
+        error instanceof KanaAuthenticationError
+          ? dictionary.kana.feedback.authExpired
+          : dictionary.kana.quiz.saveFailed,
     };
   }
 }

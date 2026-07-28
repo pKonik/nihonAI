@@ -323,6 +323,63 @@ const spanishDictionary = {
       title: "{learned} de {total} caracteres aprendidos",
       label: "{learned} de {total} caracteres aprendidos en este silabario",
     },
+    quiz: {
+      eyebrow: "Práctica · 読む",
+      title: "Escribe la lectura",
+      description:
+        "Elige qué necesitas reforzar y responde en rōmaji. La práctica prioriza caracteres nuevos o con menor precisión.",
+      scopeLabel: "Contenido de la sesión",
+      scopes: {
+        learned: "Solo aprendidos",
+        category: "Una categoría",
+        row: "Una fila",
+        all: "Todos los caracteres",
+        mistakes: "Practicar errores",
+      },
+      scopeDescriptions: {
+        learned:
+          "Repasa únicamente los caracteres que ya marcaste como aprendidos.",
+        category:
+          "Avanza por etapas: sonidos básicos, dakuten o handakuten.",
+        row: "Concentra la sesión en una sola fila de sonidos.",
+        all: "Combina todo el silabario y da prioridad a lo que más necesitas reforzar.",
+        mistakes:
+          "Trabaja con caracteres cuya precisión todavía está por debajo del 80 %.",
+      },
+      categoryLabel: "Categoría",
+      rowLabel: "Fila de sonidos",
+      vowels: "Vocales",
+      rowOption: "Fila {row}",
+      available: "{count} caracteres disponibles",
+      emptyScope:
+        "Todavía no hay caracteres disponibles en este alcance.",
+      retryHint:
+        "Las respuestas se corrigen una por una. Los errores regresan al final de la sesión hasta que los resuelvas.",
+      start: "Empezar quiz",
+      remaining: "{completed} de {total} resueltos",
+      answerLabel: "Lectura en rōmaji",
+      answerPlaceholder: "Ejemplo: ka",
+      check: "Comprobar",
+      checking: "Comprobando…",
+      continue: "Continuar",
+      correctTitle: "Respuesta correcta",
+      correctDescription: "La lectura es {answer}.",
+      incorrectTitle: "Todavía no",
+      incorrectDescription:
+        "La lectura correcta es {answer}. Este carácter volverá a aparecer.",
+      invalidAnswer: "Escribe una lectura válida usando letras.",
+      saveFailed:
+        "No se pudo guardar la respuesta. Inténtalo de nuevo.",
+      sessionCompleteTitle: "Sesión completada",
+      sessionCompleteDescription:
+        "Has resuelto {count} caracteres con {mistakes} errores durante la sesión.",
+      restart: "Practicar otros 10",
+      statsTitle: "Actividad de kana",
+      totalAnswers: "Respuestas",
+      accuracy: "Precisión",
+      activeDays: "Días de estudio",
+      currentStreak: "Racha actual",
+    },
     chart: {
       eyebrow: "Ruta de aprendizaje",
       title: "Sonidos y ejemplos",
@@ -859,6 +916,62 @@ const englishDictionary: Dictionary = {
       eyebrow: "Your progress",
       title: "{learned} of {total} characters learned",
       label: "{learned} of {total} characters learned in this script",
+    },
+    quiz: {
+      eyebrow: "Practice · 読む",
+      title: "Type the reading",
+      description:
+        "Choose what you need to reinforce and answer in rōmaji. Practice prioritizes new characters and those with lower accuracy.",
+      scopeLabel: "Session content",
+      scopes: {
+        learned: "Learned only",
+        category: "One category",
+        row: "One row",
+        all: "All characters",
+        mistakes: "Practice mistakes",
+      },
+      scopeDescriptions: {
+        learned:
+          "Review only the characters you have already marked as learned.",
+        category:
+          "Progress in stages: basic sounds, dakuten, or handakuten.",
+        row: "Focus the session on a single sound row.",
+        all: "Mix the full script and prioritize what you most need to reinforce.",
+        mistakes:
+          "Work with characters whose accuracy is still below 80%.",
+      },
+      categoryLabel: "Category",
+      rowLabel: "Sound row",
+      vowels: "Vowels",
+      rowOption: "{row} row",
+      available: "{count} characters available",
+      emptyScope:
+        "There are no characters available in this scope yet.",
+      retryHint:
+        "Answers are checked one at a time. Mistakes return at the end of the session until you solve them.",
+      start: "Start quiz",
+      remaining: "{completed} of {total} solved",
+      answerLabel: "Reading in rōmaji",
+      answerPlaceholder: "Example: ka",
+      check: "Check",
+      checking: "Checking…",
+      continue: "Continue",
+      correctTitle: "Correct answer",
+      correctDescription: "The reading is {answer}.",
+      incorrectTitle: "Not yet",
+      incorrectDescription:
+        "The correct reading is {answer}. This character will appear again.",
+      invalidAnswer: "Enter a valid reading using letters.",
+      saveFailed: "Your answer could not be saved. Try again.",
+      sessionCompleteTitle: "Session complete",
+      sessionCompleteDescription:
+        "You solved {count} characters with {mistakes} mistakes during the session.",
+      restart: "Practice 10 more",
+      statsTitle: "Kana activity",
+      totalAnswers: "Answers",
+      accuracy: "Accuracy",
+      activeDays: "Study days",
+      currentStreak: "Current streak",
     },
     chart: {
       eyebrow: "Learning path",

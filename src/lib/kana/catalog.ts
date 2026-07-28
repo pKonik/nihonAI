@@ -142,6 +142,42 @@ export function isKanaKey(value: unknown): value is string {
   return typeof value === "string" && VALID_KANA_KEYS.has(value);
 }
 
+const KANA_QUIZ_ANSWER_OVERRIDES: Readonly<
+  Record<string, readonly string[]>
+> = {
+  shi: ["shi", "si"],
+  chi: ["chi", "ti"],
+  tsu: ["tsu", "tu"],
+  fu: ["fu", "hu"],
+  ji: ["ji", "zi"],
+  di: ["ji", "di"],
+  du: ["zu", "du"],
+  wo: ["wo", "o"],
+};
+
+export function normalizeKanaQuizAnswer(value: string): string {
+  return value.trim().toLowerCase();
+}
+
+export function getKanaQuizAnswers(
+  characterKey: string,
+): readonly string[] | null {
+  if (!isKanaKey(characterKey)) return null;
+
+  const id = characterKey.slice(characterKey.indexOf(":") + 1);
+  return KANA_QUIZ_ANSWER_OVERRIDES[id] ?? [id];
+}
+
+export function checkKanaQuizAnswer(
+  characterKey: string,
+  answer: string,
+): boolean {
+  const acceptedAnswers = getKanaQuizAnswers(characterKey);
+  return (
+    acceptedAnswers?.includes(normalizeKanaQuizAnswer(answer)) ?? false
+  );
+}
+
 export const KANA_SOUND_ROW_ORDER: readonly KanaSoundRow[] = [
   "vowels",
   "k",

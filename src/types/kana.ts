@@ -59,3 +59,31 @@ export type KanaMutationResult = {
   learned?: boolean;
   ok: boolean;
 };
+
+export type KanaQuizStats = {
+  activeDays: number;
+  correctAnswers: number;
+  currentStreak: number;
+  totalAnswers: number;
+};
+
+export type KanaQuizPerformance = {
+  characterKey: string;
+  correctAnswers: number;
+  totalAnswers: number;
+};
+
+export type KanaQuizScope =
+  | "learned"
+  | "category"
+  | "row"
+  | "all"
+  | "mistakes";
+
+export type KanaQuizAnswerResult = {
+  correct?: boolean;
+  error?: string;
+  expectedAnswer?: string;
+  ok: boolean;
+  stats?: KanaQuizStats;
+};

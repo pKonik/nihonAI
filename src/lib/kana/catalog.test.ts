@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import test from "node:test";
 
 import {
+  checkKanaQuizAnswer,
+  getKanaQuizAnswers,
   getKanaCharacters,
   isKanaKey,
   KANA_COMBINATIONS,
@@ -62,6 +64,15 @@ test("invalid progress keys are rejected", () => {
   assert.equal(isKanaKey("katakana:n"), true);
   assert.equal(isKanaKey("hiragana:unknown"), false);
   assert.equal(isKanaKey({ key: "hiragana:a" }), false);
+});
+
+test("quiz answers are normalized and accept common romanization variants", () => {
+  assert.equal(checkKanaQuizAnswer("hiragana:ka", " KA "), true);
+  assert.equal(checkKanaQuizAnswer("katakana:shi", "si"), true);
+  assert.equal(checkKanaQuizAnswer("hiragana:du", "zu"), true);
+  assert.equal(checkKanaQuizAnswer("hiragana:du", "tsu"), false);
+  assert.deepEqual(getKanaQuizAnswers("katakana:wo"), ["wo", "o"]);
+  assert.equal(getKanaQuizAnswers("katakana:unknown"), null);
 });
 
 test("the combinations include readings and localized examples", () => {

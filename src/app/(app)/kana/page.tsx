@@ -1,15 +1,22 @@
 import type { Metadata } from "next";
 
 import { KanaLearning } from "@/components/kana/KanaLearning";
+import { KanaQuiz } from "@/components/kana/KanaQuiz";
 import {
   getKanaCharacters,
   getLocalizedCombinations,
 } from "@/lib/kana/catalog";
 import {
+  getKanaQuizPerformance,
+  getKanaQuizStats,
   getLearnedKanaKeys,
   KanaAuthenticationError,
 } from "@/lib/kana/data";
 import { getI18n } from "@/lib/i18n/server";
+import type {
+  KanaQuizPerformance,
+  KanaQuizStats,
+} from "@/types/kana";
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dictionary } = await getI18n();
@@ -19,10 +26,21 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function KanaPage() {
   const { locale, dictionary } = await getI18n();
   let learnedKeys: string[] = [];
+  let quizStats: KanaQuizStats = {
+    activeDays: 0,
+    correctAnswers: 0,
+    currentStreak: 0,
+    totalAnswers: 0,
+  };
+  let quizPerformance: KanaQuizPerformance[] = [];
   let loadError = false;
 
   try {
-    learnedKeys = await getLearnedKanaKeys();
+    [learnedKeys, quizStats, quizPerformance] = await Promise.all([
+      getLearnedKanaKeys(),
+      getKanaQuizStats(),
+      getKanaQuizPerformance(),
+    ]);
   } catch (error) {
     if (!(error instanceof KanaAuthenticationError)) {
       console.error("No se pudo cargar el progreso de kana.", error);
@@ -60,6 +78,15 @@ export default async function KanaPage() {
           {dictionary.kana.loadError}
         </p>
       ) : null}
+
+      <KanaQuiz
+        hiragana={getKanaCharacters("hiragana", locale)}
+        initialPerformance={quizPerformance}
+        initialStats={quizStats}
+        katakana={getKanaCharacters("katakana", locale)}
+        learnedKeys={learnedKeys}
+        text={dictionary.kana}
+      />
 
       <KanaLearning
         combinations={getLocalizedCombinations(locale)}
