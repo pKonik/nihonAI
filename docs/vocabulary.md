@@ -123,6 +123,31 @@ Las nuevas funcionalidades deberán extender el modelo existente en lugar de ree
 
 ---
 
+## Fuente lingüística prevista
+
+La minería utilizará JMdict como fuente principal compartida para palabras,
+lecturas, formas de diccionario, tipos de palabra y significados en español e
+inglés. El diccionario completo no se duplicará dentro del vocabulario de cada
+usuario.
+
+Al guardar una palabra se conservarán el significado elegido por el usuario y
+el idioma de ese significado. La consulta seguirá esta prioridad:
+
+1. definición de JMdict en el idioma seleccionado;
+2. definición inglesa de JMdict cuando no exista una definición española;
+3. traducción automática opcional y claramente identificada;
+4. corrección manual antes de guardar.
+
+Una traducción automática no debe mostrarse como si fuera una definición
+oficial. El proyecto deberá conservar las atribuciones y cumplir la licencia de
+JMdict y de cualquier fuente adicional.
+
+La forma concreta de distribuir e indexar el diccionario se decidirá durante la
+fase de minería, priorizando rendimiento, actualizaciones y uso eficiente de
+almacenamiento.
+
+---
+
 ## Relación con otros documentos
 
 - [`docs/architecture.md`](architecture.md) describe la arquitectura general del

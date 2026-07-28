@@ -28,7 +28,7 @@ La aplicación dispone de:
 - aislamiento de las entradas por usuario mediante RLS;
 - lectura del vocabulario desde un Server Component;
 - creación, actualización y eliminación mediante Server Actions;
-- acceso a Supabase centralizado en módulos exclusivos del servidor.
+- acceso a Supabase centralizado en módulos exclusivos del servidor;
 - layout autenticado compartido para las áreas principales;
 - navegación entre Inicio, Leer manga, Añadir, Mazos y Repasar;
 - interfaz persistente de vocabulario ubicada en la ruta `/anadir`.
@@ -116,9 +116,13 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 6. **Navegación principal — completada.** Crear la estructura de aplicación con
    Inicio, Leer manga, Añadir, Mazos y Repasar, conservando la interfaz actual
    dentro de Añadir.
-6.5. **Identidad visual y diseño — pendiente.** Crear el logo y la identidad
+6.5. **Identidad visual y diseño — completada.** Crear el logo y la identidad
    propia de NihonAI, aplicar un estilo japonés contemporáneo y consolidar la
    presentación responsive de la navegación sin copiar otras plataformas.
+6.6. **Internacionalización español–inglés — pendiente.** Centralizar los
+   textos de la aplicación, incorporar un selector de idioma y asegurar que
+   navegación, formularios, validaciones, errores, ayudas, metadatos y
+   accesibilidad estén disponibles en español e inglés.
 7. **Perfil y configuración de cuenta — pendiente.** Incorporar foto de perfil,
    nombre visible, configuración de la cuenta, acceso desde el avatar y
    estadísticas basadas únicamente en actividad real. No incluir niveles, XP,
@@ -144,10 +148,12 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 16. **Corrección del OCR — pendiente.** Mostrar el texto detectado y permitir
     corregirlo antes de continuar.
 17. **Minería de vocabulario — pendiente.** Analizar la oración, seleccionar
-    una palabra y obtener forma de diccionario, lectura, significado y tipo.
+    una palabra y consultar JMdict en español e inglés para obtener forma de
+    diccionario, lectura, significado y tipo.
 18. **Integración del lector con vocabulario — pendiente.** Reutilizar el
     formulario de Añadir y guardar palabra, oración, manga, capítulo, página y
-    recorte sin duplicar el modelo.
+    recorte sin duplicar el modelo, conservando el significado elegido y su
+    idioma.
 19. **Biblioteca de vocabulario — pendiente.** Incorporar búsqueda, filtros y
     presentación del contexto minado.
 20. **Mazos — pendiente.** Crear y administrar mazos, y permitir añadirles
@@ -156,12 +162,16 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
     repaso, calificaciones e intervalos programados.
 22. **Funciones de IA — pendiente.** Añadir asistencia inteligente únicamente
     sobre los flujos ya estabilizados.
-23. **Integraciones externas — pendiente.** Incorporar diccionarios, servicios
-    o APIs externas que hayan sido aprobados.
+23. **Integraciones externas — pendiente.** Incorporar fuentes lingüísticas,
+    servicios o APIs adicionales que hayan sido aprobados, incluida una
+    traducción automática opcional claramente identificada cuando JMdict no
+    disponga de una definición en el idioma seleccionado.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 6.5: Identidad visual y diseño**. Cada
+La siguiente fase oficial es la **fase 6.6: Internacionalización
+español–inglés**. Desde esta fase, toda funcionalidad nueva que muestre texto
+deberá entregar sus versiones en español e inglés dentro de la misma fase. Cada
 fase debe mantener un alcance pequeño y no adelantar funcionalidades
 pertenecientes a las fases posteriores.
 

@@ -17,7 +17,8 @@ Toda decisión de diseño debe favorecer la claridad y la mantenibilidad del pro
 - Evitar interfaces genéricas asociadas a productos de IA.
 - Diseñar para el aprendizaje antes que para el impacto visual.
 - Favorecer la consistencia visual entre pantallas.
-- Evitar elementos decorativos que no aporten funcionalidad.
+- Utilizar elementos decorativos con intención: deben reforzar el recorrido,
+  la identidad o la jerarquía del contenido.
 - Diseñar primero para la tarea principal del usuario.
 - Utilizar una tipografía deliberada y legible.
 - Mantener los textos de interfaz claros, concretos y útiles.
@@ -39,6 +40,32 @@ Siempre que sea posible:
 - Mantener una jerarquía visual consistente.
 - No introducir nuevas librerías de UI sin aprobación.
 
+La identidad de NihonAI utiliza fondos neutros claros, navegación verde tinta y
+un acento coral. La presentación debe sentirse como un producto digital moderno
+y minimalista: tipografía sans-serif, títulos de peso alto, bordes discretos y
+espaciado generoso, sin recurrir a una estética tradicional o editorial.
+
+La identidad también incluye un lenguaje gráfico relacionado con el aprendizaje:
+el recorrido `leer → recopilar → recordar`, caracteres japoneses como marcas de
+sección y gradientes o volúmenes suaves. Estos recursos deben aportar
+personalidad sin competir con el contenido ni reducir la legibilidad.
+
+El fondo global puede combinar gradientes tenues, patrones de puntos, recorridos
+discontinuos y formas circulares. Deben permanecer detrás de la interfaz, usar
+bajo contraste y adaptarse a pantallas pequeñas para evitar ruido visual.
+Los motivos japoneses, como el monte Fuji o las flores de sakura, se representan
+mediante siluetas y trazos simples del mismo sistema visual, no como fotografías
+ni ilustraciones detalladas.
+
+`Inter` se utiliza para la interfaz y `Noto Sans JP` como soporte tipográfico
+japonés. Ambas fuentes se integran mediante `next/font` para servirlas desde la
+propia aplicación. El símbolo principal adapta la forma de `日` a un isotipo
+geométrico y debe reutilizarse mediante el componente `BrandLogo` y el icono SVG
+de la aplicación.
+
+Los rojos semánticos de errores o acciones destructivas deben mantenerse
+separados del color `shu` de marca.
+
 ## Responsive
 
 Toda interfaz nueva debe funcionar correctamente en escritorio y dispositivos móviles.
@@ -58,6 +85,23 @@ La accesibilidad debe considerarse desde el inicio:
 - asociar correctamente etiquetas y controles;
 - mantener navegación mediante teclado;
 - proporcionar texto alternativo cuando corresponda.
+
+## Idiomas
+
+NihonAI debe ofrecer toda su interfaz en español e inglés.
+
+- Los textos visibles deben centralizarse cuando la fase de
+  internacionalización esté implementada.
+- Cada funcionalidad nueva debe incluir simultáneamente sus textos en español e
+  inglés.
+- La traducción abarca navegación, formularios, validaciones, errores,
+  confirmaciones, estados vacíos, ayudas, onboarding, estadísticas, metadatos y
+  textos de accesibilidad.
+- El contenido escrito por el usuario se conserva en el idioma en que fue
+  introducido y no se traduce automáticamente.
+- El texto japonés obtenido mediante OCR se conserva sin alteraciones; las
+  explicaciones y significados deberán respetar el idioma seleccionado cuando
+  la fuente utilizada lo permita.
 
 ## Evolución
 
