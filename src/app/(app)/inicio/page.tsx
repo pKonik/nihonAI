@@ -10,7 +10,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: dictionary.meta.homeTitle };
 }
 
-export default async function HomePage() {
+export default async function PrivateHomePage() {
   const { dictionary } = await getI18n();
   const text = dictionary.home;
   const areas = [

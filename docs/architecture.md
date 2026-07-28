@@ -32,7 +32,8 @@ La aplicación dispone de:
 - layout autenticado compartido para las áreas principales;
 - navegación entre Inicio, Leer manga, Añadir, Mazos y Repasar;
 - interfaz persistente de vocabulario ubicada en la ruta `/anadir`;
-- interfaz bilingüe español–inglés con preferencia persistente.
+- interfaz bilingüe español–inglés con preferencia persistente;
+- landing pública en `/` e Inicio autenticado en `/inicio`.
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -138,7 +139,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
    textos de la aplicación, incorporar un selector de idioma y asegurar que
    navegación, formularios, validaciones, errores, ayudas, metadatos y
    accesibilidad estén disponibles en español e inglés.
-6.7. **Landing pública — pendiente.** Convertir `/` en una presentación pública
+6.7. **Landing pública — completada.** Convertir `/` en una presentación pública
    y bilingüe de NihonAI antes del inicio de sesión, trasladar el Inicio privado
    a `/inicio` y explicar de forma visual y original el recorrido
    `leer → seleccionar → reconocer → minar → repasar`.
@@ -188,7 +189,8 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 6.7: Landing pública**. Desde la fase 6.6,
+La siguiente fase oficial es la **fase 7: Perfil y configuración de cuenta**.
+Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance
 pequeño y no adelantar funcionalidades pertenecientes a las fases posteriores.

@@ -6,6 +6,11 @@ const spanishDictionary = {
   meta: {
     description:
       "Aplicación personal para organizar el aprendizaje de japonés.",
+    landingTitle: "Aprende japonés desde manga | NihonAI",
+    landingDescription:
+      "Convierte el japonés que encuentras en manga en vocabulario con contexto y prepáralo para repasarlo.",
+    landingImageAlt:
+      "NihonAI conecta una escena de lectura japonesa con una tarjeta de vocabulario.",
     homeTitle: "Inicio | NihonAI",
     loginTitle: "Acceso | NihonAI",
     addTitle: "Añadir vocabulario | NihonAI",
@@ -79,6 +84,150 @@ const spanishDictionary = {
       invalidConfirmation: "El enlace de confirmación no es válido.",
       confirmationFailed:
         "No se pudo confirmar la cuenta. Solicita un enlace nuevo.",
+    },
+  },
+  landing: {
+    skipToContent: "Saltar al contenido",
+    navigationLabel: "Navegación de la presentación",
+    navigation: {
+      journey: "Cómo funciona",
+      features: "Herramientas",
+      privacy: "Privacidad",
+      faq: "Preguntas",
+    },
+    signIn: "Iniciar sesión",
+    createAccount: "Crear cuenta",
+    hero: {
+      eyebrow: "Japonés desde contexto real",
+      title: "Convierte cada viñeta en algo que puedas recordar.",
+      description:
+        "NihonAI conecta lectura de manga, reconocimiento de texto y vocabulario personal para que una palabra nueva no pierda la historia donde la encontraste.",
+      primaryAction: "Empezar con NihonAI",
+      secondaryAction: "Ver cómo funciona",
+      availability:
+        "Disponible ahora: vocabulario personal. El lector, OCR y repaso se incorporarán por fases.",
+      carouselLabel: "Ejemplos de lectura y vocabulario",
+      carouselControls: "Controles de las diapositivas",
+      previousSlide: "Mostrar el panel anterior",
+      nextSlide: "Mostrar el panel siguiente",
+      pauseSlides: "Pausar el cambio automático",
+      playSlides: "Reanudar el cambio automático",
+      goToSlide: "Mostrar el panel {current} de {total}",
+      contextLabel: "Contexto de lectura",
+      pageLabel: "Página 12",
+      nightSceneAlt:
+        "Barrio japonés tranquilo bajo la luna durante la noche.",
+      selectionLabel: "Texto seleccionado",
+      japaneseSentence: "静かな夜だね。",
+      reading: "よる",
+      word: "夜",
+      meaning: "noche",
+      saveStatus: "Listo para guardar",
+    },
+    journey: {
+      eyebrow: "Un recorrido conectado",
+      title: "Del manga a la memoria, sin perder el contexto.",
+      description:
+        "Cada etapa está pensada para alimentar la siguiente. La colección de vocabulario ya es la base; el resto se añadirá de manera progresiva.",
+      roadmapLabel: "Recorrido previsto de NihonAI",
+      upcoming: "Próximo",
+      planned: "Planificado",
+      available: "Colección disponible",
+      importTitle: "Importar",
+      importDescription:
+        "Añade imágenes o un archivo ZIP y conserva el orden de lectura.",
+      readTitle: "Leer",
+      readDescription:
+        "Recorre las páginas con controles diseñados para una lectura cómoda.",
+      selectTitle: "Seleccionar",
+      selectDescription:
+        "Marca únicamente la región que contiene el texto que quieres estudiar.",
+      recognizeTitle: "Reconocer",
+      recognizeDescription:
+        "Extrae el japonés mediante OCR y corrígelo antes de continuar.",
+      mineTitle: "Minar",
+      mineDescription:
+        "Convierte una palabra en una entrada con lectura, significado y contexto.",
+      reviewTitle: "Repasar",
+      reviewDescription:
+        "Recupera lo aprendido mediante sesiones breves de repetición espaciada.",
+    },
+    features: {
+      eyebrow: "Herramientas con un propósito",
+      title: "Todo gira alrededor de lo que estás aprendiendo.",
+      description:
+        "NihonAI no pretende juntar funciones aisladas. Cada módulo conservará el vínculo entre lectura, palabra y memoria.",
+      available: "Disponible",
+      upcoming: "Próximamente",
+      readerTitle: "Lector de manga",
+      readerDescription:
+        "Importación local, navegación, zoom y selección precisa de regiones.",
+      vocabularyTitle: "Vocabulario personal",
+      vocabularyDescription:
+        "Guarda palabras, lecturas, significados, ejemplos y su fuente en una colección privada.",
+      kanaTitle: "Hiragana y katakana",
+      kanaDescription:
+        "Aprende caracteres, combinaciones y lecturas antes de depender del contexto.",
+      decksTitle: "Mazos con propósito",
+      decksDescription:
+        "Organiza lo guardado por obra, tema u objetivo de estudio.",
+      reviewTitle: "Repaso con FSRS",
+      reviewDescription:
+        "Programa cada palabra según tu memoria para evitar repasos innecesarios.",
+    },
+    companion: {
+      eyebrow: "Espacio para acompañarte",
+      title: "Una guía propia llegará cuando el recorrido la necesite.",
+      description:
+        "La futura bienvenida tendrá una mascota de NihonAI, pero primero estamos construyendo una experiencia que realmente pueda explicar.",
+      label: "Futura guía de NihonAI",
+    },
+    privacy: {
+      eyebrow: "Privado por diseño",
+      title: "Tu colección es una herramienta personal, no un escaparate.",
+      description:
+        "La base actual protege cada entrada de vocabulario con autenticación y reglas de acceso por usuario.",
+      accountTitle: "Separado por cuenta",
+      accountDescription:
+        "Cada persona accede únicamente al vocabulario asociado con su sesión.",
+      controlTitle: "Tú eliges qué guardar",
+      controlDescription:
+        "El contenido escrito por el usuario y el japonés reconocido conservan su forma original.",
+      honestTitle: "Sin progreso inventado",
+      honestDescription:
+        "No mostramos rankings, testimonios ni métricas que todavía no existan.",
+    },
+    faq: {
+      eyebrow: "Preguntas frecuentes",
+      title: "Antes de comenzar",
+      availableQuestion: "¿Qué puedo utilizar ahora?",
+      availableAnswer:
+        "Puedes crear una cuenta y administrar una colección privada de vocabulario con palabra, lectura, significado, ejemplo, tipo y nivel JLPT.",
+      readerQuestion: "¿El lector y el OCR ya están disponibles?",
+      readerAnswer:
+        "Todavía no. La landing muestra el recorrido previsto y diferencia claramente las herramientas actuales de las próximas fases.",
+      mangaQuestion: "¿Necesito manga para utilizar NihonAI?",
+      mangaAnswer:
+        "No. Puedes añadir vocabulario encontrado en libros, clases, anime u otras fuentes mientras construimos el lector.",
+      languageQuestion: "¿Qué ocurre al cambiar el idioma?",
+      languageAnswer:
+        "La interfaz y sus explicaciones cambian entre español e inglés. El texto japonés y el contenido que escribes se conservan sin alteraciones.",
+    },
+    closing: {
+      eyebrow: "Empieza por una palabra",
+      title: "Construye hoy la colección que mañana acompañará tus lecturas.",
+      description:
+        "Crea tu espacio personal y guarda el japonés que ya estás encontrando.",
+      primaryAction: "Crear mi cuenta",
+      secondaryAction: "Ya tengo una cuenta",
+    },
+    footer: {
+      tagline: "Aprende japonés desde lo que lees.",
+      journey: "Cómo funciona",
+      privacy: "Privacidad",
+      faq: "Preguntas",
+      access: "Acceso",
+      rights: "NihonAI. Proyecto personal de aprendizaje.",
     },
   },
   home: {
@@ -227,6 +376,11 @@ const englishDictionary: Dictionary = {
   meta: {
     description:
       "A personal app for organizing your Japanese learning.",
+    landingTitle: "Learn Japanese from manga | NihonAI",
+    landingDescription:
+      "Turn the Japanese you find in manga into vocabulary with context and prepare it for review.",
+    landingImageAlt:
+      "NihonAI connects a Japanese reading scene with a vocabulary card.",
     homeTitle: "Home | NihonAI",
     loginTitle: "Sign in | NihonAI",
     addTitle: "Add vocabulary | NihonAI",
@@ -300,6 +454,150 @@ const englishDictionary: Dictionary = {
       invalidConfirmation: "The confirmation link is not valid.",
       confirmationFailed:
         "The account could not be confirmed. Request a new link.",
+    },
+  },
+  landing: {
+    skipToContent: "Skip to content",
+    navigationLabel: "Presentation navigation",
+    navigation: {
+      journey: "How it works",
+      features: "Tools",
+      privacy: "Privacy",
+      faq: "Questions",
+    },
+    signIn: "Sign in",
+    createAccount: "Create account",
+    hero: {
+      eyebrow: "Japanese from real context",
+      title: "Turn every panel into something you can remember.",
+      description:
+        "NihonAI connects manga reading, text recognition, and personal vocabulary so a new word never loses the story where you found it.",
+      primaryAction: "Start with NihonAI",
+      secondaryAction: "See how it works",
+      availability:
+        "Available now: personal vocabulary. The reader, OCR, and review will arrive in phases.",
+      carouselLabel: "Reading and vocabulary examples",
+      carouselControls: "Slideshow controls",
+      previousSlide: "Show the previous panel",
+      nextSlide: "Show the next panel",
+      pauseSlides: "Pause automatic slides",
+      playSlides: "Resume automatic slides",
+      goToSlide: "Show panel {current} of {total}",
+      contextLabel: "Reading context",
+      pageLabel: "Page 12",
+      nightSceneAlt:
+        "A quiet Japanese neighborhood beneath the moon at night.",
+      selectionLabel: "Selected text",
+      japaneseSentence: "静かな夜だね。",
+      reading: "よる",
+      word: "夜",
+      meaning: "night",
+      saveStatus: "Ready to save",
+    },
+    journey: {
+      eyebrow: "One connected journey",
+      title: "From manga to memory, without losing context.",
+      description:
+        "Each stage is designed to feed the next. The vocabulary collection is already the foundation; everything else will be added progressively.",
+      roadmapLabel: "Planned NihonAI journey",
+      upcoming: "Next",
+      planned: "Planned",
+      available: "Collection available",
+      importTitle: "Import",
+      importDescription:
+        "Add images or a ZIP file while preserving their reading order.",
+      readTitle: "Read",
+      readDescription:
+        "Move through pages with controls designed for comfortable reading.",
+      selectTitle: "Select",
+      selectDescription:
+        "Mark only the region containing the text you want to study.",
+      recognizeTitle: "Recognize",
+      recognizeDescription:
+        "Extract Japanese through OCR and correct it before continuing.",
+      mineTitle: "Mine",
+      mineDescription:
+        "Turn a word into an entry with its reading, meaning, and context.",
+      reviewTitle: "Review",
+      reviewDescription:
+        "Recall what you learned through short spaced-repetition sessions.",
+    },
+    features: {
+      eyebrow: "Tools with a purpose",
+      title: "Everything revolves around what you are learning.",
+      description:
+        "NihonAI is not meant to collect isolated features. Every module will preserve the connection between reading, words, and memory.",
+      available: "Available",
+      upcoming: "Coming later",
+      readerTitle: "Manga reader",
+      readerDescription:
+        "Local imports, navigation, zoom, and precise region selection.",
+      vocabularyTitle: "Personal vocabulary",
+      vocabularyDescription:
+        "Save words, readings, meanings, examples, and sources in a private collection.",
+      kanaTitle: "Hiragana and katakana",
+      kanaDescription:
+        "Learn characters, combinations, and readings before relying on context.",
+      decksTitle: "Purposeful decks",
+      decksDescription:
+        "Organize saved vocabulary by work, topic, or study goal.",
+      reviewTitle: "FSRS review",
+      reviewDescription:
+        "Schedule each word around your memory and avoid unnecessary reviews.",
+    },
+    companion: {
+      eyebrow: "Room for guidance",
+      title: "A dedicated guide will arrive when the journey needs one.",
+      description:
+        "The future welcome experience will have a NihonAI mascot, but first we are building an experience it can genuinely explain.",
+      label: "Future NihonAI guide",
+    },
+    privacy: {
+      eyebrow: "Private by design",
+      title: "Your collection is a personal tool, not a showcase.",
+      description:
+        "The current foundation protects every vocabulary entry with authentication and per-user access rules.",
+      accountTitle: "Separated by account",
+      accountDescription:
+        "Each person can access only the vocabulary associated with their session.",
+      controlTitle: "You choose what to save",
+      controlDescription:
+        "User-written content and recognized Japanese keep their original form.",
+      honestTitle: "No invented progress",
+      honestDescription:
+        "We do not show rankings, testimonials, or metrics that do not exist yet.",
+    },
+    faq: {
+      eyebrow: "Frequently asked questions",
+      title: "Before you begin",
+      availableQuestion: "What can I use today?",
+      availableAnswer:
+        "You can create an account and manage a private vocabulary collection with words, readings, meanings, examples, word types, and JLPT levels.",
+      readerQuestion: "Are the reader and OCR available already?",
+      readerAnswer:
+        "Not yet. The landing page shows the planned journey and clearly separates current tools from upcoming phases.",
+      mangaQuestion: "Do I need manga to use NihonAI?",
+      mangaAnswer:
+        "No. You can add vocabulary found in books, classes, anime, or other sources while we build the reader.",
+      languageQuestion: "What happens when I change the language?",
+      languageAnswer:
+        "The interface and its explanations switch between Spanish and English. Japanese text and the content you write remain unchanged.",
+    },
+    closing: {
+      eyebrow: "Start with one word",
+      title: "Build today the collection that will accompany tomorrow’s reading.",
+      description:
+        "Create your personal space and save the Japanese you are already finding.",
+      primaryAction: "Create my account",
+      secondaryAction: "I already have an account",
+    },
+    footer: {
+      tagline: "Learn Japanese from what you read.",
+      journey: "How it works",
+      privacy: "Privacy",
+      faq: "Questions",
+      access: "Sign in",
+      rights: "NihonAI. A personal learning project.",
     },
   },
   home: {

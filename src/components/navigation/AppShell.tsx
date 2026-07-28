@@ -71,7 +71,7 @@ export function AppShell({
         <Link
           aria-label={text.shell.homeLabel}
           className="relative rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-shu-300"
-          href="/"
+          href="/inicio"
         >
           <BrandLogo inverted />
         </Link>
@@ -95,7 +95,7 @@ export function AppShell({
             <Link
               aria-label={text.shell.homeLabel}
               className="rounded-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-shu-600"
-              href="/"
+              href="/inicio"
             >
               <BrandLogo compact />
             </Link>

@@ -111,11 +111,11 @@ navegador.
 
 ## Landing pública
 
-La ruta `/` se convertirá en la presentación pública de NihonAI. El Inicio de la
-aplicación autenticada se trasladará a `/inicio`; `/login` conservará el acceso
-y registro, y las demás rutas de la aplicación seguirán siendo privadas.
+La ruta `/` es la presentación pública de NihonAI. El Inicio de la aplicación
+autenticada se encuentra en `/inicio`; `/login` conserva el acceso y registro,
+y las demás rutas de la aplicación siguen siendo privadas.
 
-La landing debe:
+La landing:
 
 - utilizar la identidad visual propia de NihonAI y evitar copiar la composición
   o los recursos gráficos de otras plataformas;
@@ -132,11 +132,16 @@ La landing debe:
 - reservar un espacio compatible con la futura mascota sin adelantar la fase
   de onboarding.
 
-No deben mostrarse testimonios, métricas, precios, capturas o afirmaciones que
-no correspondan a información real. La landing debe funcionar principalmente
-como contenido renderizado en servidor, evitar vídeos y JavaScript
-innecesarios, respetar `prefers-reduced-motion` y mantener buen rendimiento en
-móvil.
+El ejemplo de lectura del hero utiliza una estructura de diapositivas. Cada
+panel puede definir su propia imagen, frase japonesa, lectura, significado y
+etiqueta de página. La rotación automática solo se activa cuando existe más de
+un panel, incluye controles manuales y se detiene cuando el usuario prefiere
+movimiento reducido.
+
+No muestra testimonios, métricas, precios, capturas o afirmaciones que no
+correspondan a información real. Funciona principalmente como contenido
+renderizado en servidor, evita vídeos y JavaScript innecesarios, respeta
+`prefers-reduced-motion` y mantiene buen rendimiento en móvil.
 
 ## Evolución
 

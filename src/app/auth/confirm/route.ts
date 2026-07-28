@@ -26,5 +26,5 @@ export async function GET(request: Request) {
     return NextResponse.redirect(destination);
   }
 
-  return NextResponse.redirect(new URL("/", requestUrl.origin));
+  return NextResponse.redirect(new URL("/inicio", requestUrl.origin));
 }

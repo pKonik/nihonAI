@@ -16,7 +16,7 @@ export function MainNavigation({
 }: MainNavigationProps) {
   const pathname = usePathname();
   const navigationItems = [
-    { href: "/", label: text.home },
+    { href: "/inicio", label: text.home },
     { href: "/leer", label: text.read },
     { href: "/anadir", label: text.add },
     { href: "/mazos", label: text.decks },
@@ -34,8 +34,8 @@ export function MainNavigation({
       >
         {navigationItems.map((item) => {
           const isActive =
-            item.href === "/"
-              ? pathname === "/"
+            item.href === "/inicio"
+              ? pathname === "/inicio"
               : pathname === item.href ||
                 pathname.startsWith(`${item.href}/`);
 

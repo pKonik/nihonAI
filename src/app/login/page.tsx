@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import {
   resendConfirmation,
@@ -60,7 +61,13 @@ export default async function LoginPage({
         </div>
 
         <aside className="hidden bg-sumi-950 p-10 lg:flex lg:flex-col lg:justify-between">
-          <BrandLogo inverted />
+          <Link
+            aria-label={dictionary.shell.homeLabel}
+            className="w-fit rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-shu-300"
+            href="/"
+          >
+            <BrandLogo inverted />
+          </Link>
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-300">
               日本語を、自分のペースで。
@@ -76,7 +83,13 @@ export default async function LoginPage({
 
         <section className="p-6 sm:p-10">
           <div className="mb-8 pr-24 lg:hidden">
-            <BrandLogo />
+            <Link
+              aria-label={dictionary.shell.homeLabel}
+              className="inline-block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-shu-600"
+              href="/"
+            >
+              <BrandLogo />
+            </Link>
           </div>
           <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-600">
             {text.eyebrow}

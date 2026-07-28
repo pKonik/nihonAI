@@ -1,15 +1,8 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
+import { isPublicPath } from "@/lib/auth/paths";
 import { getSupabaseConfig } from "@/lib/supabase/env";
-
-const PUBLIC_PATHS = ["/login", "/auth"];
-
-function isPublicPath(pathname: string) {
-  return PUBLIC_PATHS.some(
-    (path) => pathname === path || pathname.startsWith(`${path}/`),
-  );
-}
 
 export async function updateSession(request: NextRequest) {
   const config = getSupabaseConfig();
@@ -66,7 +59,7 @@ export async function updateSession(request: NextRequest) {
 
   if (claims && pathname === "/login") {
     const homeUrl = request.nextUrl.clone();
-    homeUrl.pathname = "/";
+    homeUrl.pathname = "/inicio";
     homeUrl.search = "";
     return NextResponse.redirect(homeUrl);
   }

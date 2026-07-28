@@ -10,6 +10,8 @@
     "target": "ES2022"
   },
   "include": [
+    "src/lib/auth/paths.ts",
+    "src/lib/auth/paths.test.ts",
     "src/lib/i18n/config.ts",
     "src/lib/i18n/config.test.ts",
     "src/types/vocabulary.ts",

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Noto_Sans_JP } from "next/font/google";
+import { headers } from "next/headers";
 
 import { AuthCallbackError } from "@/components/auth/AuthCallbackError";
 import { BackgroundDetails } from "@/components/brand/BackgroundDetails";
@@ -21,8 +22,31 @@ const notoSansJapanese = Noto_Sans_JP({
 
 export async function generateMetadata(): Promise<Metadata> {
   const { dictionary } = await getI18n();
+  const requestHeaders = await headers();
+  const forwardedHost = requestHeaders.get("x-forwarded-host");
+  const host = (forwardedHost ?? requestHeaders.get("host"))
+    ?.split(",")[0]
+    .trim();
+  const forwardedProtocol = requestHeaders
+    .get("x-forwarded-proto")
+    ?.split(",")[0]
+    .trim();
+  const isLocalHost =
+    host?.startsWith("localhost") === true ||
+    host?.startsWith("127.0.0.1") === true;
+  const protocol =
+    forwardedProtocol === "http" || forwardedProtocol === "https"
+      ? forwardedProtocol
+      : isLocalHost
+        ? "http"
+        : "https";
+  const metadataBase =
+    host && /^[a-zA-Z0-9.-]+(?::\d+)?$/.test(host)
+      ? new URL(`${protocol}://${host}`)
+      : undefined;
 
   return {
+    metadataBase,
     title: "NihonAI",
     description: dictionary.meta.description,
   };

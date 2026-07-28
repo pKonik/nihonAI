@@ -45,14 +45,15 @@ Inicia el servidor de desarrollo:
 npm run dev
 ```
 
-Abre [http://localhost:3000](http://localhost:3000) en el navegador. Next.js
-actualizará la página al guardar cambios en el código.
+Abre [http://localhost:3000](http://localhost:3000) en el navegador para ver la
+presentación pública. Next.js actualizará la página al guardar cambios en el
+código.
 
 Para detener el servidor, vuelve a la terminal y pulsa `Ctrl + C`.
 
-Tras iniciar sesión, la navegación principal separa Inicio, Leer manga, Añadir,
-Mazos y Repasar. El CRUD persistente de vocabulario está disponible en
-**Añadir**; las demás áreas se completarán siguiendo el roadmap de
+Tras iniciar sesión, `/inicio` abre el espacio privado y su navegación separa
+Inicio, Leer manga, Añadir, Mazos y Repasar. El CRUD persistente de vocabulario
+está disponible en **Añadir**; las demás áreas se completarán siguiendo el roadmap de
 [`docs/architecture.md`](docs/architecture.md).
 
 ## Comprobaciones
@@ -64,7 +65,7 @@ npm run typecheck
 npm run build
 ```
 
-- `test` ejecuta las pruebas unitarias del dominio de vocabulario.
+- `test` ejecuta las pruebas unitarias de rutas públicas, idiomas y vocabulario.
 - `lint` revisa problemas de calidad y convenciones.
 - `typecheck` comprueba los tipos de TypeScript sin generar archivos.
 - `build` crea y valida la versión optimizada para producción.

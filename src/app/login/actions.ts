@@ -54,7 +54,7 @@ export async function signIn(formData: FormData) {
     redirectToLogin("error", "signInFailed");
   }
 
-  redirect("/");
+  redirect("/inicio");
 }
 
 export async function signUp(formData: FormData) {
@@ -75,7 +75,7 @@ export async function signUp(formData: FormData) {
   }
 
   if (data.session) {
-    redirect("/");
+    redirect("/inicio");
   }
 
   redirectToLogin("message", "checkEmail");
