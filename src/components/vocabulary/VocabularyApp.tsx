@@ -14,6 +14,7 @@ import {
   removeVocabularyEntry,
   replaceVocabularyEntry,
 } from "@/lib/vocabulary/collection";
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type {
   VocabularyDraft,
   VocabularyEntry,
@@ -22,6 +23,7 @@ import type {
 type VocabularyAppProps = {
   initialEntries: VocabularyEntry[];
   initialLoadError: string | null;
+  text: Dictionary["vocabulary"];
 };
 
 type DeleteError = {
@@ -32,6 +34,7 @@ type DeleteError = {
 export function VocabularyApp({
   initialEntries,
   initialLoadError,
+  text,
 }: VocabularyAppProps) {
   const [entries, setEntries] =
     useState<VocabularyEntry[]>(initialEntries);
@@ -46,15 +49,15 @@ export function VocabularyApp({
 
   async function saveEntry(draft: VocabularyDraft): Promise<string | null> {
     if (initialLoadError) {
-      return "Recarga la página antes de modificar tu vocabulario.";
+      return text.errors.reloadBeforeModify;
     }
 
     if (deletingId) {
-      return "Espera a que termine la eliminación en curso.";
+      return text.errors.waitForDelete;
     }
 
     if (isSavingRef.current) {
-      return "Ya hay una operación de guardado en curso.";
+      return text.errors.saveInProgress;
     }
 
     const entryBeingEdited = editingEntry;
@@ -85,7 +88,7 @@ export function VocabularyApp({
 
       return null;
     } catch {
-      return "No se pudo completar la operación. Inténtalo de nuevo.";
+      return text.errors.operationFailed;
     } finally {
       isSavingRef.current = false;
       setIsSaving(false);
@@ -117,7 +120,7 @@ export function VocabularyApp({
       setDeleteError({
         id,
         message:
-          "No se pudo completar la operación. Inténtalo de nuevo.",
+          text.errors.operationFailed,
       });
     } finally {
       setDeletingId(null);
@@ -128,9 +131,7 @@ export function VocabularyApp({
     <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
       <VocabularyForm
         disabledMessage={
-          initialLoadError
-            ? "Recarga la página para recuperar tu colección antes de guardar cambios."
-            : null
+          initialLoadError ? text.errors.disabled : null
         }
         editingEntry={editingEntry}
         isDisabled={initialLoadError !== null || deletingId !== null}
@@ -138,6 +139,7 @@ export function VocabularyApp({
         key={editingEntry?.id ?? "create"}
         onCancelEdit={() => setEditingEntry(null)}
         onSave={saveEntry}
+        text={text}
       />
       <VocabularyList
         confirmingDeleteId={confirmingDeleteId}
@@ -160,6 +162,7 @@ export function VocabularyApp({
           setConfirmingDeleteId(id);
           setDeleteError(null);
         }}
+        text={text}
       />
     </div>
   );

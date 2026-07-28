@@ -2,14 +2,21 @@ export class VocabularyAuthenticationError extends Error {}
 
 export class VocabularyNotFoundError extends Error {}
 
-export function safeVocabularyMutationError(error: unknown): string {
+export type VocabularyMutationErrorCode =
+  | "authExpired"
+  | "notFound"
+  | "operationFailed";
+
+export function safeVocabularyMutationError(
+  error: unknown,
+): VocabularyMutationErrorCode {
   if (error instanceof VocabularyAuthenticationError) {
-    return "Tu sesión ya no es válida. Vuelve a iniciar sesión.";
+    return "authExpired";
   }
 
   if (error instanceof VocabularyNotFoundError) {
-    return "La entrada ya no existe o no tienes acceso a ella.";
+    return "notFound";
   }
 
-  return "No se pudo completar la operación. Inténtalo de nuevo.";
+  return "operationFailed";
 }

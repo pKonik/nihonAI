@@ -3,25 +3,28 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const NAVIGATION_ITEMS = [
-  { href: "/", label: "Inicio" },
-  { href: "/leer", label: "Leer manga" },
-  { href: "/anadir", label: "Añadir" },
-  { href: "/mazos", label: "Mazos" },
-  { href: "/repasar", label: "Repasar" },
-] as const;
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 
 type MainNavigationProps = {
   isMobile?: boolean;
+  text: Dictionary["navigation"];
 };
 
 export function MainNavigation({
   isMobile = false,
+  text,
 }: MainNavigationProps) {
   const pathname = usePathname();
+  const navigationItems = [
+    { href: "/", label: text.home },
+    { href: "/leer", label: text.read },
+    { href: "/anadir", label: text.add },
+    { href: "/mazos", label: text.decks },
+    { href: "/repasar", label: text.review },
+  ] as const;
 
   return (
-    <nav aria-label="Navegación principal">
+    <nav aria-label={text.label}>
       <ul
         className={
           isMobile
@@ -29,7 +32,7 @@ export function MainNavigation({
             : "space-y-1"
         }
       >
-        {NAVIGATION_ITEMS.map((item) => {
+        {navigationItems.map((item) => {
           const isActive =
             item.href === "/"
               ? pathname === "/"

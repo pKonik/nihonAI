@@ -31,7 +31,8 @@ La aplicación dispone de:
 - acceso a Supabase centralizado en módulos exclusivos del servidor;
 - layout autenticado compartido para las áreas principales;
 - navegación entre Inicio, Leer manga, Añadir, Mazos y Repasar;
-- interfaz persistente de vocabulario ubicada en la ruta `/anadir`.
+- interfaz persistente de vocabulario ubicada en la ruta `/anadir`;
+- interfaz bilingüe español–inglés con preferencia persistente.
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -52,6 +53,20 @@ Toda modificación de la arquitectura debe respetar los siguientes principios:
 - evitar abstracciones innecesarias hasta que exista una necesidad real.
 
 La simplicidad tiene prioridad sobre una arquitectura excesivamente compleja.
+
+---
+
+## Internacionalización
+
+La interfaz utiliza diccionarios TypeScript centralizados para español e inglés.
+El idioma seleccionado se conserva en una cookie `httpOnly` con alcance global y
+se resuelve en Server Components y Server Actions. La aplicación mantiene sus
+rutas actuales sin prefijos de idioma; el elemento `<html>` refleja el idioma
+activo mediante su atributo `lang`.
+
+Los componentes cliente reciben únicamente la sección del diccionario que
+necesitan. Los valores persistidos del dominio, como los tipos de palabra, no se
+traducen en la base de datos: solo se traduce su etiqueta de presentación.
 
 ---
 
@@ -119,10 +134,14 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 6.5. **Identidad visual y diseño — completada.** Crear el logo y la identidad
    propia de NihonAI, aplicar un estilo japonés contemporáneo y consolidar la
    presentación responsive de la navegación sin copiar otras plataformas.
-6.6. **Internacionalización español–inglés — pendiente.** Centralizar los
+6.6. **Internacionalización español–inglés — completada.** Centralizar los
    textos de la aplicación, incorporar un selector de idioma y asegurar que
    navegación, formularios, validaciones, errores, ayudas, metadatos y
    accesibilidad estén disponibles en español e inglés.
+6.7. **Landing pública — pendiente.** Convertir `/` en una presentación pública
+   y bilingüe de NihonAI antes del inicio de sesión, trasladar el Inicio privado
+   a `/inicio` y explicar de forma visual y original el recorrido
+   `leer → seleccionar → reconocer → minar → repasar`.
 7. **Perfil y configuración de cuenta — pendiente.** Incorporar foto de perfil,
    nombre visible, configuración de la cuenta, acceso desde el avatar y
    estadísticas basadas únicamente en actividad real. No incluir niveles, XP,
@@ -169,11 +188,10 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 6.6: Internacionalización
-español–inglés**. Desde esta fase, toda funcionalidad nueva que muestre texto
-deberá entregar sus versiones en español e inglés dentro de la misma fase. Cada
-fase debe mantener un alcance pequeño y no adelantar funcionalidades
-pertenecientes a las fases posteriores.
+La siguiente fase oficial es la **fase 6.7: Landing pública**. Desde la fase 6.6,
+toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
+español e inglés dentro de la misma fase. Cada fase debe mantener un alcance
+pequeño y no adelantar funcionalidades pertenecientes a las fases posteriores.
 
 ---
 

@@ -1,14 +1,18 @@
 import Link from "next/link";
 
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+
 type FeaturePlaceholderProps = {
   description: string;
   nextStep: string;
+  text: Dictionary["feature"];
   title: string;
 };
 
 export function FeaturePlaceholder({
   description,
   nextStep,
+  text,
   title,
 }: FeaturePlaceholderProps) {
   return (
@@ -22,7 +26,7 @@ export function FeaturePlaceholder({
         </span>
         <div className="border-b border-shu-100 bg-shu-50 px-6 py-4 sm:px-10">
           <p className="text-sm font-semibold text-shu-700">
-            Espacio preparado para una próxima fase
+            {text.prepared}
           </p>
         </div>
         <div className="relative px-6 py-10 sm:px-10 sm:py-14">
@@ -38,7 +42,7 @@ export function FeaturePlaceholder({
 
           <div className="mt-8 rounded-2xl border border-washi-200 bg-washi-100 p-5">
             <p className="text-sm font-semibold text-sumi-950">
-              Qué viene después
+              {text.next}
             </p>
             <p className="mt-2 text-sm leading-6 text-sumi-600">
               {nextStep}
@@ -49,7 +53,7 @@ export function FeaturePlaceholder({
             className="mt-8 inline-flex rounded-xl bg-sumi-950 px-5 py-3 font-semibold text-washi-50 transition hover:bg-shu-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600"
             href="/anadir"
           >
-            Añadir vocabulario ahora
+            {text.addNow}
           </Link>
         </div>
       </section>

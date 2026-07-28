@@ -16,7 +16,13 @@ export const VOCABULARY_FIELD_LIMITS = {
 
 type ValidationResult =
   | { success: true; data: VocabularyDraft }
-  | { success: false; error: string };
+  | { success: false; error: VocabularyValidationErrorCode };
+
+export type VocabularyValidationErrorCode =
+  | "invalidData"
+  | "requiredFields"
+  | "invalidEnums"
+  | "fieldTooLong";
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null;
@@ -38,7 +44,7 @@ export function parseVocabularyDraft(value: unknown): ValidationResult {
   if (!isRecord(value)) {
     return {
       success: false,
-      error: "No se recibieron datos de vocabulario válidos.",
+      error: "invalidData",
     };
   }
 
@@ -53,14 +59,14 @@ export function parseVocabularyDraft(value: unknown): ValidationResult {
   if (!word || !reading || !meaning) {
     return {
       success: false,
-      error: "Completa la palabra, la lectura y el significado.",
+      error: "requiredFields",
     };
   }
 
   if (!isWordType(partOfSpeech) || !isJlptLevel(jlptLevel)) {
     return {
       success: false,
-      error: "Selecciona un tipo de palabra y un nivel JLPT válidos.",
+      error: "invalidEnums",
     };
   }
 
@@ -73,7 +79,7 @@ export function parseVocabularyDraft(value: unknown): ValidationResult {
   ) {
     return {
       success: false,
-      error: "Uno o más campos superan la longitud permitida.",
+      error: "fieldTooLong",
     };
   }
 

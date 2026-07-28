@@ -10,6 +10,8 @@
     "target": "ES2022"
   },
   "include": [
+    "src/lib/i18n/config.ts",
+    "src/lib/i18n/config.test.ts",
     "src/types/vocabulary.ts",
     "src/lib/vocabulary/collection.ts",
     "src/lib/vocabulary/domain.test.ts",

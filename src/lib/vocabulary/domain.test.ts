@@ -53,7 +53,7 @@ test("rechaza campos obligatorios vacíos", () => {
 
   assert.deepEqual(result, {
     success: false,
-    error: "Completa la palabra, la lectura y el significado.",
+    error: "requiredFields",
   });
 });
 
@@ -65,7 +65,7 @@ test("rechaza enumeraciones manipuladas", () => {
 
   assert.deepEqual(result, {
     success: false,
-    error: "Selecciona un tipo de palabra y un nivel JLPT válidos.",
+    error: "invalidEnums",
   });
 });
 
@@ -77,7 +77,7 @@ test("rechaza textos que superan los límites", () => {
 
   assert.deepEqual(result, {
     success: false,
-    error: "Uno o más campos superan la longitud permitida.",
+    error: "fieldTooLong",
   });
 });
 
@@ -140,15 +140,15 @@ test("convierte campos opcionales vacíos a null", () => {
 test("convierte errores del servidor en mensajes seguros", () => {
   assert.equal(
     safeVocabularyMutationError(new VocabularyAuthenticationError()),
-    "Tu sesión ya no es válida. Vuelve a iniciar sesión.",
+    "authExpired",
   );
   assert.equal(
     safeVocabularyMutationError(new VocabularyNotFoundError()),
-    "La entrada ya no existe o no tienes acceso a ella.",
+    "notFound",
   );
   assert.equal(
     safeVocabularyMutationError(new Error("database connection string")),
-    "No se pudo completar la operación. Inténtalo de nuevo.",
+    "operationFailed",
   );
 });
 

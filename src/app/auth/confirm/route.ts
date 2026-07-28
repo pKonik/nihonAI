@@ -14,10 +14,7 @@ export async function GET(request: Request) {
   }
 
   if (!code) {
-    destination.searchParams.set(
-      "error",
-      "El enlace de confirmación no es válido.",
-    );
+    destination.searchParams.set("error", "invalidConfirmation");
     return NextResponse.redirect(destination);
   }
 
@@ -25,10 +22,7 @@ export async function GET(request: Request) {
   const { error } = await supabase.auth.exchangeCodeForSession(code);
 
   if (error) {
-    destination.searchParams.set(
-      "error",
-      "No se pudo confirmar la cuenta. Solicita un enlace nuevo.",
-    );
+    destination.searchParams.set("error", "confirmationFailed");
     return NextResponse.redirect(destination);
   }
 

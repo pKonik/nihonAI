@@ -2,12 +2,15 @@
 
 import { useEffect, useState } from "react";
 
-type AuthNotice = {
-  title: string;
-  description: string;
+import type { Dictionary } from "@/lib/i18n/dictionaries";
+
+type AuthNoticeKind = "expired" | "invalid";
+
+type AuthCallbackErrorProps = {
+  text: Dictionary["authNotice"];
 };
 
-function readAuthNotice(): AuthNotice | null {
+function readAuthNotice(): AuthNoticeKind | null {
   const params = new URLSearchParams(window.location.hash.slice(1));
   const errorCode = params.get("error_code");
 
@@ -16,22 +19,14 @@ function readAuthNotice(): AuthNotice | null {
   }
 
   if (errorCode === "otp_expired") {
-    return {
-      title: "El enlace ya no está disponible",
-      description:
-        "El enlace venció o ya fue utilizado. Solicita un correo nuevo desde la pantalla de acceso.",
-    };
+    return "expired";
   }
 
-  return {
-    title: "No se pudo completar la confirmación",
-    description:
-      "El enlace no es válido. Puedes solicitar uno nuevo desde la pantalla de acceso.",
-  };
+  return "invalid";
 }
 
-export function AuthCallbackError() {
-  const [notice, setNotice] = useState<AuthNotice | null>(null);
+export function AuthCallbackError({ text }: AuthCallbackErrorProps) {
+  const [notice, setNotice] = useState<AuthNoticeKind | null>(null);
 
   useEffect(() => {
     const authNotice = readAuthNotice();
@@ -56,6 +51,13 @@ export function AuthCallbackError() {
     return null;
   }
 
+  const title =
+    notice === "expired" ? text.expiredTitle : text.invalidTitle;
+  const description =
+    notice === "expired"
+      ? text.expiredDescription
+      : text.invalidDescription;
+
   return (
     <aside
       className="fixed inset-x-4 top-4 z-50 mx-auto max-w-xl rounded-2xl border border-red-200 bg-washi-50 p-4 shadow-lg"
@@ -63,18 +65,18 @@ export function AuthCallbackError() {
     >
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="font-semibold text-red-800">{notice.title}</p>
+          <p className="font-semibold text-red-800">{title}</p>
           <p className="mt-1 text-sm leading-6 text-sumi-600">
-            {notice.description}
+            {description}
           </p>
         </div>
         <button
-          aria-label="Cerrar aviso"
+          aria-label={text.closeLabel}
           className="rounded-lg px-2 py-1 text-sm font-semibold text-sumi-500 transition hover:bg-washi-100 hover:text-sumi-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
           onClick={() => setNotice(null)}
           type="button"
         >
-          Cerrar
+          {text.close}
         </button>
       </div>
     </aside>

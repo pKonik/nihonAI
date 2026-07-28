@@ -1,17 +1,23 @@
 import type { Metadata } from "next";
 
 import { FeaturePlaceholder } from "@/components/navigation/FeaturePlaceholder";
+import { getI18n } from "@/lib/i18n/server";
 
-export const metadata: Metadata = {
-  title: "Leer manga | NihonAI",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { dictionary } = await getI18n();
 
-export default function ReadMangaPage() {
+  return { title: dictionary.meta.readTitle };
+}
+
+export default async function ReadMangaPage() {
+  const { dictionary } = await getI18n();
+
   return (
     <FeaturePlaceholder
-      description="Aquí podrás importar páginas de manga y convertir la lectura en vocabulario con contexto."
-      nextStep="La importación de imágenes y archivos ZIP llegará en la fase 7."
-      title="Leer manga"
+      description={dictionary.read.description}
+      nextStep={dictionary.read.nextStep}
+      text={dictionary.feature}
+      title={dictionary.read.title}
     />
   );
 }

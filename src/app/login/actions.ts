@@ -6,6 +6,13 @@ import { redirect } from "next/navigation";
 import { getSupabaseConfig } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 
+function redirectToLogin(
+  kind: "error" | "message",
+  code: string,
+): never {
+  redirect(`/login?${kind}=${encodeURIComponent(code)}`);
+}
+
 function readCredentials(formData: FormData) {
   const emailValue = formData.get("email");
   const passwordValue = formData.get("password");
@@ -14,9 +21,7 @@ function readCredentials(formData: FormData) {
     typeof passwordValue === "string" ? passwordValue : "";
 
   if (!email || !email.includes("@") || password.length < 6) {
-    redirect(
-      "/login?error=Escribe un correo válido y una contraseña de al menos 6 caracteres.",
-    );
+    redirectToLogin("error", "invalidCredentials");
   }
 
   return { email, password };
@@ -27,7 +32,7 @@ function readEmail(formData: FormData) {
   const email = typeof emailValue === "string" ? emailValue.trim() : "";
 
   if (!email || !email.includes("@")) {
-    redirect("/login?error=Escribe un correo válido.");
+    redirectToLogin("error", "invalidEmail");
   }
 
   return email;
@@ -46,7 +51,7 @@ export async function signIn(formData: FormData) {
   const { error } = await supabase.auth.signInWithPassword(credentials);
 
   if (error) {
-    redirect("/login?error=No se pudo iniciar sesión. Revisa tus datos.");
+    redirectToLogin("error", "signInFailed");
   }
 
   redirect("/");
@@ -66,16 +71,14 @@ export async function signUp(formData: FormData) {
   });
 
   if (error) {
-    redirect("/login?error=No se pudo crear la cuenta.");
+    redirectToLogin("error", "signUpFailed");
   }
 
   if (data.session) {
     redirect("/");
   }
 
-  redirect(
-    "/login?message=Revisa tu correo para confirmar la cuenta antes de iniciar sesión.",
-  );
+  redirectToLogin("message", "checkEmail");
 }
 
 export async function resendConfirmation(formData: FormData) {
@@ -93,14 +96,10 @@ export async function resendConfirmation(formData: FormData) {
   });
 
   if (error) {
-    redirect(
-      "/login?error=No se pudo reenviar la confirmación. Espera un momento e inténtalo de nuevo.",
-    );
+    redirectToLogin("error", "resendFailed");
   }
 
-  redirect(
-    "/login?message=Si existe una cuenta pendiente para ese correo, recibirás un enlace de confirmación nuevo.",
-  );
+  redirectToLogin("message", "resendSuccess");
 }
 
 export async function signOut() {

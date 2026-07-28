@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 import type { VocabularyEntry } from "@/types/vocabulary";
 
 type VocabularyListProps = {
@@ -15,6 +16,7 @@ type VocabularyListProps = {
   onConfirmDelete: (id: string) => Promise<void>;
   onEdit: (entry: VocabularyEntry) => void;
   onRequestDelete: (id: string) => void;
+  text: Dictionary["vocabulary"];
 };
 
 export function VocabularyList({
@@ -28,6 +30,7 @@ export function VocabularyList({
   onConfirmDelete,
   onEdit,
   onRequestDelete,
+  text,
 }: VocabularyListProps) {
   const confirmDeleteButtonRef = useRef<HTMLButtonElement>(null);
 
@@ -44,13 +47,13 @@ export function VocabularyList({
     >
       <div className="mb-6">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-600">
-          Colección
+          {text.list.eyebrow}
         </p>
         <h2
           className="mt-2 text-2xl font-bold text-sumi-950"
           id="vocabulary-list-title"
         >
-          Mi vocabulario
+          {text.list.title}
         </h2>
       </div>
 
@@ -66,10 +69,10 @@ export function VocabularyList({
       {entries.length === 0 && !loadError ? (
         <div className="rounded-2xl border border-dashed border-washi-300 bg-washi-100 px-6 py-12 text-center">
           <p className="font-medium text-sumi-800">
-            Todavía no hay palabras guardadas.
+            {text.list.emptyTitle}
           </p>
           <p className="mt-2 text-sm leading-6 text-sumi-500">
-            Completa el formulario para crear tu primera entrada.
+            {text.list.emptyDescription}
           </p>
         </div>
       ) : entries.length > 0 ? (
@@ -89,22 +92,28 @@ export function VocabularyList({
                   {confirmingDeleteId !== entry.id ? (
                     <div className="flex flex-wrap justify-end gap-1">
                       <button
-                        aria-label={`Editar ${entry.word}`}
+                        aria-label={text.list.editLabel.replace(
+                          "{word}",
+                          entry.word,
+                        )}
                         className="rounded-lg px-3 py-2 text-sm font-medium text-sumi-700 transition hover:bg-washi-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sumi-700 disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={isSaving || deletingId !== null}
                         onClick={() => onEdit(entry)}
                         type="button"
                       >
-                        Editar
+                        {text.list.edit}
                       </button>
                       <button
-                        aria-label={`Eliminar ${entry.word}`}
+                        aria-label={text.list.deleteLabel.replace(
+                          "{word}",
+                          entry.word,
+                        )}
                         className="rounded-lg px-3 py-2 text-sm font-medium text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={isSaving || deletingId !== null}
                         onClick={() => onRequestDelete(entry.id)}
                         type="button"
                       >
-                        Eliminar
+                        {text.list.delete}
                       </button>
                     </div>
                   ) : null}
@@ -112,12 +121,15 @@ export function VocabularyList({
 
                 {confirmingDeleteId === entry.id ? (
                   <div
-                    aria-label={`Confirmar eliminación de ${entry.word}`}
+                    aria-label={text.list.confirmLabel.replace(
+                      "{word}",
+                      entry.word,
+                    )}
                     className="mt-4 rounded-xl bg-red-50 p-4"
                     role="group"
                   >
                     <p className="text-sm font-medium text-red-900">
-                      ¿Eliminar esta entrada?
+                      {text.list.confirmQuestion}
                     </p>
                     <div className="mt-3 flex flex-wrap gap-2">
                       <button
@@ -130,8 +142,8 @@ export function VocabularyList({
                         type="button"
                       >
                         {deletingId === entry.id
-                          ? "Eliminando..."
-                          : "Eliminar"}
+                          ? text.list.deleting
+                          : text.list.delete}
                       </button>
                       <button
                         className="rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-semibold text-sumi-800 transition hover:border-red-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sumi-700 disabled:cursor-not-allowed disabled:opacity-60"
@@ -141,7 +153,7 @@ export function VocabularyList({
                         onClick={onCancelDelete}
                         type="button"
                       >
-                        Cancelar
+                        {text.list.cancel}
                       </button>
                     </div>
                     {deleteError?.id === entry.id ? (
@@ -159,10 +171,12 @@ export function VocabularyList({
 
                 <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
                   <span className="rounded-full bg-washi-100 px-3 py-1 text-sumi-700">
-                    {entry.partOfSpeech}
+                    {text.form.wordTypes[entry.partOfSpeech]}
                   </span>
                   <span className="rounded-full bg-shu-50 px-3 py-1 text-shu-700">
-                    {entry.jlptLevel}
+                    {entry.jlptLevel === "Sin clasificar"
+                      ? text.form.unclassified
+                      : entry.jlptLevel}
                   </span>
                 </div>
 
@@ -174,7 +188,10 @@ export function VocabularyList({
 
                 {entry.source ? (
                   <p className="mt-4 text-xs text-sumi-500">
-                    Fuente: {entry.source}
+                    {text.list.source.replace(
+                      "{source}",
+                      entry.source,
+                    )}
                   </p>
                 ) : null}
               </article>

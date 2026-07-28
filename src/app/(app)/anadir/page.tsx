@@ -2,15 +2,20 @@ import type { Metadata } from "next";
 import { redirect, unstable_rethrow } from "next/navigation";
 
 import { VocabularyApp } from "@/components/vocabulary/VocabularyApp";
+import { getI18n } from "@/lib/i18n/server";
 import { listVocabularyEntries } from "@/lib/vocabulary/data";
 import { VocabularyAuthenticationError } from "@/lib/vocabulary/errors";
 import type { VocabularyEntry } from "@/types/vocabulary";
 
-export const metadata: Metadata = {
-  title: "Añadir vocabulario | NihonAI",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { dictionary } = await getI18n();
+
+  return { title: dictionary.meta.addTitle };
+}
 
 export default async function AddVocabularyPage() {
+  const { dictionary } = await getI18n();
+  const text = dictionary.vocabulary;
   let initialEntries: VocabularyEntry[] = [];
   let initialLoadError: string | null = null;
 
@@ -24,28 +29,27 @@ export default async function AddVocabularyPage() {
     }
 
     console.error("No se pudo cargar el vocabulario.", error);
-    initialLoadError =
-      "No se pudo cargar tu vocabulario. Recarga la página para intentarlo de nuevo.";
+    initialLoadError = text.loadError;
   }
 
   return (
     <div className="mx-auto w-full max-w-6xl">
       <header className="mb-8">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-600">
-          Colección · 単語
+          {text.eyebrow}
         </p>
         <h1 className="mt-2 text-3xl font-bold tracking-tight text-sumi-950 sm:text-4xl">
-          Añadir vocabulario
+          {text.title}
         </h1>
         <p className="mt-3 max-w-2xl leading-7 text-sumi-600">
-          Guarda las palabras que encuentras durante tu estudio y administra tu
-          colección personal.
+          {text.description}
         </p>
       </header>
 
       <VocabularyApp
         initialEntries={initialEntries}
         initialLoadError={initialLoadError}
+        text={text}
       />
     </div>
   );

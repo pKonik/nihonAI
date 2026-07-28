@@ -3,6 +3,7 @@ import { Inter, Noto_Sans_JP } from "next/font/google";
 
 import { AuthCallbackError } from "@/components/auth/AuthCallbackError";
 import { BackgroundDetails } from "@/components/brand/BackgroundDetails";
+import { getI18n } from "@/lib/i18n/server";
 
 import "./globals.css";
 
@@ -18,25 +19,31 @@ const notoSansJapanese = Noto_Sans_JP({
   weight: "variable",
 });
 
-export const metadata: Metadata = {
-  title: "NihonAI",
-  description: "Aplicación personal para organizar el aprendizaje de japonés.",
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const { dictionary } = await getI18n();
 
-export default function RootLayout({
+  return {
+    title: "NihonAI",
+    description: dictionary.meta.description,
+  };
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { locale, dictionary } = await getI18n();
+
   return (
     <html
-      lang="es"
+      lang={locale}
       className={`${inter.variable} ${notoSansJapanese.variable} h-full antialiased`}
     >
       <body className="min-h-full">
         <BackgroundDetails />
         <div className="relative z-10 flex min-h-full flex-col">
-          <AuthCallbackError />
+          <AuthCallbackError text={dictionary.authNotice} />
           {children}
         </div>
       </body>

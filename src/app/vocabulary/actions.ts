@@ -7,6 +7,7 @@ import {
   deleteVocabularyEntry,
   updateVocabularyEntry,
 } from "@/lib/vocabulary/data";
+import { getI18n } from "@/lib/i18n/server";
 import { safeVocabularyMutationError } from "@/lib/vocabulary/errors";
 import {
   parseVocabularyDraft,
@@ -20,9 +21,11 @@ import type {
 export async function createVocabularyAction(
   value: unknown,
 ): Promise<VocabularyResult<VocabularyEntry>> {
+  const { dictionary } = await getI18n();
+  const errors = dictionary.vocabulary.errors;
   const parsed = parseVocabularyDraft(value);
   if (!parsed.success) {
-    return { ok: false, error: parsed.error };
+    return { ok: false, error: errors[parsed.error] };
   }
 
   try {
@@ -34,7 +37,7 @@ export async function createVocabularyAction(
     console.error("No se pudo crear la entrada de vocabulario.", error);
     return {
       ok: false,
-      error: safeVocabularyMutationError(error),
+      error: errors[safeVocabularyMutationError(error)],
     };
   }
 }
@@ -43,15 +46,17 @@ export async function updateVocabularyAction(
   idValue: unknown,
   value: unknown,
 ): Promise<VocabularyResult<VocabularyEntry>> {
+  const { dictionary } = await getI18n();
+  const errors = dictionary.vocabulary.errors;
   const id = parseVocabularyId(idValue);
   const parsed = parseVocabularyDraft(value);
 
   if (!id) {
-    return { ok: false, error: "La entrada seleccionada no es válida." };
+    return { ok: false, error: errors.invalidEntry };
   }
 
   if (!parsed.success) {
-    return { ok: false, error: parsed.error };
+    return { ok: false, error: errors[parsed.error] };
   }
 
   try {
@@ -66,7 +71,7 @@ export async function updateVocabularyAction(
     );
     return {
       ok: false,
-      error: safeVocabularyMutationError(error),
+      error: errors[safeVocabularyMutationError(error)],
     };
   }
 }
@@ -74,9 +79,11 @@ export async function updateVocabularyAction(
 export async function deleteVocabularyAction(
   idValue: unknown,
 ): Promise<VocabularyResult<{ id: string }>> {
+  const { dictionary } = await getI18n();
+  const errors = dictionary.vocabulary.errors;
   const id = parseVocabularyId(idValue);
   if (!id) {
-    return { ok: false, error: "La entrada seleccionada no es válida." };
+    return { ok: false, error: errors.invalidEntry };
   }
 
   try {
@@ -91,7 +98,7 @@ export async function deleteVocabularyAction(
     );
     return {
       ok: false,
-      error: safeVocabularyMutationError(error),
+      error: errors[safeVocabularyMutationError(error)],
     };
   }
 }

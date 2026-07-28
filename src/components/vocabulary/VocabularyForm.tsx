@@ -5,6 +5,7 @@ import {
   type FormEvent,
 } from "react";
 
+import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { VOCABULARY_FIELD_LIMITS } from "@/lib/vocabulary/validation";
 import {
   JLPT_LEVELS,
@@ -22,6 +23,7 @@ type VocabularyFormProps = {
   isSaving: boolean;
   onCancelEdit: () => void;
   onSave: (draft: VocabularyDraft) => Promise<string | null>;
+  text: Dictionary["vocabulary"];
 };
 
 const INITIAL_VALUES: VocabularyDraft = {
@@ -60,6 +62,7 @@ export function VocabularyForm({
   isSaving,
   onCancelEdit,
   onSave,
+  text,
 }: VocabularyFormProps) {
   const [values, setValues] = useState<VocabularyDraft>(() =>
     getInitialValues(editingEntry),
@@ -101,7 +104,7 @@ export function VocabularyForm({
       !normalizedValues.reading ||
       !normalizedValues.meaning
     ) {
-      setError("Completa la palabra, la lectura y el significado.");
+      setError(text.errors.requiredFields);
       return;
     }
 
@@ -118,9 +121,7 @@ export function VocabularyForm({
       }
       setError("");
     } catch {
-      setError(
-        "No se pudo completar la operación. Inténtalo de nuevo.",
-      );
+      setError(text.errors.operationFailed);
     }
   }
 
@@ -128,17 +129,19 @@ export function VocabularyForm({
     <section className="rounded-3xl border border-washi-200 bg-washi-50 p-6 shadow-sm sm:p-8">
       <div className="mb-6">
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-600">
-          {editingEntry ? "Editar entrada" : "Nueva entrada"}
+          {editingEntry
+            ? text.form.editEyebrow
+            : text.form.newEyebrow}
         </p>
         <h2
           className="mt-2 text-2xl font-bold text-sumi-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-shu-600"
           ref={headingRef}
           tabIndex={-1}
         >
-          {editingEntry ? "Editar vocabulario" : "Añadir vocabulario"}
+          {editingEntry ? text.form.editTitle : text.form.addTitle}
         </h2>
         <p className="mt-2 text-sm leading-6 text-sumi-600">
-          Los campos marcados con * son obligatorios.
+          {text.form.requiredHelp}
         </p>
       </div>
 
@@ -153,7 +156,7 @@ export function VocabularyForm({
             className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="word"
           >
-            Palabra en japonés *
+            {text.form.word}
           </label>
           <input
             className={FIELD_CLASSES}
@@ -173,7 +176,7 @@ export function VocabularyForm({
             className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="reading"
           >
-            Lectura *
+            {text.form.reading}
           </label>
           <input
             className={FIELD_CLASSES}
@@ -193,7 +196,7 @@ export function VocabularyForm({
             className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="meaning"
           >
-            Significado en español *
+            {text.form.meaning}
           </label>
           <input
             className={FIELD_CLASSES}
@@ -203,7 +206,7 @@ export function VocabularyForm({
             name="meaning"
             value={values.meaning}
             onChange={(event) => updateField("meaning", event.target.value)}
-            placeholder="estudio"
+            placeholder={text.form.meaningPlaceholder}
             required
           />
         </div>
@@ -214,7 +217,7 @@ export function VocabularyForm({
               className="mb-2 block text-sm font-medium text-sumi-800"
               htmlFor="partOfSpeech"
             >
-              Tipo de palabra
+              {text.form.wordType}
             </label>
             <select
               className={FIELD_CLASSES}
@@ -228,7 +231,7 @@ export function VocabularyForm({
             >
               {WORD_TYPES.map((wordType) => (
                 <option key={wordType} value={wordType}>
-                  {wordType}
+                  {text.form.wordTypes[wordType]}
                 </option>
               ))}
             </select>
@@ -239,7 +242,7 @@ export function VocabularyForm({
               className="mb-2 block text-sm font-medium text-sumi-800"
               htmlFor="jlptLevel"
             >
-              Nivel JLPT
+              {text.form.jlpt}
             </label>
             <select
               className={FIELD_CLASSES}
@@ -253,7 +256,9 @@ export function VocabularyForm({
             >
               {JLPT_LEVELS.map((level) => (
                 <option key={level} value={level}>
-                  {level}
+                  {level === "Sin clasificar"
+                    ? text.form.unclassified
+                    : level}
                 </option>
               ))}
             </select>
@@ -265,7 +270,7 @@ export function VocabularyForm({
             className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="example"
           >
-            Frase de ejemplo
+            {text.form.example}
           </label>
           <textarea
             className={`${FIELD_CLASSES} min-h-24 resize-y`}
@@ -284,7 +289,7 @@ export function VocabularyForm({
             className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="source"
           >
-            Fuente o etiqueta de origen
+            {text.form.source}
           </label>
           <input
             className={FIELD_CLASSES}
@@ -294,7 +299,7 @@ export function VocabularyForm({
             name="source"
             value={values.source}
             onChange={(event) => updateField("source", event.target.value)}
-            placeholder="Anime, libro, clase..."
+            placeholder={text.form.sourcePlaceholder}
           />
         </div>
 
@@ -324,11 +329,11 @@ export function VocabularyForm({
           >
             {isSaving
               ? editingEntry
-                ? "Guardando cambios..."
-                : "Guardando..."
+                ? text.form.savingChanges
+                : text.form.saving
               : editingEntry
-                ? "Guardar cambios"
-                : "Guardar palabra"}
+                ? text.form.saveChanges
+                : text.form.saveWord}
           </button>
 
           {editingEntry ? (
@@ -338,7 +343,7 @@ export function VocabularyForm({
               onClick={onCancelEdit}
               type="button"
             >
-              Cancelar
+              {text.form.cancel}
             </button>
           ) : null}
         </div>

@@ -103,6 +103,41 @@ NihonAI debe ofrecer toda su interfaz en español e inglés.
   explicaciones y significados deberán respetar el idioma seleccionado cuando
   la fuente utilizada lo permita.
 
+Los textos se centralizan en `src/lib/i18n/dictionaries.ts`. El selector utiliza
+los códigos `ES` y `EN`, muestra el idioma activo y conserva la preferencia entre
+sesiones. Los componentes interactivos reciben textos traducidos mediante
+props, evitando incluir ambos diccionarios completos en el JavaScript del
+navegador.
+
+## Landing pública
+
+La ruta `/` se convertirá en la presentación pública de NihonAI. El Inicio de la
+aplicación autenticada se trasladará a `/inicio`; `/login` conservará el acceso
+y registro, y las demás rutas de la aplicación seguirán siendo privadas.
+
+La landing debe:
+
+- utilizar la identidad visual propia de NihonAI y evitar copiar la composición
+  o los recursos gráficos de otras plataformas;
+- explicar primero la propuesta principal: aprender japonés desde manga y
+  convertir contexto real en vocabulario que pueda repasarse;
+- mostrar el recorrido `importar → leer → seleccionar → OCR → minar → repasar`;
+- presentar de forma breve el lector, el vocabulario, kana, mazos y FSRS;
+- ofrecer navegación por anclas, selector español–inglés, acceso y registro;
+- repetir llamadas a la acción únicamente en puntos naturales del recorrido;
+- diferenciar claramente las funciones disponibles de las que estén marcadas
+  como próximas;
+- incluir una sección de privacidad, preguntas frecuentes, llamada final y
+  footer;
+- reservar un espacio compatible con la futura mascota sin adelantar la fase
+  de onboarding.
+
+No deben mostrarse testimonios, métricas, precios, capturas o afirmaciones que
+no correspondan a información real. La landing debe funcionar principalmente
+como contenido renderizado en servidor, evitar vídeos y JavaScript
+innecesarios, respetar `prefers-reduced-motion` y mantener buen rendimiento en
+móvil.
+
 ## Evolución
 
 Si este documento crece significativamente, podrá dividirse en:

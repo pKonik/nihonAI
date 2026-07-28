@@ -1,10 +1,18 @@
-const STEPS = [
-  { japanese: "読む", label: "Leer", x: 18, y: 26 },
-  { japanese: "集める", label: "Recopilar", x: 156, y: 108 },
-  { japanese: "覚える", label: "Recordar", x: 294, y: 34 },
-] as const;
+type LearningMotifProps = {
+  labels: {
+    collect: string;
+    read: string;
+    remember: string;
+  };
+};
 
-export function LearningMotif() {
+export function LearningMotif({ labels }: LearningMotifProps) {
+  const steps = [
+    { japanese: "読む", label: labels.read, x: 18, y: 26 },
+    { japanese: "集める", label: labels.collect, x: 156, y: 108 },
+    { japanese: "覚える", label: labels.remember, x: 294, y: 34 },
+  ] as const;
+
   return (
     <svg
       aria-hidden="true"
@@ -24,7 +32,7 @@ export function LearningMotif() {
         strokeWidth="3"
       />
 
-      {STEPS.map((step, index) => (
+      {steps.map((step, index) => (
         <g key={step.japanese} transform={`translate(${step.x} ${step.y})`}>
           <rect
             fill="white"
