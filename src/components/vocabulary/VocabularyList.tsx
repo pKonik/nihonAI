@@ -40,14 +40,14 @@ export function VocabularyList({
   return (
     <section
       aria-labelledby="vocabulary-list-title"
-      className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8"
+      className="rounded-3xl border border-washi-200 bg-washi-50 p-6 shadow-sm sm:p-8"
     >
       <div className="mb-6">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-red-600">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-600">
           Colección
         </p>
         <h2
-          className="mt-2 text-2xl font-bold text-slate-950"
+          className="mt-2 text-2xl font-bold text-sumi-950"
           id="vocabulary-list-title"
         >
           Mi vocabulario
@@ -64,11 +64,11 @@ export function VocabularyList({
       ) : null}
 
       {entries.length === 0 && !loadError ? (
-        <div className="rounded-2xl border border-dashed border-slate-300 bg-slate-50 px-6 py-12 text-center">
-          <p className="font-medium text-slate-800">
+        <div className="rounded-2xl border border-dashed border-washi-300 bg-washi-100 px-6 py-12 text-center">
+          <p className="font-medium text-sumi-800">
             Todavía no hay palabras guardadas.
           </p>
-          <p className="mt-2 text-sm leading-6 text-slate-500">
+          <p className="mt-2 text-sm leading-6 text-sumi-500">
             Completa el formulario para crear tu primera entrada.
           </p>
         </div>
@@ -76,13 +76,13 @@ export function VocabularyList({
         <ul className="space-y-4">
           {entries.map((entry) => (
             <li key={entry.id}>
-              <article className="rounded-2xl border border-slate-200 p-5">
+              <article className="rounded-2xl border border-washi-200 bg-white p-5">
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <h3 className="text-2xl font-bold text-slate-950">
+                    <h3 className="text-2xl font-bold text-sumi-950">
                       {entry.word}
                     </h3>
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-sumi-500">
                       {entry.reading}
                     </p>
                   </div>
@@ -90,7 +90,7 @@ export function VocabularyList({
                     <div className="flex flex-wrap justify-end gap-1">
                       <button
                         aria-label={`Editar ${entry.word}`}
-                        className="rounded-lg px-3 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="rounded-lg px-3 py-2 text-sm font-medium text-sumi-700 transition hover:bg-washi-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sumi-700 disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={isSaving || deletingId !== null}
                         onClick={() => onEdit(entry)}
                         type="button"
@@ -134,7 +134,7 @@ export function VocabularyList({
                           : "Eliminar"}
                       </button>
                       <button
-                        className="rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-semibold text-slate-800 transition hover:border-red-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+                        className="rounded-lg border border-red-200 bg-white px-3 py-2 text-sm font-semibold text-sumi-800 transition hover:border-red-300 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sumi-700 disabled:cursor-not-allowed disabled:opacity-60"
                         disabled={
                           isSaving || deletingId === entry.id
                         }
@@ -155,25 +155,25 @@ export function VocabularyList({
                   </div>
                 ) : null}
 
-                <p className="mt-4 text-lg text-slate-800">{entry.meaning}</p>
+                <p className="mt-4 text-lg text-sumi-800">{entry.meaning}</p>
 
                 <div className="mt-4 flex flex-wrap gap-2 text-xs font-semibold">
-                  <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
+                  <span className="rounded-full bg-washi-100 px-3 py-1 text-sumi-700">
                     {entry.partOfSpeech}
                   </span>
-                  <span className="rounded-full bg-red-50 px-3 py-1 text-red-700">
+                  <span className="rounded-full bg-shu-50 px-3 py-1 text-shu-700">
                     {entry.jlptLevel}
                   </span>
                 </div>
 
                 {entry.example ? (
-                  <blockquote className="mt-4 border-l-2 border-red-200 pl-4 text-sm leading-6 text-slate-600">
+                  <blockquote className="mt-4 border-l-2 border-shu-200 pl-4 text-sm leading-6 text-sumi-600">
                     {entry.example}
                   </blockquote>
                 ) : null}
 
                 {entry.source ? (
-                  <p className="mt-4 text-xs text-slate-500">
+                  <p className="mt-4 text-xs text-sumi-500">
                     Fuente: {entry.source}
                   </p>
                 ) : null}

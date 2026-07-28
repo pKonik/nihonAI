@@ -4,6 +4,7 @@ import {
   signIn,
   signUp,
 } from "@/app/login/actions";
+import { BrandLogo } from "@/components/brand/BrandLogo";
 
 type LoginPageProps = {
   searchParams: Promise<{
@@ -23,16 +24,36 @@ export default async function LoginPage({
 
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-12 sm:px-6">
-      <section className="w-full max-w-md rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-red-600">
-          日本語を学ぶ
-        </p>
-        <h1 className="mt-3 text-3xl font-bold text-slate-950">
-          Accede a NihonAI
-        </h1>
-        <p className="mt-3 leading-7 text-slate-600">
-          Tu cuenta separa y protege el vocabulario que guardas en NihonAI.
-        </p>
+      <div className="grid w-full max-w-5xl overflow-hidden rounded-[2rem] border border-washi-200 bg-washi-50 shadow-xl shadow-sumi-950/5 lg:grid-cols-[0.85fr_1.15fr]">
+        <aside className="hidden bg-sumi-950 p-10 lg:flex lg:flex-col lg:justify-between">
+          <BrandLogo inverted />
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-300">
+              日本語を、自分のペースで。
+            </p>
+            <h2 className="mt-4 text-4xl font-bold leading-tight text-washi-50">
+              Aprende desde lo que lees, escuchas y descubres.
+            </h2>
+            <p className="mt-5 leading-7 text-washi-300">
+              Una colección personal para convertir cada palabra nueva en una
+              oportunidad de aprendizaje.
+            </p>
+          </div>
+        </aside>
+
+        <section className="p-6 sm:p-10">
+          <div className="mb-8 lg:hidden">
+            <BrandLogo />
+          </div>
+          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-600">
+            Bienvenido
+          </p>
+          <h1 className="mt-3 text-3xl font-bold text-sumi-950">
+            Accede a tu espacio
+          </h1>
+          <p className="mt-3 leading-7 text-sumi-600">
+            Tu cuenta separa y protege el vocabulario que guardas en NihonAI.
+          </p>
 
         {!isConfigured ? (
           <div
@@ -51,14 +72,14 @@ export default async function LoginPage({
             <form className="mt-8 space-y-5" action={signIn}>
               <div>
                 <label
-                  className="mb-2 block text-sm font-medium text-slate-800"
+                  className="mb-2 block text-sm font-medium text-sumi-800"
                   htmlFor="email"
                 >
                   Correo electrónico
                 </label>
                 <input
                   autoComplete="email"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none placeholder:text-slate-400 focus:border-red-600 focus:ring-3 focus:ring-red-100"
+                  className="w-full rounded-xl border border-washi-300 bg-white px-4 py-3 text-sumi-950 outline-none placeholder:text-sumi-500 focus:border-shu-600 focus:ring-3 focus:ring-shu-100"
                   id="email"
                   name="email"
                   placeholder=""
@@ -69,14 +90,14 @@ export default async function LoginPage({
 
               <div>
                 <label
-                  className="mb-2 block text-sm font-medium text-slate-800"
+                  className="mb-2 block text-sm font-medium text-sumi-800"
                   htmlFor="password"
                 >
                   Contraseña
                 </label>
                 <input
                   autoComplete="current-password"
-                  className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none placeholder:text-slate-400 focus:border-red-600 focus:ring-3 focus:ring-red-100"
+                  className="w-full rounded-xl border border-washi-300 bg-white px-4 py-3 text-sumi-950 outline-none placeholder:text-sumi-500 focus:border-shu-600 focus:ring-3 focus:ring-shu-100"
                   id="password"
                   minLength={6}
                   name="password"
@@ -105,13 +126,13 @@ export default async function LoginPage({
 
               <div className="grid gap-3 sm:grid-cols-2">
                 <button
-                  className="rounded-xl bg-slate-950 px-5 py-3 font-semibold text-white transition hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                  className="rounded-xl bg-sumi-950 px-5 py-3 font-semibold text-washi-50 transition hover:bg-shu-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600"
                   type="submit"
                 >
                   Iniciar sesión
                 </button>
                 <button
-                  className="rounded-xl border border-slate-300 px-5 py-3 font-semibold text-slate-800 transition hover:border-red-300 hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                  className="rounded-xl border border-washi-300 px-5 py-3 font-semibold text-sumi-800 transition hover:border-shu-300 hover:bg-shu-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600"
                   formAction={signUp}
                   type="submit"
                 >
@@ -120,27 +141,27 @@ export default async function LoginPage({
               </div>
             </form>
 
-            <details className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-4">
-              <summary className="cursor-pointer text-sm font-semibold text-slate-800">
+            <details className="mt-6 rounded-2xl border border-washi-200 bg-washi-100 p-4">
+              <summary className="cursor-pointer text-sm font-semibold text-sumi-800">
                 ¿No recibiste la confirmación?
               </summary>
               <form className="mt-4 space-y-3" action={resendConfirmation}>
                 <label
-                  className="block text-sm font-medium text-slate-700"
+                  className="block text-sm font-medium text-sumi-700"
                   htmlFor="resend-email"
                 >
                   Correo de la cuenta pendiente
                 </label>
                 <input
                   autoComplete="email"
-                  className="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 outline-none placeholder:text-slate-400 focus:border-red-600 focus:ring-3 focus:ring-red-100"
+                  className="w-full rounded-xl border border-washi-300 bg-white px-4 py-3 text-sumi-950 outline-none placeholder:text-sumi-500 focus:border-shu-600 focus:ring-3 focus:ring-shu-100"
                   id="resend-email"
                   name="email"
                   required
                   type="email"
                 />
                 <button
-                  className="w-full rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-800 transition hover:border-red-300 hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                  className="w-full rounded-xl border border-washi-300 bg-white px-5 py-3 font-semibold text-sumi-800 transition hover:border-shu-300 hover:bg-shu-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600"
                   type="submit"
                 >
                   Reenviar confirmación
@@ -149,7 +170,8 @@ export default async function LoginPage({
             </details>
           </>
         )}
-      </section>
+        </section>
+      </div>
     </main>
   );
 }

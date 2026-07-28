@@ -42,15 +42,15 @@ export function MainNavigation({
                 aria-current={isActive ? "page" : undefined}
                 className={
                   isMobile
-                    ? `block rounded-lg px-2 py-2 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 ${
+                    ? `block rounded-lg px-2 py-2 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600 ${
                         isActive
-                          ? "bg-red-50 text-red-700"
-                          : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+                          ? "bg-shu-50 text-shu-700"
+                          : "text-sumi-600 hover:bg-washi-100 hover:text-sumi-950"
                       }`
-                    : `block rounded-xl border-l-4 px-4 py-3 font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 ${
+                    : `block rounded-xl border-l-4 px-4 py-3 font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-300 ${
                         isActive
-                          ? "border-red-600 bg-red-50 text-red-700"
-                          : "border-transparent text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+                          ? "border-shu-500 bg-white/10 text-washi-50"
+                          : "border-transparent text-washi-300 hover:bg-white/5 hover:text-washi-50"
                       }`
                 }
                 href={item.href}

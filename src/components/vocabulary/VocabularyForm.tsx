@@ -35,7 +35,7 @@ const INITIAL_VALUES: VocabularyDraft = {
 };
 
 const FIELD_CLASSES =
-  "w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-950 outline-none placeholder:text-slate-400 focus:border-red-600 focus:ring-3 focus:ring-red-100 disabled:cursor-not-allowed disabled:bg-slate-50 disabled:text-slate-500";
+  "w-full rounded-xl border border-washi-300 bg-white px-4 py-3 text-sumi-950 outline-none placeholder:text-sumi-500 focus:border-shu-600 focus:ring-3 focus:ring-shu-100 disabled:cursor-not-allowed disabled:bg-washi-100 disabled:text-sumi-500";
 
 function getInitialValues(
   editingEntry: VocabularyEntry | null,
@@ -125,19 +125,19 @@ export function VocabularyForm({
   }
 
   return (
-    <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+    <section className="rounded-3xl border border-washi-200 bg-washi-50 p-6 shadow-sm sm:p-8">
       <div className="mb-6">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-red-600">
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-600">
           {editingEntry ? "Editar entrada" : "Nueva entrada"}
         </p>
         <h2
-          className="mt-2 text-2xl font-bold text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-red-700"
+          className="mt-2 text-2xl font-bold text-sumi-950 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-shu-600"
           ref={headingRef}
           tabIndex={-1}
         >
           {editingEntry ? "Editar vocabulario" : "Añadir vocabulario"}
         </h2>
-        <p className="mt-2 text-sm leading-6 text-slate-600">
+        <p className="mt-2 text-sm leading-6 text-sumi-600">
           Los campos marcados con * son obligatorios.
         </p>
       </div>
@@ -150,7 +150,7 @@ export function VocabularyForm({
       >
         <div>
           <label
-            className="mb-2 block text-sm font-medium text-slate-800"
+            className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="word"
           >
             Palabra en japonés *
@@ -170,7 +170,7 @@ export function VocabularyForm({
 
         <div>
           <label
-            className="mb-2 block text-sm font-medium text-slate-800"
+            className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="reading"
           >
             Lectura *
@@ -190,7 +190,7 @@ export function VocabularyForm({
 
         <div>
           <label
-            className="mb-2 block text-sm font-medium text-slate-800"
+            className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="meaning"
           >
             Significado en español *
@@ -211,7 +211,7 @@ export function VocabularyForm({
         <div className="grid gap-5 sm:grid-cols-2">
           <div>
             <label
-              className="mb-2 block text-sm font-medium text-slate-800"
+              className="mb-2 block text-sm font-medium text-sumi-800"
               htmlFor="partOfSpeech"
             >
               Tipo de palabra
@@ -236,7 +236,7 @@ export function VocabularyForm({
 
           <div>
             <label
-              className="mb-2 block text-sm font-medium text-slate-800"
+              className="mb-2 block text-sm font-medium text-sumi-800"
               htmlFor="jlptLevel"
             >
               Nivel JLPT
@@ -262,7 +262,7 @@ export function VocabularyForm({
 
         <div>
           <label
-            className="mb-2 block text-sm font-medium text-slate-800"
+            className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="example"
           >
             Frase de ejemplo
@@ -281,7 +281,7 @@ export function VocabularyForm({
 
         <div>
           <label
-            className="mb-2 block text-sm font-medium text-slate-800"
+            className="mb-2 block text-sm font-medium text-sumi-800"
             htmlFor="source"
           >
             Fuente o etiqueta de origen
@@ -318,7 +318,7 @@ export function VocabularyForm({
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <button
-            className="flex-1 rounded-xl bg-slate-950 px-5 py-3 font-semibold text-white transition hover:bg-red-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex-1 rounded-xl bg-sumi-950 px-5 py-3 font-semibold text-washi-50 transition hover:bg-shu-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600 disabled:cursor-not-allowed disabled:opacity-60"
             disabled={isFormDisabled}
             type="submit"
           >
@@ -333,7 +333,7 @@ export function VocabularyForm({
 
           {editingEntry ? (
             <button
-              className="rounded-xl border border-slate-300 bg-white px-5 py-3 font-semibold text-slate-800 transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
+              className="rounded-xl border border-washi-300 bg-white px-5 py-3 font-semibold text-sumi-800 transition hover:border-sumi-500 hover:bg-washi-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sumi-700 disabled:cursor-not-allowed disabled:opacity-60"
               disabled={isFormDisabled}
               onClick={onCancelEdit}
               type="button"

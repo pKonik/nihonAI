@@ -58,19 +58,19 @@ export function AuthCallbackError() {
 
   return (
     <aside
-      className="fixed inset-x-4 top-4 z-50 mx-auto max-w-xl rounded-2xl border border-red-200 bg-white p-4 shadow-lg"
+      className="fixed inset-x-4 top-4 z-50 mx-auto max-w-xl rounded-2xl border border-red-200 bg-washi-50 p-4 shadow-lg"
       role="alert"
     >
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="font-semibold text-red-800">{notice.title}</p>
-          <p className="mt-1 text-sm leading-6 text-slate-600">
+          <p className="mt-1 text-sm leading-6 text-sumi-600">
             {notice.description}
           </p>
         </div>
         <button
           aria-label="Cerrar aviso"
-          className="rounded-lg px-2 py-1 text-sm font-semibold text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+          className="rounded-lg px-2 py-1 text-sm font-semibold text-sumi-500 transition hover:bg-washi-100 hover:text-sumi-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
           onClick={() => setNotice(null)}
           type="button"
         >

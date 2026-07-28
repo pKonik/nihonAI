@@ -1,19 +1,64 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #f7f8fb;
+  --foreground: #17202a;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: system-ui, sans-serif;
+  --color-washi-50: #ffffff;
+  --color-washi-100: #f7f8fb;
+  --color-washi-200: #e7eaf0;
+  --color-washi-300: #cfd5df;
+  --color-sumi-500: #667583;
+  --color-sumi-600: #4b5d6a;
+  --color-sumi-700: #344752;
+  --color-sumi-800: #243640;
+  --color-sumi-900: #172a33;
+  --color-sumi-950: #0b2029;
+  --color-shu-50: #fff5f4;
+  --color-shu-100: #ffe6e3;
+  --color-shu-200: #ffc9c4;
+  --color-shu-300: #f89a92;
+  --color-shu-500: #ed6b63;
+  --color-shu-600: #da5752;
+  --color-shu-700: #b93e3d;
+  --color-shu-800: #983638;
+  --font-sans:
+    var(--font-inter), var(--font-noto-sans-jp), system-ui, sans-serif;
   --font-mono: ui-monospace, monospace;
 }
 
 body {
-  background: var(--background);
+  background:
+    radial-gradient(
+      circle at 92% -4%,
+      rgb(237 107 99 / 12%),
+      transparent 32rem
+    ),
+    radial-gradient(
+      circle at 2% 94%,
+      rgb(11 32 41 / 7%),
+      transparent 34rem
+    ),
+    linear-gradient(135deg, #f6f8fb 0%, #f8f9fc 52%, #fff8f7 100%);
+  background-attachment: fixed;
   color: var(--foreground);
-  font-family: system-ui, sans-serif;
+  font-family:
+    var(--font-inter), var(--font-noto-sans-jp), system-ui, sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-family:
+    var(--font-inter), var(--font-noto-sans-jp), system-ui, sans-serif;
+  text-wrap: balance;
+}
+
+::selection {
+  background: #ffe6e3;
+  color: #983638;
 }

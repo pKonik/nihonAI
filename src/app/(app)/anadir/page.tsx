@@ -31,13 +31,13 @@ export default async function AddVocabularyPage() {
   return (
     <div className="mx-auto w-full max-w-6xl">
       <header className="mb-8">
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-red-600">
-          Colección
+        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-shu-600">
+          Colección · 単語
         </p>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-950 sm:text-4xl">
+        <h1 className="mt-2 text-3xl font-bold tracking-tight text-sumi-950 sm:text-4xl">
           Añadir vocabulario
         </h1>
-        <p className="mt-3 max-w-2xl leading-7 text-slate-600">
+        <p className="mt-3 max-w-2xl leading-7 text-sumi-600">
           Guarda las palabras que encuentras durante tu estudio y administra tu
           colección personal.
         </p>
