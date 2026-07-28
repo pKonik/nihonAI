@@ -50,6 +50,11 @@ actualizará la página al guardar cambios en el código.
 
 Para detener el servidor, vuelve a la terminal y pulsa `Ctrl + C`.
 
+Tras iniciar sesión, la navegación principal separa Inicio, Leer manga, Añadir,
+Mazos y Repasar. El CRUD persistente de vocabulario está disponible en
+**Añadir**; las demás áreas se completarán siguiendo el roadmap de
+[`docs/architecture.md`](docs/architecture.md).
+
 ## Comprobaciones
 
 ```bash

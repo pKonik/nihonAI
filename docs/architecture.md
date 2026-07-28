@@ -29,6 +29,9 @@ La aplicación dispone de:
 - lectura del vocabulario desde un Server Component;
 - creación, actualización y eliminación mediante Server Actions;
 - acceso a Supabase centralizado en módulos exclusivos del servidor.
+- layout autenticado compartido para las áreas principales;
+- navegación entre Inicio, Leer manga, Añadir, Mazos y Repasar;
+- interfaz persistente de vocabulario ubicada en la ruta `/anadir`.
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -95,18 +98,72 @@ Cada módulo debe mantener una responsabilidad claramente definida.
 
 ---
 
-## Evolución de la arquitectura
+## Roadmap oficial
 
-La arquitectura crecerá de forma incremental conforme avance el proyecto.
+El proyecto avanza mediante las siguientes fases numeradas. Una fase no comienza
+hasta que la anterior esté verificada y el usuario apruebe continuar.
 
-Las próximas fases incorporarán módulos como:
+1. **Fundación del proyecto — completada.** Crear la aplicación con Next.js,
+   React, TypeScript, Tailwind CSS y las comprobaciones básicas.
+2. **Interfaz local de vocabulario — completada.** Implementar el formulario,
+   la colección en memoria y la eliminación básica.
+3. **Autenticación con Supabase — completada.** Incorporar registro, inicio de
+   sesión, confirmación de correo, cookies SSR y protección de rutas.
+4. **Persistencia segura de vocabulario — completada.** Crear la tabla,
+   migración, relación con el usuario y políticas RLS.
+5. **CRUD persistente de vocabulario — completada.** Conectar lectura,
+   creación, edición y eliminación de la interfaz con Supabase.
+6. **Navegación principal — completada.** Crear la estructura de aplicación con
+   Inicio, Leer manga, Añadir, Mazos y Repasar, conservando la interfaz actual
+   dentro de Añadir.
+6.5. **Identidad visual y diseño — pendiente.** Crear el logo y la identidad
+   propia de NihonAI, aplicar un estilo japonés contemporáneo y consolidar la
+   presentación responsive de la navegación sin copiar otras plataformas.
+7. **Perfil y configuración de cuenta — pendiente.** Incorporar foto de perfil,
+   nombre visible, configuración de la cuenta, acceso desde el avatar y
+   estadísticas basadas únicamente en actividad real. No incluir niveles, XP,
+   rankings ni perfiles públicos.
+8. **Bienvenida y mascota — pendiente.** Mostrar a los usuarios nuevos una guía
+   opcional de los módulos de NihonAI acompañada por una mascota propia, y
+   permitir abrirla nuevamente desde Ayuda.
+9. **Aprendizaje de hiragana y katakana — pendiente.** Crear un módulo para
+   estudiar kana, combinaciones, lecturas y ejemplos, con progreso por carácter.
+10. **Quiz y progreso de kana — pendiente.** Practicar la lectura escrita con
+    teclado, corregir respuestas, repetir errores y registrar precisión,
+    actividad y rachas de estudio.
+11. **Importación y lector local de manga — pendiente.** Importar una carpeta de
+   imágenes o un ZIP y mostrar sus páginas en orden.
+12. **Navegación del lector y zoom — pendiente.** Cambiar de página y controlar
+   zoom y desplazamiento.
+13. **Selección de regiones — pendiente.** Permitir marcar con el ratón una
+   región concreta de una página.
+14. **Recorte y almacenamiento de imágenes — pendiente.** Generar el recorte,
+    asociarlo con manga, capítulo y página, y definir su persistencia.
+15. **OCR japonés — pendiente.** Reconocer texto japonés únicamente dentro del
+    recorte seleccionado.
+16. **Corrección del OCR — pendiente.** Mostrar el texto detectado y permitir
+    corregirlo antes de continuar.
+17. **Minería de vocabulario — pendiente.** Analizar la oración, seleccionar
+    una palabra y obtener forma de diccionario, lectura, significado y tipo.
+18. **Integración del lector con vocabulario — pendiente.** Reutilizar el
+    formulario de Añadir y guardar palabra, oración, manga, capítulo, página y
+    recorte sin duplicar el modelo.
+19. **Biblioteca de vocabulario — pendiente.** Incorporar búsqueda, filtros y
+    presentación del contexto minado.
+20. **Mazos — pendiente.** Crear y administrar mazos, y permitir añadirles
+    vocabulario manual o minado.
+21. **Repetición espaciada con FSRS — pendiente.** Implementar sesiones de
+    repaso, calificaciones e intervalos programados.
+22. **Funciones de IA — pendiente.** Añadir asistencia inteligente únicamente
+    sobre los flujos ya estabilizados.
+23. **Integraciones externas — pendiente.** Incorporar diccionarios, servicios
+    o APIs externas que hayan sido aprobados.
+24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
+    observabilidad, rendimiento y verificaciones finales.
 
-- OCR;
-- lector de manga;
-- sistema de repetición espaciada (FSRS);
-- funcionalidades de IA.
-
-Cada nuevo módulo deberá respetar los principios definidos en este documento.
+La siguiente fase oficial es la **fase 6.5: Identidad visual y diseño**. Cada
+fase debe mantener un alcance pequeño y no adelantar funcionalidades
+pertenecientes a las fases posteriores.
 
 ---
 

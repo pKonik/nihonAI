@@ -31,8 +31,7 @@ export default async function LoginPage({
           Accede a NihonAI
         </h1>
         <p className="mt-3 leading-7 text-slate-600">
-          Tu cuenta separará y protegerá el vocabulario que guardaremos en
-          Supabase durante la siguiente fase.
+          Tu cuenta separa y protege el vocabulario que guardas en NihonAI.
         </p>
 
         {!isConfigured ? (

@@ -45,6 +45,11 @@ Toda interfaz nueva debe funcionar correctamente en escritorio y dispositivos m�
 
 El comportamiento responsive debe considerarse desde el inicio.
 
+La aplicación autenticada utiliza una navegación lateral en escritorio y una
+navegación horizontal en la cabecera móvil. Sus cinco destinos principales son
+Inicio, Leer manga, Añadir, Mazos y Repasar. El destino activo debe estar
+identificado visualmente y mediante `aria-current`.
+
 ## Accesibilidad
 
 La accesibilidad debe considerarse desde el inicio:
