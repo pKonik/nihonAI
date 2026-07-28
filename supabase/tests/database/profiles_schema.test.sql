@@ -4,7 +4,7 @@ create extension if not exists pgtap with schema extensions;
 
 set search_path = public, extensions;
 
-select plan(12);
+select plan(14);
 
 select has_table('public', 'profiles', 'profiles exists');
 select col_is_pk('public', 'profiles', 'user_id', 'user_id is primary key');
@@ -13,6 +13,19 @@ select col_is_fk(
   'profiles',
   'user_id',
   'user_id references an authenticated user'
+);
+select col_type_is(
+  'public',
+  'profiles',
+  'onboarding_completed_at',
+  'timestamp with time zone',
+  'onboarding completion uses a timestamp'
+);
+select col_is_null(
+  'public',
+  'profiles',
+  'onboarding_completed_at',
+  'onboarding is pending by default'
 );
 select ok(
   (

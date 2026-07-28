@@ -42,6 +42,9 @@ export default async function AuthenticatedLayout({
       displayName={displayName}
       email={email}
       hasAvatar={Boolean(profile?.avatarPath)}
+      initialOnboardingOpen={Boolean(
+        profile && !profile.onboardingCompletedAt,
+      )}
       locale={locale}
       text={dictionary}
     >

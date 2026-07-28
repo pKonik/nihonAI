@@ -5,6 +5,7 @@ import { UserAvatar } from "@/components/account/UserAvatar";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { LanguageSelector } from "@/components/i18n/LanguageSelector";
 import { MainNavigation } from "@/components/navigation/MainNavigation";
+import { OnboardingGuide } from "@/components/onboarding/OnboardingGuide";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 
@@ -14,6 +15,7 @@ type AppShellProps = {
   displayName: string;
   email: string;
   hasAvatar: boolean;
+  initialOnboardingOpen: boolean;
   locale: Locale;
   text: Dictionary;
 };
@@ -83,6 +85,7 @@ export function AppShell({
   displayName,
   email,
   hasAvatar,
+  initialOnboardingOpen,
   locale,
   text,
 }: AppShellProps) {
@@ -178,6 +181,10 @@ export function AppShell({
           {children}
         </main>
       </div>
+      <OnboardingGuide
+        initialOpen={initialOnboardingOpen}
+        text={text.onboarding}
+      />
     </div>
   );
 }

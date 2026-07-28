@@ -157,6 +157,17 @@ de creación de la cuenta y cantidad actual de palabras guardadas.
 No se muestran niveles, XP, rankings, perfiles públicos ni métricas derivadas de
 funciones que todavía no existen.
 
+## Bienvenida y ayuda
+
+Las cuentas que todavía no han completado la bienvenida reciben una guía
+opcional de cuatro pasos acompañada por Kitsu, la mascota de NihonAI. La guía
+distingue las funciones disponibles de las planificadas y guarda su finalización
+en el perfil privado.
+
+El botón Ayuda permanece separado de los cinco destinos principales y permite
+abrir nuevamente la guía en cualquier momento. El diálogo conserva navegación
+por teclado, cierre explícito, adaptación móvil y textos en español e inglés.
+
 ## Evolución
 
 Si este documento crece significativamente, podrá dividirse en:

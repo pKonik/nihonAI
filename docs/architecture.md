@@ -36,6 +36,8 @@ La aplicación dispone de:
 - landing pública en `/` e Inicio autenticado en `/inicio`.
 - perfil privado con nombre visible, avatar y configuración de cuenta;
 - estadísticas de cuenta calculadas desde la actividad persistida.
+- bienvenida opcional y bilingüe para cuentas nuevas, reabrible desde Ayuda;
+- estado de finalización de la bienvenida persistido en el perfil privado.
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -149,7 +151,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
    nombre visible, configuración de la cuenta, acceso desde el avatar y
    estadísticas basadas únicamente en actividad real. No incluir niveles, XP,
    rankings ni perfiles públicos.
-8. **Bienvenida y mascota — pendiente.** Mostrar a los usuarios nuevos una guía
+8. **Bienvenida y mascota — completada.** Mostrar a los usuarios nuevos una guía
    opcional de los módulos de NihonAI acompañada por una mascota propia, y
    permitir abrirla nuevamente desde Ayuda.
 9. **Aprendizaje de hiragana y katakana — pendiente.** Crear un módulo para
@@ -191,7 +193,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 8: Bienvenida y mascota**.
+La siguiente fase oficial es la **fase 9: Aprendizaje de hiragana y katakana**.
 Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance

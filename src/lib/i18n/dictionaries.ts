@@ -51,6 +51,46 @@ const spanishDictionary = {
     decks: "Mazos",
     review: "Repasar",
   },
+  onboarding: {
+    openGuide: "Ayuda",
+    closeLabel: "Cerrar bienvenida",
+    mascotAlt: "Kitsu, la mascota guía de NihonAI",
+    stepLabel: "Paso {current} de {total}",
+    progressLabel: "Progreso de la bienvenida",
+    skip: "Omitir guía",
+    back: "Anterior",
+    next: "Siguiente",
+    finish: "Empezar",
+    saving: "Guardando...",
+    authExpired:
+      "Tu sesión ya no es válida. Inicia sesión de nuevo para guardar este cambio.",
+    saveFailed:
+      "No se pudo guardar tu preferencia. Inténtalo de nuevo.",
+    welcome: {
+      eyebrow: "Kitsu te da la bienvenida",
+      title: "Un recorrido corto para empezar.",
+      description:
+        "NihonAI conecta lo que lees con el vocabulario que recopilas y lo que quieres recordar. Esta guía es opcional y siempre podrás abrirla de nuevo desde Ayuda.",
+    },
+    read: {
+      eyebrow: "Leer · Próximamente",
+      title: "Aprende desde el contexto.",
+      description:
+        "El futuro lector reunirá tus páginas de manga y conservará el lugar donde encontraste cada palabra. La importación llegará en una fase posterior.",
+    },
+    collect: {
+      eyebrow: "Recopilar · Disponible",
+      title: "Guarda vocabulario útil.",
+      description:
+        "En Añadir puedes registrar palabras, lecturas, significados y ejemplos en una colección privada asociada con tu cuenta.",
+    },
+    remember: {
+      eyebrow: "Recordar · Planificado",
+      title: "Prepara tu siguiente paso.",
+      description:
+        "Mazos y Repasar organizarán el estudio cuando lleguen sus fases. Por ahora, construye una colección pequeña desde palabras que realmente encuentres.",
+    },
+  },
   login: {
     heroTitle: "Aprende desde lo que lees, escuchas y descubres.",
     heroDescription:
@@ -178,11 +218,11 @@ const spanishDictionary = {
         "Programa cada palabra según tu memoria para evitar repasos innecesarios.",
     },
     companion: {
-      eyebrow: "Espacio para acompañarte",
-      title: "Una guía propia llegará cuando el recorrido la necesite.",
+      eyebrow: "Conoce a Kitsu",
+      title: "Una guía cercana para orientarte sin interrumpir.",
       description:
-        "La futura bienvenida tendrá una mascota de NihonAI, pero primero estamos construyendo una experiencia que realmente pueda explicar.",
-      label: "Futura guía de NihonAI",
+        "Kitsu acompaña la bienvenida opcional de NihonAI, explica qué puedes usar ahora y diferencia las herramientas que llegarán más adelante.",
+      label: "Kitsu, la mascota guía de NihonAI",
     },
     privacy: {
       eyebrow: "Privado por diseño",
@@ -468,6 +508,46 @@ const englishDictionary: Dictionary = {
     decks: "Decks",
     review: "Review",
   },
+  onboarding: {
+    openGuide: "Help",
+    closeLabel: "Close welcome guide",
+    mascotAlt: "Kitsu, NihonAI's guide mascot",
+    stepLabel: "Step {current} of {total}",
+    progressLabel: "Welcome guide progress",
+    skip: "Skip guide",
+    back: "Back",
+    next: "Next",
+    finish: "Get started",
+    saving: "Saving...",
+    authExpired:
+      "Your session is no longer valid. Sign in again to save this change.",
+    saveFailed:
+      "Your preference could not be saved. Try again.",
+    welcome: {
+      eyebrow: "Kitsu welcomes you",
+      title: "A short tour to get started.",
+      description:
+        "NihonAI connects what you read with the vocabulary you collect and what you want to remember. This guide is optional, and you can always open it again from Help.",
+    },
+    read: {
+      eyebrow: "Read · Coming later",
+      title: "Learn from context.",
+      description:
+        "The future reader will bring your manga pages together and preserve where you found each word. Importing will arrive in a later phase.",
+    },
+    collect: {
+      eyebrow: "Collect · Available",
+      title: "Save useful vocabulary.",
+      description:
+        "In Add, you can record words, readings, meanings, and examples in a private collection associated with your account.",
+    },
+    remember: {
+      eyebrow: "Remember · Planned",
+      title: "Prepare your next step.",
+      description:
+        "Decks and Review will organize your study when their phases arrive. For now, build a small collection from words you genuinely encounter.",
+    },
+  },
   login: {
     heroTitle: "Learn from what you read, hear, and discover.",
     heroDescription:
@@ -595,11 +675,11 @@ const englishDictionary: Dictionary = {
         "Schedule each word around your memory and avoid unnecessary reviews.",
     },
     companion: {
-      eyebrow: "Room for guidance",
-      title: "A dedicated guide will arrive when the journey needs one.",
+      eyebrow: "Meet Kitsu",
+      title: "A friendly guide that helps without getting in the way.",
       description:
-        "The future welcome experience will have a NihonAI mascot, but first we are building an experience it can genuinely explain.",
-      label: "Future NihonAI guide",
+        "Kitsu accompanies NihonAI's optional welcome tour, explains what you can use now, and distinguishes the tools that will arrive later.",
+      label: "Kitsu, NihonAI's guide mascot",
     },
     privacy: {
       eyebrow: "Private by design",

@@ -1,6 +1,7 @@
 export type AccountProfile = {
   displayName: string | null;
   avatarPath: string | null;
+  onboardingCompletedAt: string | null;
   updatedAt: string;
 };
 

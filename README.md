@@ -55,6 +55,8 @@ Tras iniciar sesión, `/inicio` abre el espacio privado y su navegación separa
 Inicio, Leer manga, Añadir, Mazos y Repasar. El CRUD persistente de vocabulario
 está disponible en **Añadir**. El avatar abre `/cuenta`, donde se puede configurar
 el nombre visible y una foto privada, además de consultar estadísticas reales.
+Las cuentas nuevas reciben una bienvenida opcional con Kitsu, que puede abrirse
+de nuevo mediante el botón **Ayuda**.
 Las demás áreas se completarán siguiendo el roadmap de
 [`docs/architecture.md`](docs/architecture.md).
 

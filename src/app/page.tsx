@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 
 import { LandingHeader } from "@/components/landing/LandingHeader";
@@ -355,9 +356,7 @@ export default async function LandingPage() {
         <section className="px-4 pb-20 sm:px-6 sm:pb-24 lg:px-8">
           <div className="mx-auto grid w-full max-w-7xl items-center gap-8 overflow-hidden rounded-[2rem] border border-shu-200 bg-[linear-gradient(125deg,#fff_0%,#fff8f7_100%)] p-6 shadow-[0_22px_55px_-40px_rgba(11,32,41,0.45)] sm:p-10 lg:grid-cols-[0.8fr_1.2fr] lg:p-12">
             <div
-              aria-label={text.companion.label}
               className="relative flex min-h-64 items-center justify-center overflow-hidden rounded-[1.5rem] border border-dashed border-shu-300 bg-shu-50"
-              role="img"
             >
               <div
                 aria-hidden="true"
@@ -369,12 +368,13 @@ export default async function LandingPage() {
               >
                 案内
               </div>
-              <span
-                aria-hidden="true"
-                className="flex size-24 items-center justify-center rounded-[2rem] border border-shu-200 bg-white text-5xl font-black text-shu-500 shadow-sm"
-              >
-                ?
-              </span>
+              <Image
+                alt={text.companion.label}
+                className="relative h-64 w-auto object-contain sm:h-72"
+                height={1536}
+                src="/kitsu-guide.webp"
+                width={1024}
+              />
             </div>
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.18em] text-shu-600">

@@ -9,6 +9,7 @@ import type {
 type ProfileRow = {
   display_name: string | null;
   avatar_path: string | null;
+  onboarding_completed_at: string | null;
   updated_at: string;
 };
 
@@ -31,6 +32,7 @@ function toAccountProfile(row: ProfileRow): AccountProfile {
   return {
     displayName: row.display_name,
     avatarPath: row.avatar_path,
+    onboardingCompletedAt: row.onboarding_completed_at,
     updatedAt: row.updated_at,
   };
 }
@@ -41,7 +43,9 @@ export async function getShellProfile(
   const supabase = await createClient();
   const { data, error } = await supabase
     .from("profiles")
-    .select("display_name, avatar_path, updated_at")
+    .select(
+      "display_name, avatar_path, onboarding_completed_at, updated_at",
+    )
     .eq("user_id", userId)
     .maybeSingle()
     .overrideTypes<ProfileRow | null, { merge: false }>();
@@ -59,7 +63,9 @@ export async function getAccountOverview(): Promise<AccountOverview> {
   const [profileResult, vocabularyResult] = await Promise.all([
     supabase
       .from("profiles")
-      .select("display_name, avatar_path, updated_at")
+      .select(
+        "display_name, avatar_path, onboarding_completed_at, updated_at",
+      )
       .eq("user_id", user.id)
       .single()
       .overrideTypes<ProfileRow, { merge: false }>(),
@@ -126,4 +132,14 @@ export async function removeAvatar() {
     .eq("user_id", user.id);
 
   if (profileError) throw profileError;
+}
+
+export async function completeOnboarding() {
+  const { supabase, user } = await getAuthenticatedContext();
+  const { error } = await supabase
+    .from("profiles")
+    .update({ onboarding_completed_at: new Date().toISOString() })
+    .eq("user_id", user.id);
+
+  if (error) throw error;
 }
