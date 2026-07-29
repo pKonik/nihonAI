@@ -59,6 +59,10 @@ Las cuentas nuevas reciben una bienvenida opcional con Kitsu, que puede abrirse
 de nuevo mediante el botón **Ayuda**.
 Desde Inicio también se puede abrir `/kana` para estudiar hiragana y katakana,
 consultar ejemplos y conservar el progreso por carácter.
+La ruta `/leer` permite importar localmente una carpeta de imágenes o un ZIP,
+alternar entre modo libro y lectura continua, controlar el zoom y desplazarse
+por las imágenes sin subir los archivos. En ambos modos también permite marcar
+con el ratón una región de una página, que permanece únicamente en memoria.
 Las demás áreas se completarán siguiendo el roadmap de
 [`docs/architecture.md`](docs/architecture.md).
 
@@ -71,8 +75,8 @@ npm run typecheck
 npm run build
 ```
 
-- `test` ejecuta las pruebas unitarias de cuenta, rutas públicas, idiomas, kana
-  y vocabulario.
+- `test` ejecuta las pruebas unitarias de cuenta, rutas públicas, idiomas, kana,
+  importación de manga y vocabulario.
 - `lint` revisa problemas de calidad y convenciones.
 - `typecheck` comprueba los tipos de TypeScript sin generar archivos.
 - `build` crea y valida la versión optimizada para producción.

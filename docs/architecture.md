@@ -42,6 +42,11 @@ La aplicación dispone de:
   persistente por carácter;
 - quiz privado de kana con corrección en servidor, repetición de errores y
   estadísticas calculadas desde intentos persistidos;
+- lector local de manga con importación de carpetas de imágenes o archivos ZIP,
+  orden natural, navegación página a página, zoom, desplazamiento y procesamiento
+  exclusivo en el navegador;
+- selección rectangular de una región de la página, conservada únicamente en
+  memoria mediante coordenadas porcentuales;
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -163,11 +168,12 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 10. **Quiz y progreso de kana — completada.** Practicar la lectura escrita con
     teclado, corregir respuestas, repetir errores y registrar precisión,
     actividad y rachas de estudio.
-11. **Importación y lector local de manga — pendiente.** Importar una carpeta de
+11. **Importación y lector local de manga — completada.** Importar una carpeta de
    imágenes o un ZIP y mostrar sus páginas en orden.
-12. **Navegación del lector y zoom — pendiente.** Cambiar de página y controlar
-   zoom y desplazamiento.
-13. **Selección de regiones — pendiente.** Permitir marcar con el ratón una
+12. **Navegación del lector y zoom — completada.** Cambiar de página, ampliar o
+   reducir las páginas cargadas mediante controles de zoom y gestionar su
+   desplazamiento.
+13. **Selección de regiones — completada.** Permitir marcar con el ratón una
    región concreta de una página.
 14. **Recorte y almacenamiento de imágenes — pendiente.** Generar el recorte,
     asociarlo con manga, capítulo y página, y definir su persistencia.
@@ -197,7 +203,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 11: Importación y lector local de manga**.
+La siguiente fase oficial es la **fase 14: Recorte y almacenamiento de imágenes**.
 Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance

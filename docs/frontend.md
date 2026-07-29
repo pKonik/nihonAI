@@ -207,6 +207,31 @@ regresan al final de la sesión hasta resolverse. Los intentos se guardan como
 actividad privada e inmutable para calcular respuestas totales, precisión, días
 de estudio y racha actual a partir de datos reales.
 
+## Lector local de manga
+
+La ruta privada `/leer` importa carpetas de imágenes o archivos ZIP y procesa
+todo el contenido exclusivamente en el navegador. El modo libro, activo de forma
+predeterminada con zoom al 75 %, muestra una página cada vez y permite avanzar o
+retroceder. Un control permite alternarlo con el modo scroll, que recupera la
+lectura vertical continua de todas las páginas. Ambos modos permiten ampliar
+entre 50 % y 200 % y desplazarse horizontal o verticalmente cuando sea necesario.
+
+Los controles funcionan con ratón, tacto y teclado. En modo libro, las flechas
+izquierda y derecha cambian de página. En ambos modos, `+` y `-` ajustan el zoom
+y `0` lo restablece al 75 %. Al cambiar de página, el desplazamiento vuelve al
+origen para evitar posiciones confusas.
+
+En ambos modos de lectura, el usuario puede activar la selección de regiones y
+arrastrar con el botón principal del ratón sobre una página. La selección
+mantiene el identificador de la página y coordenadas porcentuales para conservar
+su posición al cambiar el zoom. Solo existe una región a la vez; puede
+redibujarse o borrarse y permanece únicamente en memoria. Cambiar de página en
+modo libro o cambiar de modo cancela la selección actual.
+
+El control de selección permanece fijo sobre el botón flotante de Ayuda para
+estar disponible al recorrer capítulos largos en modo scroll. La selección solo
+comienza cuando el puntero se arrastra dentro de los límites de una imagen.
+
 ## Evolución
 
 Si este documento crece significativamente, podrá dividirse en:

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { FeaturePlaceholder } from "@/components/navigation/FeaturePlaceholder";
+import { MangaImporter } from "@/components/manga/MangaImporter";
 import { getI18n } from "@/lib/i18n/server";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -12,12 +12,5 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ReadMangaPage() {
   const { dictionary } = await getI18n();
 
-  return (
-    <FeaturePlaceholder
-      description={dictionary.read.description}
-      nextStep={dictionary.read.nextStep}
-      text={dictionary.feature}
-      title={dictionary.read.title}
-    />
-  );
+  return <MangaImporter text={dictionary.read} />;
 }
