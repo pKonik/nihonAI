@@ -25,6 +25,8 @@
     "src/lib/kana/stats.test.ts",
     "src/lib/manga/files.ts",
     "src/lib/manga/files.test.ts",
+    "src/lib/manga/crop.ts",
+    "src/lib/manga/crop.test.ts",
     "src/lib/manga/selection.ts",
     "src/lib/manga/selection.test.ts",
     "src/types/vocabulary.ts",

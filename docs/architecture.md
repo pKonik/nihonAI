@@ -45,8 +45,9 @@ La aplicación dispone de:
 - lector local de manga con importación de carpetas de imágenes o archivos ZIP,
   orden natural, navegación página a página, zoom, desplazamiento y procesamiento
   exclusivo en el navegador;
-- selección rectangular de una región de la página, conservada únicamente en
-  memoria mediante coordenadas porcentuales;
+- selección rectangular de una región de la página mediante coordenadas
+  porcentuales y generación local de un recorte temporal para OCR, sin
+  persistencia de imágenes;
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -175,8 +176,9 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
    desplazamiento.
 13. **Selección de regiones — completada.** Permitir marcar con el ratón una
    región concreta de una página.
-14. **Recorte y almacenamiento de imágenes — pendiente.** Generar el recorte,
-    asociarlo con manga, capítulo y página, y definir su persistencia.
+14. **Recorte temporal de imágenes — completada.** Generar localmente el recorte
+    que consumirá el OCR y descartarlo después del procesamiento, sin almacenar
+    imágenes en Supabase.
 15. **OCR japonés — pendiente.** Reconocer texto japonés únicamente dentro del
     recorte seleccionado.
 16. **Corrección del OCR — pendiente.** Mostrar el texto detectado y permitir
@@ -185,9 +187,9 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
     una palabra y consultar JMdict en español e inglés para obtener forma de
     diccionario, lectura, significado y tipo.
 18. **Integración del lector con vocabulario — pendiente.** Reutilizar el
-    formulario de Añadir y guardar palabra, oración, manga, capítulo, página y
-    recorte sin duplicar el modelo, conservando el significado elegido y su
-    idioma.
+    formulario de Añadir y guardar la palabra, la oración reconocida y los datos
+    lingüísticos confirmados sin persistir el recorte, conservando el significado
+    elegido y su idioma.
 19. **Biblioteca de vocabulario — pendiente.** Incorporar búsqueda, filtros y
     presentación del contexto minado.
 20. **Mazos — pendiente.** Crear y administrar mazos, y permitir añadirles
@@ -203,7 +205,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 14: Recorte y almacenamiento de imágenes**.
+La siguiente fase oficial es la **fase 15: OCR japonés**.
 Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance

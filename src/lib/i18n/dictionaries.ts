@@ -456,7 +456,7 @@ const spanishDictionary = {
     chooseFolder: "Elegir carpeta",
     chooseZip: "Abrir ZIP",
     privacyNote:
-      "JPG, PNG, WebP, GIF o AVIF. Los archivos se procesan localmente y se eliminan al salir de esta pantalla.",
+      "JPG, PNG, WebP, GIF o AVIF. Las páginas y los recortes permanecen en tu dispositivo durante esta sesión.",
     importing: "Preparando las páginas…",
     pageCount: "{count} páginas listas",
     readerEyebrow: "Lectura página a página",
@@ -487,6 +487,20 @@ const spanishDictionary = {
     selectionHelp:
       "Arrastra con el botón principal del ratón sobre una página. Pulsa Esc para cancelar.",
     selectionReady: "Región seleccionada",
+    crop: {
+      title: "Recorte preparado",
+      description:
+        "Esta región queda lista para que el OCR lea únicamente el contenido seleccionado en la siguiente fase.",
+      previewEyebrow: "Vista previa del recorte",
+      previewAlt: "Vista previa de la región seleccionada",
+      preparing: "Preparando el recorte…",
+      temporary:
+        "El recorte permanece temporalmente en tu dispositivo y se descartará después del reconocimiento. La tarjeta conservará el texto como contexto, no la imagen.",
+      errors: {
+        prepareFailed:
+          "No se pudo generar el recorte. Intenta seleccionar la región de nuevo.",
+      },
+    },
     bookKeyboardHelp:
       "Atajos: ←/→ cambia de página, +/− ajusta el zoom y 0 vuelve al 75 %.",
     scrollKeyboardHelp:
@@ -1095,7 +1109,7 @@ const englishDictionary: Dictionary = {
     chooseFolder: "Choose folder",
     chooseZip: "Open ZIP",
     privacyNote:
-      "JPG, PNG, WebP, GIF, or AVIF. Files are processed locally and removed when you leave this screen.",
+      "JPG, PNG, WebP, GIF, or AVIF. Pages and crops stay on your device during this session.",
     importing: "Preparing pages…",
     pageCount: "{count} pages ready",
     readerEyebrow: "Page-by-page reading",
@@ -1126,6 +1140,20 @@ const englishDictionary: Dictionary = {
     selectionHelp:
       "Drag with the primary mouse button over a page. Press Esc to cancel.",
     selectionReady: "Region selected",
+    crop: {
+      title: "Crop prepared",
+      description:
+        "This region is ready for OCR to read only the selected content in the next phase.",
+      previewEyebrow: "Crop preview",
+      previewAlt: "Preview of the selected region",
+      preparing: "Preparing crop…",
+      temporary:
+        "The crop stays temporarily on your device and will be discarded after recognition. The card will keep text as context, not the image.",
+      errors: {
+        prepareFailed:
+          "The crop could not be generated. Try selecting the region again.",
+      },
+    },
     bookKeyboardHelp:
       "Shortcuts: ←/→ changes page, +/− adjusts zoom, and 0 returns to 75%.",
     scrollKeyboardHelp:

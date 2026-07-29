@@ -225,8 +225,17 @@ En ambos modos de lectura, el usuario puede activar la selección de regiones y
 arrastrar con el botón principal del ratón sobre una página. La selección
 mantiene el identificador de la página y coordenadas porcentuales para conservar
 su posición al cambiar el zoom. Solo existe una región a la vez; puede
-redibujarse o borrarse y permanece únicamente en memoria. Cambiar de página en
-modo libro o cambiar de modo cancela la selección actual.
+redibujarse o borrarse. Cambiar de página en modo libro o cambiar de modo cancela
+la selección actual.
+
+Al terminar una selección, el navegador genera una vista previa local sin subir
+la página original. El recorte permanece temporalmente en memoria y queda listo
+para el futuro OCR; no existe una acción para guardarlo como imagen
+independiente. Después del reconocimiento se descarta y la futura tarjeta
+conservará la oración japonesa como contexto textual.
+
+Los recortes se limitan a 2048 píxeles por lado para mantener un uso predecible
+de memoria durante el procesamiento local.
 
 El control de selección permanece fijo sobre el botón flotante de Ayuda para
 estar disponible al recorrer capítulos largos en modo scroll. La selección solo

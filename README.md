@@ -61,8 +61,10 @@ Desde Inicio también se puede abrir `/kana` para estudiar hiragana y katakana,
 consultar ejemplos y conservar el progreso por carácter.
 La ruta `/leer` permite importar localmente una carpeta de imágenes o un ZIP,
 alternar entre modo libro y lectura continua, controlar el zoom y desplazarse
-por las imágenes sin subir los archivos. En ambos modos también permite marcar
-con el ratón una región de una página, que permanece únicamente en memoria.
+por las imágenes sin subir las páginas originales. En ambos modos permite
+marcar una región y previsualizar temporalmente el recorte que utilizará el
+futuro OCR. El recorte no se sube: se descartará después del reconocimiento y
+la tarjeta conservará únicamente la oración japonesa como contexto textual.
 Las demás áreas se completarán siguiendo el roadmap de
 [`docs/architecture.md`](docs/architecture.md).
 

@@ -121,6 +121,11 @@ El modelo de vocabulario servirá como base para futuras funcionalidades como:
 
 Las nuevas funcionalidades deberán extender el modelo existente en lugar de reemplazarlo.
 
+La minería desde manga utilizará el recorte únicamente como entrada temporal
+para OCR. La tarjeta confirmada conservará la oración japonesa como contexto
+textual, pero no almacenará el recorte, manga, capítulo o página. Esto evita
+costes de almacenamiento y transferencia de imágenes.
+
 ---
 
 ## Fuente lingüística prevista

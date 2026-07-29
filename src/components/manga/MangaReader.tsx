@@ -1,4 +1,7 @@
+"use client";
+
 import {
+  useCallback,
   useEffect,
   useRef,
   useState,
@@ -7,6 +10,7 @@ import {
 } from "react";
 
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import { createMangaCrop } from "@/lib/manga/crop";
 import {
   createSelectionRect,
   getRelativePoint,
@@ -42,6 +46,13 @@ type SelectionStart = {
   point: Point;
 };
 
+type PreparedCrop = {
+  height: number;
+  pageName: string;
+  url: string;
+  width: number;
+};
+
 function formatPosition(
   template: string,
   current: number,
@@ -58,10 +69,25 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
   const [isSelecting, setIsSelecting] = useState(false);
   const [selection, setSelection] = useState<PageSelection | null>(null);
+  const [preparedCrop, setPreparedCrop] = useState<PreparedCrop | null>(
+    null,
+  );
+  const [cropFeedback, setCropFeedback] = useState("");
+  const [cropStatus, setCropStatus] = useState<
+    "idle" | "preparing" | "ready" | "error"
+  >("idle");
   const viewportRef = useRef<HTMLDivElement>(null);
   const selectionStartRef = useRef<SelectionStart | null>(null);
+  const cropGenerationRef = useRef(0);
   const currentPage = pages[currentPageIndex];
   const isBookMode = readingMode === "book";
+
+  const resetCrop = useCallback(() => {
+    cropGenerationRef.current += 1;
+    setPreparedCrop(null);
+    setCropFeedback("");
+    setCropStatus("idle");
+  }, []);
 
   function changePage(nextIndex: number) {
     if (nextIndex < 0 || nextIndex >= pages.length) {
@@ -70,6 +96,7 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
 
     setIsSelecting(false);
     setSelection(null);
+    resetCrop();
     setCurrentPageIndex(nextIndex);
   }
 
@@ -80,12 +107,14 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
   function changeReadingMode() {
     setIsSelecting(false);
     setSelection(null);
+    resetCrop();
     setReadingMode((mode) => (mode === "book" ? "scroll" : "book"));
   }
 
   function clearSelection() {
     selectionStartRef.current = null;
     setSelection(null);
+    resetCrop();
   }
 
   function getPointerPoint(event: ReactPointerEvent<HTMLDivElement>) {
@@ -106,6 +135,7 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
     const point = getPointerPoint(event);
     event.preventDefault();
     event.currentTarget.setPointerCapture(event.pointerId);
+    resetCrop();
     selectionStartRef.current = { pageId, point };
     setSelection({
       pageId,
@@ -140,11 +170,13 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
 
-    setSelection(
-      nextSelection.width >= 0.5 && nextSelection.height >= 0.5
-        ? { pageId: start.pageId, rect: nextSelection }
-        : null,
-    );
+    if (nextSelection.width >= 0.5 && nextSelection.height >= 0.5) {
+      setSelection({ pageId: start.pageId, rect: nextSelection });
+      void prepareCrop(start.pageId, nextSelection);
+    } else {
+      setSelection(null);
+      resetCrop();
+    }
   }
 
   function handleSelectionCancel(event: ReactPointerEvent<HTMLDivElement>) {
@@ -153,11 +185,49 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
       event.currentTarget.releasePointerCapture(event.pointerId);
     }
     setSelection(null);
+    resetCrop();
+  }
+
+  async function prepareCrop(pageId: string, rect: SelectionRect) {
+    const pageNumber = pages.findIndex((page) => page.id === pageId) + 1;
+    const page = pages[pageNumber - 1];
+    if (!page) return;
+
+    const generation = cropGenerationRef.current + 1;
+    cropGenerationRef.current = generation;
+    setPreparedCrop(null);
+    setCropFeedback("");
+    setCropStatus("preparing");
+
+    try {
+      const crop = await createMangaCrop(page.url, rect);
+      if (cropGenerationRef.current !== generation) return;
+
+      setPreparedCrop({
+        height: crop.height,
+        pageName: page.name,
+        url: URL.createObjectURL(crop.blob),
+        width: crop.width,
+      });
+      setCropStatus("ready");
+    } catch {
+      if (cropGenerationRef.current === generation) {
+        setCropFeedback(text.crop.errors.prepareFailed);
+        setCropStatus("error");
+      }
+    }
   }
 
   useEffect(() => {
     viewportRef.current?.scrollTo({ left: 0, top: 0 });
   }, [currentPageIndex, readingMode]);
+
+  useEffect(
+    () => () => {
+      if (preparedCrop) URL.revokeObjectURL(preparedCrop.url);
+    },
+    [preparedCrop],
+  );
 
   useEffect(() => {
     function handleShortcut(event: globalThis.KeyboardEvent) {
@@ -177,6 +247,7 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
         event.preventDefault();
         setIsSelecting(false);
         setSelection(null);
+        resetCrop();
         setCurrentPageIndex((index) => Math.max(0, index - 1));
       } else if (
         isBookMode &&
@@ -185,6 +256,7 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
         event.preventDefault();
         setIsSelecting(false);
         setSelection(null);
+        resetCrop();
         setCurrentPageIndex((index) =>
           Math.min(pages.length - 1, index + 1),
         );
@@ -206,12 +278,13 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
         selectionStartRef.current = null;
         setIsSelecting(false);
         setSelection(null);
+        resetCrop();
       }
     }
 
     window.addEventListener("keydown", handleShortcut);
     return () => window.removeEventListener("keydown", handleShortcut);
-  }, [isBookMode, isSelecting, pages.length, selection]);
+  }, [isBookMode, isSelecting, pages.length, resetCrop, selection]);
 
   function handleViewportKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
     if (event.key === "Home") {
@@ -336,6 +409,60 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
             {selection ? text.selectionReady : ""}
           </p>
         </div>
+
+        {cropStatus !== "idle" ? (
+          <div className="border-b border-washi-200/80 bg-white/80 p-4 sm:p-5">
+            {cropStatus === "preparing" ? (
+              <p
+                aria-live="polite"
+                className="text-sm font-semibold text-sumi-700"
+              >
+                {text.crop.preparing}
+              </p>
+            ) : preparedCrop ? (
+              <div className="grid gap-5 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)]">
+                <div>
+                  <p className="text-sm font-semibold uppercase tracking-[0.16em] text-shu-600">
+                    {text.crop.previewEyebrow}
+                  </p>
+                  <div className="mt-3 grid min-h-36 place-items-center overflow-hidden rounded-xl border border-washi-200 bg-washi-100 p-3">
+                    {/* The preview is a local blob URL generated from the selected page. */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      alt={text.crop.previewAlt}
+                      className="max-h-60 max-w-full rounded-lg object-contain"
+                      src={preparedCrop.url}
+                    />
+                  </div>
+                  <p className="mt-2 text-xs text-sumi-500">
+                    {preparedCrop.width} × {preparedCrop.height} px ·{" "}
+                    {preparedCrop.pageName}
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="text-xl font-bold text-sumi-950">
+                    {text.crop.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-6 text-sumi-600">
+                    {text.crop.description}
+                  </p>
+                  <p className="mt-4 rounded-xl border border-shu-100 bg-shu-50 px-4 py-3 text-sm leading-6 text-sumi-700">
+                    {text.crop.temporary}
+                  </p>
+                </div>
+              </div>
+            ) : cropFeedback ? (
+              <p
+                aria-live="polite"
+                className="text-sm font-semibold text-red-700"
+                role="alert"
+              >
+                {cropFeedback}
+              </p>
+            ) : null}
+          </div>
+        ) : null}
 
         {isBookMode ? (
           <>

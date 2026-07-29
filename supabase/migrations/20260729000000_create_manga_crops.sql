@@ -1,0 +1,2 @@
+-- Reserved migration version.
+-- Standalone manga crop persistence was removed before release.
