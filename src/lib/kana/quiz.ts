@@ -127,3 +127,74 @@ export function createAdaptiveKanaQuiz({
 
   return selected;
 }
+
+export function createAdaptiveMixedKanaQuiz({
+  category,
+  hiragana,
+  katakana,
+  learnedKeys,
+  performance,
+  random = Math.random,
+  row,
+  scope,
+  size,
+}: Omit<KanaQuizSelection, "characters"> & {
+  hiragana: KanaCharacter[];
+  katakana: KanaCharacter[];
+}): KanaCharacter[] {
+  const hiraganaSize = Math.ceil(size / 2);
+  const katakanaSize = size - hiraganaSize;
+  const commonSelection = {
+    category,
+    learnedKeys,
+    performance,
+    random,
+    row,
+    scope,
+  };
+  const selected = [
+    ...createAdaptiveKanaQuiz({
+      ...commonSelection,
+      characters: hiragana,
+      size: hiraganaSize,
+    }),
+    ...createAdaptiveKanaQuiz({
+      ...commonSelection,
+      characters: katakana,
+      size: katakanaSize,
+    }),
+  ];
+  const selectedKeys = new Set(
+    selected.map((character) => character.key),
+  );
+
+  if (selected.length < size) {
+    const remainingCharacters = getKanaQuizCandidates({
+      category,
+      characters: [...hiragana, ...katakana],
+      learnedKeys,
+      performance,
+      row,
+      scope,
+    }).filter((character) => !selectedKeys.has(character.key));
+
+    selected.push(
+      ...createAdaptiveKanaQuiz({
+        ...commonSelection,
+        characters: remainingCharacters,
+        scope: "all",
+        size: size - selected.length,
+      }),
+    );
+  }
+
+  for (let index = selected.length - 1; index > 0; index -= 1) {
+    const target = Math.floor(random() * (index + 1));
+    [selected[index], selected[target]] = [
+      selected[target],
+      selected[index],
+    ];
+  }
+
+  return selected;
+}

@@ -2,6 +2,7 @@
 
 import {
   type FormEvent,
+  type KeyboardEvent,
   useMemo,
   useRef,
   useState,
@@ -10,9 +11,15 @@ import {
 
 import { answerKanaQuizAction } from "@/app/kana/actions";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
-import { KANA_SOUND_ROW_ORDER } from "@/lib/kana/catalog";
+import {
+  checkKanaQuizAnswer,
+  getKanaQuizAnswers,
+  KANA_SOUND_ROW_ORDER,
+  normalizeKanaQuizAnswer,
+} from "@/lib/kana/catalog";
 import {
   createAdaptiveKanaQuiz,
+  createAdaptiveMixedKanaQuiz,
   getKanaQuizCandidates,
   type KanaQuizCategory,
 } from "@/lib/kana/quiz";
@@ -25,7 +32,7 @@ import type {
   KanaSoundRow,
 } from "@/types/kana";
 
-const QUIZ_SIZE = 10;
+type KanaQuizScript = KanaScript | "mixed";
 
 type QuizFeedback = {
   correct: boolean;
@@ -49,7 +56,7 @@ export function KanaQuiz({
   learnedKeys,
   text,
 }: KanaQuizProps) {
-  const [script, setScript] = useState<KanaScript>("hiragana");
+  const [script, setScript] = useState<KanaQuizScript>("hiragana");
   const [scope, setScope] = useState<KanaQuizScope>("category");
   const [category, setCategory] =
     useState<KanaQuizCategory>("basic");
@@ -61,12 +68,19 @@ export function KanaQuiz({
   const [started, setStarted] = useState(false);
   const [completed, setCompleted] = useState(0);
   const [mistakes, setMistakes] = useState(0);
-  const [sessionSize, setSessionSize] = useState(QUIZ_SIZE);
+  const [sessionSize, setSessionSize] = useState(0);
   const [stats, setStats] = useState(initialStats);
   const [performance, setPerformance] = useState(initialPerformance);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const answerInput = useRef<HTMLInputElement>(null);
-  const characters = script === "hiragana" ? hiragana : katakana;
+  const characters =
+    script === "hiragana"
+      ? hiragana
+      : script === "katakana"
+        ? katakana
+        : [...hiragana, ...katakana];
+  const scriptLabel =
+    script === "mixed" ? text.quiz.mixed : text.chart[script];
   const learnedKeySet = useMemo(
     () => new Set(learnedKeys),
     [learnedKeys],
@@ -87,15 +101,27 @@ export function KanaQuiz({
     : 0;
 
   function startQuiz() {
-    const nextQueue = createAdaptiveKanaQuiz({
-      category,
-      characters,
-      learnedKeys: learnedKeySet,
-      performance,
-      row,
-      scope,
-      size: QUIZ_SIZE,
-    });
+    const nextQueue =
+      script === "mixed"
+        ? createAdaptiveMixedKanaQuiz({
+            category,
+            hiragana,
+            katakana,
+            learnedKeys: learnedKeySet,
+            performance,
+            row,
+            scope,
+            size: availableCharacters.length,
+          })
+        : createAdaptiveKanaQuiz({
+            category,
+            characters,
+            learnedKeys: learnedKeySet,
+            performance,
+            row,
+            scope,
+            size: availableCharacters.length,
+          });
 
     if (!nextQueue.length) return;
 
@@ -112,56 +138,72 @@ export function KanaQuiz({
 
   function submitAnswer(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (!current || feedback || isPending) return;
+    if (!current) return;
+
+    if (feedback) {
+      continueQuiz();
+      return;
+    }
 
     setError("");
+    const normalizedAnswer = normalizeKanaQuizAnswer(answer);
+    const acceptedAnswers = getKanaQuizAnswers(current.key);
+
+    if (
+      !acceptedAnswers ||
+      !normalizedAnswer ||
+      normalizedAnswer.length > 12 ||
+      !/^[a-z]+$/.test(normalizedAnswer)
+    ) {
+      setError(text.quiz.invalidAnswer);
+      return;
+    }
+
+    const correct = checkKanaQuizAnswer(current.key, normalizedAnswer);
+    setFeedback({
+      correct,
+      expectedAnswer: acceptedAnswers.join(" / "),
+    });
+    setPerformance((currentPerformance) => {
+      const existing = currentPerformance.find(
+        (item) => item.characterKey === current.key,
+      );
+
+      if (!existing) {
+        return [
+          ...currentPerformance,
+          {
+            characterKey: current.key,
+            correctAnswers: correct ? 1 : 0,
+            totalAnswers: 1,
+          },
+        ];
+      }
+
+      return currentPerformance.map((item) =>
+        item.characterKey === current.key
+          ? {
+              ...item,
+              correctAnswers:
+                item.correctAnswers + (correct ? 1 : 0),
+              totalAnswers: item.totalAnswers + 1,
+            }
+          : item,
+      );
+    });
+
+    if (correct) setCompleted((value) => value + 1);
+    else setMistakes((value) => value + 1);
+
     startTransition(async () => {
       const result = await answerKanaQuizAction(current.key, answer);
 
-      if (
-        !result.ok ||
-        typeof result.correct !== "boolean" ||
-        !result.expectedAnswer
-      ) {
+      if (!result.ok) {
         setError(result.error ?? text.quiz.saveFailed);
         return;
       }
 
       if (result.stats) setStats(result.stats);
-      setPerformance((currentPerformance) => {
-        const existing = currentPerformance.find(
-          (item) => item.characterKey === current.key,
-        );
-
-        if (!existing) {
-          return [
-            ...currentPerformance,
-            {
-              characterKey: current.key,
-              correctAnswers: result.correct ? 1 : 0,
-              totalAnswers: 1,
-            },
-          ];
-        }
-
-        return currentPerformance.map((item) =>
-          item.characterKey === current.key
-            ? {
-                ...item,
-                correctAnswers:
-                  item.correctAnswers + (result.correct ? 1 : 0),
-                totalAnswers: item.totalAnswers + 1,
-              }
-            : item,
-        );
-      });
-      setFeedback({
-        correct: result.correct,
-        expectedAnswer: result.expectedAnswer,
-      });
-
-      if (result.correct) setCompleted((value) => value + 1);
-      else setMistakes((value) => value + 1);
     });
   }
 
@@ -177,6 +219,19 @@ export function KanaQuiz({
     setFeedback(null);
     setError("");
     window.requestAnimationFrame(() => answerInput.current?.focus());
+  }
+
+  function handleQuizKeyDown(event: KeyboardEvent<HTMLFormElement>) {
+    if (event.key !== "Enter") return;
+
+    event.preventDefault();
+
+    if (feedback) {
+      continueQuiz();
+      return;
+    }
+
+    event.currentTarget.requestSubmit();
   }
 
   return (
@@ -204,7 +259,7 @@ export function KanaQuiz({
             className="mt-6 inline-flex rounded-xl border border-white/15 bg-white/5 p-1"
             role="group"
           >
-            {(["hiragana", "katakana"] as const).map((option) => (
+            {(["hiragana", "katakana", "mixed"] as const).map((option) => (
               <button
                 aria-pressed={script === option}
                 className={`rounded-lg px-4 py-2 text-sm font-semibold transition ${
@@ -217,7 +272,9 @@ export function KanaQuiz({
                 onClick={() => setScript(option)}
                 type="button"
               >
-                {text.chart[option]}
+                {option === "mixed"
+                  ? text.quiz.mixed
+                  : text.chart[option]}
               </button>
             ))}
           </div>
@@ -266,7 +323,7 @@ export function KanaQuiz({
                     ["basic", "dakuten", "handakuten"] as const
                   ).map((option) => (
                     <option key={option} value={option}>
-                      {text.chart.categories[option].title}
+                      {text.quiz.categories[option]}
                     </option>
                   ))}
                 </select>
@@ -288,10 +345,7 @@ export function KanaQuiz({
                     <option key={option} value={option}>
                       {option === "vowels"
                         ? text.quiz.vowels
-                        : text.quiz.rowOption.replace(
-                            "{row}",
-                            option.toUpperCase(),
-                          )}
+                        : option.toUpperCase()}
                     </option>
                   ))}
                 </select>
@@ -354,7 +408,7 @@ export function KanaQuiz({
                     .replace("{total}", String(sessionSize))}
                 </p>
                 <span className="rounded-full bg-washi-100 px-3 py-1 text-xs font-bold uppercase tracking-wide text-sumi-600">
-                  {text.chart[script]}
+                  {scriptLabel}
                 </span>
               </div>
 
@@ -362,7 +416,11 @@ export function KanaQuiz({
                 {current.character}
               </p>
 
-              <form className="mt-8" onSubmit={submitAnswer}>
+              <form
+                className="mt-8"
+                onKeyDown={handleQuizKeyDown}
+                onSubmit={submitAnswer}
+              >
                 <label
                   className="text-sm font-bold text-sumi-700"
                   htmlFor="kana-quiz-answer"
@@ -372,26 +430,27 @@ export function KanaQuiz({
                 <div className="mt-2 flex flex-col gap-3 sm:flex-row">
                   <input
                     autoComplete="off"
-                    className="min-w-0 flex-1 rounded-xl border border-washi-300 px-4 py-3 text-lg font-semibold outline-none transition focus:border-shu-500 focus:ring-2 focus:ring-shu-100 disabled:bg-washi-100"
-                    disabled={Boolean(feedback) || isPending}
+                    className="min-w-0 flex-1 rounded-xl border border-washi-300 px-4 py-3 text-lg font-semibold outline-none transition focus:border-shu-500 focus:ring-2 focus:ring-shu-100 read-only:bg-washi-100"
                     id="kana-quiz-answer"
                     maxLength={12}
                     onChange={(event) => setAnswer(event.target.value)}
                     placeholder={text.quiz.answerPlaceholder}
                     ref={answerInput}
+                    readOnly={Boolean(feedback)}
                     spellCheck={false}
                     value={answer}
                   />
                   {!feedback ? (
                     <button
                       className="rounded-xl bg-shu-600 px-5 py-3 font-bold text-white transition hover:bg-shu-700 disabled:cursor-wait disabled:opacity-60"
-                      disabled={!answer.trim() || isPending}
+                      disabled={!answer.trim()}
                       type="submit"
                     >
-                      {isPending ? text.quiz.checking : text.quiz.check}
+                      {text.quiz.check}
                     </button>
                   ) : (
                     <button
+                      aria-keyshortcuts="Enter"
                       className="rounded-xl bg-sumi-950 px-5 py-3 font-bold text-white transition hover:bg-sumi-800"
                       onClick={continueQuiz}
                       type="button"

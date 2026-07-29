@@ -403,6 +403,18 @@ export function KanaLearning({
                                 </article>
                               );
                             })}
+                            {filter === "all" ? (
+                              <div
+                                aria-hidden="true"
+                                className="pointer-events-none relative hidden min-h-[12rem] select-none overflow-hidden sm:col-start-2 sm:flex sm:items-center sm:justify-center xl:col-start-3"
+                              >
+                                <span className="absolute h-36 w-36 rounded-full border border-shu-200/40" />
+                                <span className="absolute h-24 w-24 rounded-full bg-shu-100/35 blur-xl" />
+                                <span className="relative font-[var(--font-noto-sans-jp)] text-[7.5rem] font-black leading-none text-sumi-950/[0.07]">
+                                  {row.allCharacters[0].character}
+                                </span>
+                              </div>
+                            ) : null}
                           </div>
                         </section>
                       );

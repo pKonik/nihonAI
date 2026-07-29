@@ -4,6 +4,7 @@ import test from "node:test";
 import { getKanaCharacters } from "./catalog.ts";
 import {
   createAdaptiveKanaQuiz,
+  createAdaptiveMixedKanaQuiz,
   getKanaQuizCandidates,
 } from "./quiz.ts";
 
@@ -70,4 +71,28 @@ test("adaptive quiz creates a unique session limited to available kana", () => {
 
   assert.equal(quiz.length, 4);
   assert.equal(new Set(quiz.map((item) => item.key)).size, 4);
+});
+
+test("mixed quiz balances both scripts when both have candidates", () => {
+  const quiz = createAdaptiveMixedKanaQuiz({
+    category: "basic",
+    hiragana: getKanaCharacters("hiragana", "es"),
+    katakana: getKanaCharacters("katakana", "es"),
+    learnedKeys: new Set(),
+    performance: [],
+    random: () => 0.5,
+    row: "vowels",
+    scope: "all",
+    size: 10,
+  });
+
+  assert.equal(
+    quiz.filter((item) => item.script === "hiragana").length,
+    5,
+  );
+  assert.equal(
+    quiz.filter((item) => item.script === "katakana").length,
+    5,
+  );
+  assert.equal(new Set(quiz.map((item) => item.key)).size, 10);
 });

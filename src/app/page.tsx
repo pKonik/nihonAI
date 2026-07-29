@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
+import { HeroAmbient } from "@/components/landing/HeroAmbient";
 import { LandingHeader } from "@/components/landing/LandingHeader";
 import { ReadingPreview } from "@/components/landing/ReadingPreview";
 import { getI18n } from "@/lib/i18n/server";
@@ -38,18 +39,10 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function LandingPage() {
   const { locale, dictionary } = await getI18n();
   const text = dictionary.landing;
-  const readingSlides = [
-    {
-      alt: text.hero.nightSceneAlt,
-      id: "original-night",
-      japaneseSentence: text.hero.japaneseSentence,
-      meaning: text.hero.meaning,
-      pageLabel: text.hero.pageLabel,
-      reading: text.hero.reading,
-      src: "/reading-preview-background.webp",
-      word: text.hero.word,
-    },
-  ] as const;
+  const readingExample = {
+    ...text.hero.example,
+    src: "/landing/mining-example.webp",
+  } as const;
   const journeySteps = [
     {
       number: "01",
@@ -189,10 +182,10 @@ export default async function LandingPage() {
       />
 
       <main id="contenido">
-        <section className="relative px-4 pb-20 pt-14 sm:px-6 sm:pb-24 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
+        <HeroAmbient className="relative px-4 pb-20 pt-14 sm:px-6 sm:pb-24 sm:pt-20 lg:px-8 lg:pb-32 lg:pt-24">
           <div
             aria-hidden="true"
-            className="absolute left-1/2 top-8 -z-10 hidden -translate-x-1/2 font-[var(--font-noto-sans-jp)] text-[11rem] font-black tracking-[0.2em] text-sumi-950/[0.025] xl:block"
+            className="hero-ambient__kanji absolute left-1/2 top-8 -z-10 hidden font-[var(--font-noto-sans-jp)] text-[11rem] font-black tracking-[0.2em] text-sumi-950/[0.025] xl:block"
           >
             日本語
           </div>
@@ -232,9 +225,9 @@ export default async function LandingPage() {
               </p>
             </div>
 
-            <ReadingPreview slides={readingSlides} text={text.hero} />
+            <ReadingPreview example={readingExample} text={text.hero} />
           </div>
-        </section>
+        </HeroAmbient>
 
         <section
           className="scroll-mt-28 border-y border-washi-200 bg-white/72 px-4 py-20 backdrop-blur-sm sm:px-6 sm:py-24 lg:px-8"

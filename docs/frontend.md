@@ -132,11 +132,16 @@ La landing:
 - reservar un espacio compatible con la futura mascota sin adelantar la fase
   de onboarding.
 
-El ejemplo de lectura del hero utiliza una estructura de diapositivas. Cada
-panel puede definir su propia imagen, frase japonesa, lectura, significado y
-etiqueta de página. La rotación automática solo se activa cuando existe más de
-un panel, incluye controles manuales y se detiene cuando el usuario prefiere
-movimiento reducido.
+El ejemplo de lectura del hero utiliza una única ilustración original dentro de
+un molde 4:3. La frase japonesa y el resaltado de la palabra detectada se
+superponen como contenido HTML para conservar su nitidez y accesibilidad. La
+tarjeta con la palabra minada, su lectura y significado se muestra debajo de la
+imagen sin cubrirla. Este ejemplo no utiliza carrusel ni navegación adicional.
+
+El entorno del hero aporta movimiento sutil mediante halos, destellos y una ruta
+punteada animada. El kanji decorativo del fondo responde suavemente al puntero,
+mientras el contenido principal y los paneles permanecen estables. Estos efectos
+se desactivan cuando el sistema solicita movimiento reducido.
 
 No muestra testimonios, métricas, precios, capturas o afirmaciones que no
 correspondan a información real. Funciona principalmente como contenido
@@ -180,20 +185,27 @@ pendientes y marcar el progreso personal. Dentro de cada silabario, la enseñanz
 avanza en tres bloques: 46 sonidos básicos, 20 sonidos con dakuten y 5 sonidos
 con handakuten. Cada bloque separa sus filas vocálicas o consonánticas y permite
 marcar o desmarcar el progreso de una fila completa mediante una sola acción.
+Desde el layout de dos columnas, cada fila utiliza el espacio libre de la
+cuadrícula para mostrar como marca de agua el kana de su columna A; este detalle
+es decorativo, mantiene bajo contraste y no se muestra en una sola columna ni
+cuando hay filtros activos.
 Las 33 combinaciones yōon estándar y las reglas de consonante
 doble, vocal larga y lectura de partículas se muestran como referencias
 posteriores.
 
-La misma ruta incluye un quiz de lectura en rōmaji con sesiones de 10
-caracteres del silabario elegido. El usuario puede limitar la sesión a
-caracteres aprendidos, una categoría, una fila, todo el silabario o errores
-anteriores. Dentro del alcance elegido, la selección da más peso a caracteres
-nuevos o con menor precisión. El alcance de errores reúne los caracteres que
-todavía permanecen por debajo del 80 % de precisión. Cada respuesta se corrige
-antes de avanzar y los errores regresan al final de la sesión hasta resolverse.
-Los intentos se guardan como actividad privada e inmutable para calcular
-respuestas totales, precisión, días de estudio y racha actual a partir de datos
-reales.
+La misma ruta incluye un quiz de lectura en rōmaji con hiragana, katakana o
+ambos silabarios en modo mixto. El usuario puede limitar la sesión a caracteres
+aprendidos, una categoría, una fila, todo el silabario o errores anteriores. La
+sesión utiliza todos los caracteres disponibles dentro del alcance elegido, sin
+un límite fijo, y ordena primero los caracteres nuevos o con menor precisión. El
+alcance de errores reúne los caracteres que todavía permanecen por debajo del
+80 % de precisión. Cada respuesta se corrige localmente de forma inmediata con
+las mismas reglas compartidas por el servidor, mientras el intento se valida y
+guarda en segundo plano. Tras mostrar el resultado, el foco permanece en el
+formulario para que un segundo Enter avance sin utilizar el ratón. Los errores
+regresan al final de la sesión hasta resolverse. Los intentos se guardan como
+actividad privada e inmutable para calcular respuestas totales, precisión, días
+de estudio y racha actual a partir de datos reales.
 
 ## Evolución
 
