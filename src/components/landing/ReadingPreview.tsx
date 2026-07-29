@@ -47,9 +47,9 @@ export function ReadingPreview({
             sizes="(min-width: 1024px) 34rem, (min-width: 640px) 80vw, calc(100vw - 2rem)"
             src={example.src}
           />
-          <p className="absolute right-[4%] top-[7%] flex h-[29%] w-[37%] items-center justify-center whitespace-nowrap px-2 text-center font-[var(--font-noto-sans-jp)] text-xs font-bold leading-relaxed text-sumi-950 sm:px-4 sm:text-lg">
+          <p className="absolute right-[7%] top-[5%] flex h-[39%] w-[14%] items-center justify-center whitespace-nowrap font-[var(--font-noto-sans-jp)] text-xs font-bold leading-relaxed tracking-[0.12em] text-sumi-950 [text-orientation:upright] [writing-mode:vertical-rl] sm:text-lg">
             {sentenceStart}
-            <mark className="rounded bg-shu-200 px-0.5 text-sumi-950">
+            <mark className="rounded-md bg-shu-500 px-1 py-0.5 text-white shadow-sm">
               {example.word}
             </mark>
             {sentenceEnd}

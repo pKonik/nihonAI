@@ -41,7 +41,7 @@ export default async function LandingPage() {
   const text = dictionary.landing;
   const readingExample = {
     ...text.hero.example,
-    src: "/landing/mining-example.webp",
+    src: "/landing/mining-example-v3.webp",
   } as const;
   const journeySteps = [
     {
