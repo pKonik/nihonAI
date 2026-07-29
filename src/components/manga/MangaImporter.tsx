@@ -1,6 +1,5 @@
 "use client";
 
-import JSZip from "jszip";
 import {
   useEffect,
   useRef,
@@ -132,6 +131,7 @@ export function MangaImporter({ text }: MangaImporterProps) {
       throw new MangaImportError(text.errors.archiveTooLarge);
     }
 
+    const { default: JSZip } = await import("jszip");
     const zip = await JSZip.loadAsync(file);
     const entries = Object.values(zip.files).filter(
       (entry) =>

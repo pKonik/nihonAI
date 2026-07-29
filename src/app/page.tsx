@@ -20,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
       description: dictionary.meta.landingDescription,
       images: [
         {
-          url: "/og.png",
+          url: "/og.jpg",
           width: 1733,
           height: 907,
           alt: dictionary.meta.landingImageAlt,
@@ -31,7 +31,7 @@ export async function generateMetadata(): Promise<Metadata> {
       card: "summary_large_image",
       title: dictionary.meta.landingTitle,
       description: dictionary.meta.landingDescription,
-      images: ["/og.png"],
+      images: ["/og.jpg"],
     },
   };
 }
