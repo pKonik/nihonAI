@@ -1,5 +1,8 @@
 const PUBLIC_EXACT_PATHS = new Set(["/", "/login"]);
-const PUBLIC_PATH_PREFIXES = ["/auth"];
+const PUBLIC_PATH_PREFIXES = [
+  "/auth",
+  "/models/manga-ocr-mobile",
+];
 
 export function isPublicPath(pathname: string) {
   return (

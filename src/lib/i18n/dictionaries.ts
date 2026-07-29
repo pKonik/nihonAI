@@ -490,15 +490,51 @@ const spanishDictionary = {
     crop: {
       title: "Recorte preparado",
       description:
-        "Esta región queda lista para que el OCR lea únicamente el contenido seleccionado en la siguiente fase.",
+        "El OCR leerá únicamente el contenido de esta región seleccionada.",
       previewEyebrow: "Vista previa del recorte",
       previewAlt: "Vista previa de la región seleccionada",
       preparing: "Preparando el recorte…",
       temporary:
-        "El recorte permanece temporalmente en tu dispositivo y se descartará después del reconocimiento. La tarjeta conservará el texto como contexto, no la imagen.",
+        "El recorte solo existe temporalmente en la memoria de este dispositivo. Se eliminará al terminar el reconocimiento y nunca se guardará ni se enviará.",
       errors: {
         prepareFailed:
           "No se pudo generar el recorte. Intenta seleccionar la región de nuevo.",
+      },
+    },
+    ocr: {
+      action: "Reconocer texto japonés",
+      fastAction: "OCR alternativo",
+      preciseAction: "OCR preciso",
+      preciseNote:
+        "El OCR preciso es la opción principal. La primera vez descarga unos 65 MB desde NihonAI y los guarda en la caché del navegador; el OCR alternativo queda disponible como respaldo.",
+      preciseConfirm:
+        "El OCR preciso necesita descargar unos 65 MB desde NihonAI. Se guardarán en la caché de este navegador y la imagen no se enviará. ¿Deseas continuar?",
+      working: "Procesando…",
+      loading: "Preparando el OCR japonés local…",
+      preciseLoading: "Preparando Manga OCR en este dispositivo…",
+      connecting: "Conectando con el repositorio del modelo…",
+      downloading: "Cargando el modelo local… {progress} %",
+      downloadProgressLabel: "Progreso de carga del modelo de OCR preciso",
+      recognizing: "Reconociendo texto… {progress} %",
+      progressLabel: "Progreso del reconocimiento de texto",
+      floatingPanelLabel: "Panel flotante de OCR",
+      closeFloatingPanel: "Cerrar panel de OCR",
+      successTitle: "Texto japonés reconocido",
+      successDescription:
+        "El recorte ya fue eliminado de la memoria. Revisa el resultado antes de continuar.",
+      correctionLabel: "Texto japonés detectado",
+      correctionHelp:
+        "Corrige cualquier carácter, espacio o salto de línea que el OCR no haya reconocido bien. El texto permanece únicamente en esta sesión.",
+      emptyTitle: "No se detectó texto",
+      emptyDescription:
+        "El recorte fue eliminado. Selecciona otra región con texto japonés más nítido e inténtalo de nuevo.",
+      errors: {
+        recognitionFailed:
+          "No se pudo reconocer el texto y el recorte fue eliminado. Selecciona la región de nuevo e inténtalo otra vez.",
+        preciseFailed:
+          "El OCR preciso no pudo completar el reconocimiento y el recorte fue eliminado. Comprueba la conexión o el espacio disponible y vuelve a intentarlo.",
+        preciseUnavailable:
+          "El OCR preciso no está disponible en este navegador. Puedes continuar con el OCR rápido.",
       },
     },
     bookKeyboardHelp:
@@ -1143,15 +1179,51 @@ const englishDictionary: Dictionary = {
     crop: {
       title: "Crop prepared",
       description:
-        "This region is ready for OCR to read only the selected content in the next phase.",
+        "OCR will read only the content inside this selected region.",
       previewEyebrow: "Crop preview",
       previewAlt: "Preview of the selected region",
       preparing: "Preparing crop…",
       temporary:
-        "The crop stays temporarily on your device and will be discarded after recognition. The card will keep text as context, not the image.",
+        "The crop exists only temporarily in this device's memory. It will be deleted after recognition and will never be saved or sent.",
       errors: {
         prepareFailed:
           "The crop could not be generated. Try selecting the region again.",
+      },
+    },
+    ocr: {
+      action: "Recognize Japanese text",
+      fastAction: "Alternative OCR",
+      preciseAction: "Precise OCR",
+      preciseNote:
+        "Precise OCR is the primary option. Its first use downloads about 65 MB from NihonAI and stores it in the browser cache; alternative OCR remains available as a fallback.",
+      preciseConfirm:
+        "Precise OCR needs to download about 65 MB from NihonAI. It will be stored in this browser's cache and the image will not be sent. Continue?",
+      working: "Processing…",
+      loading: "Preparing local Japanese OCR…",
+      preciseLoading: "Preparing Manga OCR on this device…",
+      connecting: "Connecting to the model repository…",
+      downloading: "Loading the local model… {progress}%",
+      downloadProgressLabel: "Precise OCR model loading progress",
+      recognizing: "Recognizing text… {progress}%",
+      progressLabel: "Text recognition progress",
+      floatingPanelLabel: "Floating OCR panel",
+      closeFloatingPanel: "Close OCR panel",
+      successTitle: "Japanese text recognized",
+      successDescription:
+        "The crop has been removed from memory. Review the result before continuing.",
+      correctionLabel: "Detected Japanese text",
+      correctionHelp:
+        "Correct any character, space, or line break that OCR did not recognize properly. The text remains only in this session.",
+      emptyTitle: "No text was detected",
+      emptyDescription:
+        "The crop was removed. Select another region with clearer Japanese text and try again.",
+      errors: {
+        recognitionFailed:
+          "The text could not be recognized and the crop was removed. Select the region again and retry.",
+        preciseFailed:
+          "Precise OCR could not complete recognition and the crop was removed. Check the connection or available storage and try again.",
+        preciseUnavailable:
+          "Precise OCR is not available in this browser. You can continue with fast OCR.",
       },
     },
     bookKeyboardHelp:

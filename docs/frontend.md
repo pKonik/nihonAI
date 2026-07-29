@@ -229,13 +229,60 @@ redibujarse o borrarse. Cambiar de página en modo libro o cambiar de modo cance
 la selección actual.
 
 Al terminar una selección, el navegador genera una vista previa local sin subir
-la página original. El recorte permanece temporalmente en memoria y queda listo
-para el futuro OCR; no existe una acción para guardarlo como imagen
-independiente. Después del reconocimiento se descarta y la futura tarjeta
-conservará la oración japonesa como contexto textual.
+la página original. El recorte permanece temporalmente en memoria y no existe
+una acción para guardarlo como imagen independiente. El usuario inicia el OCR
+japonés desde esa vista previa; el lector muestra la preparación, el progreso y
+el resultado general del intento. Cuando detecta texto, lo muestra en un campo
+editable para corregir caracteres, espacios o saltos de línea antes de
+continuar.
+
+En modo scroll, todo el flujo posterior a la selección se presenta como una
+tarjeta flotante anclada a la ventana: preparación del recorte, vista previa,
+elección del motor, progreso y resultado editable. De este modo permanece
+accesible junto a la página que se está leyendo sin regresar al inicio del
+lector y puede cerrarse explícitamente. En modo libro conserva su posición
+dentro del flujo normal de la interfaz.
 
 Los recortes se limitan a 2048 píxeles por lado para mantener un uso predecible
-de memoria durante el procesamiento local.
+de memoria durante el procesamiento local. El OCR elige automáticamente el
+modelo japonés vertical cuando el recorte es claramente más alto que ancho y el
+modelo horizontal en los demás casos. Antes del reconocimiento, los recortes
+pequeños se amplían localmente hasta un límite de tres veces y se generan una
+variante en escala de grises con mayor contraste y otra binarizada. El mismo
+trabajador procesa ambas y conserva el resultado no vacío con mayor confianza.
+
+El motor se carga bajo demanda, procesa exclusivamente los `Blob` locales y
+termina su trabajador después de cada intento. Entonces el recorte y sus
+variantes se eliminan de memoria y su URL local se revoca, incluso si el
+reconocimiento no detecta texto o falla. Solo el texto detectado permanece
+temporalmente en el estado del lector; las correcciones también son locales y se
+descartan al cambiar de página, modo de lectura o selección.
+
+Como experimento de precisión, la vista previa también ofrece **OCR preciso**.
+Esta alternativa usa el modelo comunitario
+[`ogkalu/manga-ocr-mobile`](https://huggingface.co/ogkalu/manga-ocr-mobile)
+con ONNX Runtime Web y constituye la opción principal del lector. Tesseract
+permanece temporalmente como alternativa de compatibilidad.
+
+Los cuatro archivos ONNX se distribuyen como recursos estáticos versionados de
+NihonAI. No forman parte del JavaScript ni se descargan al visitar la web: la
+primera activación solicita confirmación, descarga aproximadamente 65 MB desde
+el mismo origen y los conserva en Cache Storage. Los usuarios que ya posean la
+versión anterior procedente de Hugging Face pueden reutilizarla y migrarla a la
+nueva clave de caché sin repetir la transferencia. La petición contiene
+únicamente el modelo; el recorte permanece local y la inferencia se ejecuta
+mediante WebAssembly.
+
+Mientras espera la primera respuesta del servidor estático, la interfaz muestra un
+estado de conexión indeterminado. Después actualiza el porcentaje con los
+bloques de bytes recibidos, en lugar de avanzar solo al terminar cada archivo.
+Los cuatro recursos se solicitan concurrentemente y su escritura en Cache
+Storage continúa en segundo plano para no bloquear el comienzo de la inferencia.
+
+El modo preciso necesita memoria adicional. El OCR basado en Tesseract continúa
+disponible como respaldo durante la evaluación de compatibilidad. El
+usuario puede eliminar el modelo descargado borrando los datos del sitio desde
+su navegador. El modelo está publicado bajo licencia Apache-2.0.
 
 El control de selección permanece fijo sobre el botón flotante de Ayuda para
 estar disponible al recorrer capítulos largos en modo scroll. La selección solo

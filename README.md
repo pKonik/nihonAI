@@ -62,9 +62,19 @@ consultar ejemplos y conservar el progreso por carácter.
 La ruta `/leer` permite importar localmente una carpeta de imágenes o un ZIP,
 alternar entre modo libro y lectura continua, controlar el zoom y desplazarse
 por las imágenes sin subir las páginas originales. En ambos modos permite
-marcar una región y previsualizar temporalmente el recorte que utilizará el
-futuro OCR. El recorte no se sube: se descartará después del reconocimiento y
-la tarjeta conservará únicamente la oración japonesa como contexto textual.
+marcar una región, previsualizar temporalmente el recorte y reconocer localmente
+texto japonés horizontal o vertical mediante variantes de imagen optimizadas
+localmente. El recorte no se sube ni se guarda: se descarta después de cada
+intento y solo el texto reconocido, que puede corregirse antes de continuar,
+permanece temporalmente en memoria.
+
+El lector incluye además un modo **OCR preciso** experimental basado en Manga
+OCR Mobile y ONNX Runtime Web, configurado como motor principal. Sus archivos se
+distribuyen de forma estática junto con NihonAI, pero no se cargan al visitar la
+web: el primer uso descarga, con confirmación previa, unos 65 MB y los conserva
+en la caché del navegador. La descarga no contiene el recorte: tanto la imagen
+como la inferencia permanecen en el dispositivo. Tesseract continúa disponible
+temporalmente como respaldo de compatibilidad.
 Las demás áreas se completarán siguiendo el roadmap de
 [`docs/architecture.md`](docs/architecture.md).
 
@@ -78,7 +88,7 @@ npm run build
 ```
 
 - `test` ejecuta las pruebas unitarias de cuenta, rutas públicas, idiomas, kana,
-  importación de manga y vocabulario.
+  importación y OCR de manga, y vocabulario.
 - `lint` revisa problemas de calidad y convenciones.
 - `typecheck` comprueba los tipos de TypeScript sin generar archivos.
 - `build` crea y valida la versión optimizada para producción.

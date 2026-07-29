@@ -8,9 +8,11 @@ import {
   type KeyboardEvent as ReactKeyboardEvent,
   type PointerEvent as ReactPointerEvent,
 } from "react";
+import { createPortal } from "react-dom";
 
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { createMangaCrop } from "@/lib/manga/crop";
+import { recognizeJapaneseCrop } from "@/lib/manga/ocr";
 import {
   createSelectionRect,
   getRelativePoint,
@@ -35,6 +37,7 @@ const ZOOM_STEP = 25;
 const DEFAULT_ZOOM = 75;
 
 type ReadingMode = "book" | "scroll";
+type OcrEngine = "fast" | "precise";
 
 type PageSelection = {
   pageId: string;
@@ -47,11 +50,21 @@ type SelectionStart = {
 };
 
 type PreparedCrop = {
+  blob: Blob;
   height: number;
   pageName: string;
   url: string;
   width: number;
 };
+
+type OcrStatus =
+  | "idle"
+  | "downloading"
+  | "loading"
+  | "recognizing"
+  | "success"
+  | "empty"
+  | "error";
 
 function formatPosition(
   template: string,
@@ -76,17 +89,39 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
   const [cropStatus, setCropStatus] = useState<
     "idle" | "preparing" | "ready" | "error"
   >("idle");
+  const [ocrResult, setOcrResult] = useState<string | null>(null);
+  const [ocrStatus, setOcrStatus] = useState<OcrStatus>("idle");
+  const [ocrProgress, setOcrProgress] = useState(0);
+  const [ocrFeedback, setOcrFeedback] = useState("");
+  const [ocrEngine, setOcrEngine] = useState<OcrEngine | null>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
   const selectionStartRef = useRef<SelectionStart | null>(null);
   const cropGenerationRef = useRef(0);
+  const ocrGenerationRef = useRef(0);
+  const ocrAbortRef = useRef<AbortController | null>(null);
+  const mangaOcrDisposeRef = useRef<(() => Promise<void>) | null>(null);
   const currentPage = pages[currentPageIndex];
   const isBookMode = readingMode === "book";
+  const isOcrBusy =
+    ocrStatus === "downloading" ||
+    ocrStatus === "loading" ||
+    ocrStatus === "recognizing";
+  const isFloatingOcrPanel =
+    !isBookMode && (cropStatus !== "idle" || ocrStatus !== "idle");
 
   const resetCrop = useCallback(() => {
     cropGenerationRef.current += 1;
+    ocrGenerationRef.current += 1;
+    ocrAbortRef.current?.abort();
+    ocrAbortRef.current = null;
     setPreparedCrop(null);
     setCropFeedback("");
     setCropStatus("idle");
+    setOcrResult(null);
+    setOcrStatus("idle");
+    setOcrProgress(0);
+    setOcrFeedback("");
+    setOcrEngine(null);
   }, []);
 
   function changePage(nextIndex: number) {
@@ -204,6 +239,7 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
       if (cropGenerationRef.current !== generation) return;
 
       setPreparedCrop({
+        blob: crop.blob,
         height: crop.height,
         pageName: page.name,
         url: URL.createObjectURL(crop.blob),
@@ -218,6 +254,102 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
     }
   }
 
+  async function recognizeCrop(engine: OcrEngine) {
+    if (!preparedCrop || isOcrBusy) return;
+
+    let mangaOcrModule:
+      | typeof import("@/lib/manga/mangaOcr")
+      | undefined;
+    if (engine === "precise") {
+      try {
+        mangaOcrModule = await import("@/lib/manga/mangaOcr");
+        mangaOcrDisposeRef.current =
+          mangaOcrModule.disposeMangaOcrRuntime;
+        const isCached = await mangaOcrModule.isMangaOcrModelCached();
+        if (!isCached && !window.confirm(text.ocr.preciseConfirm)) return;
+      } catch {
+        setOcrFeedback(text.ocr.errors.preciseUnavailable);
+        setOcrStatus("error");
+        return;
+      }
+    }
+
+    const crop = preparedCrop;
+    const generation = ocrGenerationRef.current + 1;
+    const controller = new AbortController();
+    ocrGenerationRef.current = generation;
+    ocrAbortRef.current?.abort();
+    ocrAbortRef.current = controller;
+    setOcrResult(null);
+    setOcrStatus("loading");
+    setOcrProgress(0);
+    setOcrFeedback("");
+    setOcrEngine(engine);
+
+    try {
+      const updateProgress = (progress: {
+        progress: number;
+        stage: "downloading" | "loading" | "recognizing";
+      }) => {
+        if (
+          ocrGenerationRef.current !== generation ||
+          controller.signal.aborted
+        ) {
+          return;
+        }
+
+        setOcrStatus(progress.stage);
+        setOcrProgress(
+          Math.min(100, Math.max(0, progress.progress * 100)),
+        );
+      };
+      const result =
+        engine === "precise" && mangaOcrModule
+          ? await mangaOcrModule.recognizeMangaCrop(crop.blob, {
+              onProgress: updateProgress,
+              signal: controller.signal,
+            })
+          : await recognizeJapaneseCrop(crop.blob, {
+              height: crop.height,
+              onProgress: updateProgress,
+              signal: controller.signal,
+              width: crop.width,
+            });
+
+      if (
+        ocrGenerationRef.current !== generation ||
+        controller.signal.aborted
+      ) {
+        return;
+      }
+
+      if (result.trim().length === 0) {
+        setOcrStatus("empty");
+      } else {
+        setOcrResult(result);
+        setOcrStatus("success");
+      }
+    } catch {
+      if (
+        ocrGenerationRef.current === generation &&
+        !controller.signal.aborted
+      ) {
+        setOcrFeedback(
+          engine === "precise"
+            ? text.ocr.errors.preciseFailed
+            : text.ocr.errors.recognitionFailed,
+        );
+        setOcrStatus("error");
+      }
+    } finally {
+      if (ocrGenerationRef.current === generation) {
+        ocrAbortRef.current = null;
+        setPreparedCrop(null);
+        setCropStatus("idle");
+      }
+    }
+  }
+
   useEffect(() => {
     viewportRef.current?.scrollTo({ left: 0, top: 0 });
   }, [currentPageIndex, readingMode]);
@@ -227,6 +359,14 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
       if (preparedCrop) URL.revokeObjectURL(preparedCrop.url);
     },
     [preparedCrop],
+  );
+
+  useEffect(
+    () => () => {
+      ocrAbortRef.current?.abort();
+      void mangaOcrDisposeRef.current?.();
+    },
+    [],
   );
 
   useEffect(() => {
@@ -410,8 +550,33 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
           </p>
         </div>
 
-        {cropStatus !== "idle" ? (
-          <div className="border-b border-washi-200/80 bg-white/80 p-4 sm:p-5">
+        {(() => {
+          const ocrPanel =
+            cropStatus !== "idle" || ocrStatus !== "idle" ? (
+          <div
+            aria-label={
+              isFloatingOcrPanel
+                ? text.ocr.floatingPanelLabel
+                : undefined
+            }
+            className={
+              isFloatingOcrPanel
+                ? "fixed bottom-[8.5rem] left-4 right-4 z-40 max-h-[calc(100vh-11rem)] overflow-y-auto rounded-2xl border border-white/90 bg-white/95 p-4 shadow-[0_24px_70px_-24px_rgba(11,32,41,0.5)] backdrop-blur-xl sm:left-auto sm:right-6 sm:w-[min(56rem,calc(100vw-3rem))] sm:p-5"
+                : "border-b border-washi-200/80 bg-white/80 p-4 sm:p-5"
+            }
+            role={isFloatingOcrPanel ? "region" : undefined}
+          >
+            {isFloatingOcrPanel ? (
+              <button
+                aria-label={text.ocr.closeFloatingPanel}
+                className="absolute right-3 top-3 grid size-9 place-items-center rounded-full border border-washi-200 bg-white text-lg font-bold text-sumi-600 shadow-sm transition hover:border-shu-300 hover:text-shu-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600"
+                onClick={clearSelection}
+                title={text.ocr.closeFloatingPanel}
+                type="button"
+              >
+                <span aria-hidden="true">×</span>
+              </button>
+            ) : null}
             {cropStatus === "preparing" ? (
               <p
                 aria-live="polite"
@@ -450,8 +615,127 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
                   <p className="mt-4 rounded-xl border border-shu-100 bg-shu-50 px-4 py-3 text-sm leading-6 text-sumi-700">
                     {text.crop.temporary}
                   </p>
+                  <div className="mt-4 flex flex-wrap gap-3">
+                    <button
+                      className="rounded-xl bg-sumi-950 px-5 py-3 text-sm font-bold text-washi-50 transition hover:bg-shu-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600 disabled:cursor-wait disabled:opacity-60"
+                      disabled={isOcrBusy}
+                      onClick={() => void recognizeCrop("precise")}
+                      type="button"
+                    >
+                      {isOcrBusy && ocrEngine === "precise"
+                        ? text.ocr.working
+                        : text.ocr.preciseAction}
+                    </button>
+                    <button
+                      className="rounded-xl border border-shu-300 bg-white px-5 py-3 text-sm font-bold text-shu-700 transition hover:border-shu-500 hover:bg-shu-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600 disabled:cursor-wait disabled:opacity-60"
+                      disabled={isOcrBusy}
+                      onClick={() => void recognizeCrop("fast")}
+                      type="button"
+                    >
+                      {isOcrBusy && ocrEngine === "fast"
+                        ? text.ocr.working
+                        : text.ocr.fastAction}
+                    </button>
+                  </div>
+                  <p className="mt-3 text-xs leading-5 text-sumi-500">
+                    {text.ocr.preciseNote}
+                  </p>
+                  <div aria-live="polite" className="mt-3 min-h-6">
+                    {ocrStatus === "downloading" ? (
+                      <div>
+                        <p className="text-sm font-semibold text-sumi-700">
+                          {ocrProgress === 0
+                            ? text.ocr.connecting
+                            : text.ocr.downloading.replace(
+                                "{progress}",
+                                String(Math.round(ocrProgress)),
+                              )}
+                        </p>
+                        <progress
+                          aria-label={text.ocr.downloadProgressLabel}
+                          className="mt-2 h-2 w-full accent-shu-600"
+                          max="100"
+                          value={ocrProgress === 0 ? undefined : ocrProgress}
+                        />
+                      </div>
+                    ) : ocrStatus === "loading" ? (
+                      <p className="text-sm font-semibold text-sumi-700">
+                        {ocrEngine === "precise"
+                          ? text.ocr.preciseLoading
+                          : text.ocr.loading}
+                      </p>
+                    ) : ocrStatus === "recognizing" ? (
+                      <div>
+                        <p className="text-sm font-semibold text-sumi-700">
+                          {text.ocr.recognizing.replace(
+                            "{progress}",
+                            String(Math.round(ocrProgress)),
+                          )}
+                        </p>
+                        <progress
+                          aria-label={text.ocr.progressLabel}
+                          className="mt-2 h-2 w-full accent-shu-600"
+                          max="100"
+                          value={ocrProgress}
+                        />
+                      </div>
+                    ) : null}
+                  </div>
                 </div>
               </div>
+            ) : ocrStatus === "success" && ocrResult !== null ? (
+              <div className={isFloatingOcrPanel ? "pr-10" : undefined}>
+                <h3 className="text-lg font-bold text-sumi-950">
+                  {text.ocr.successTitle}
+                </h3>
+                <p
+                  aria-live="polite"
+                  className="mt-2 text-sm leading-6 text-sumi-600"
+                >
+                  {text.ocr.successDescription}
+                </p>
+                <label
+                  className="mt-5 block text-sm font-bold text-sumi-900"
+                  htmlFor="ocr-correction"
+                >
+                  {text.ocr.correctionLabel}
+                </label>
+                <textarea
+                  autoCapitalize="none"
+                  className="mt-2 min-h-32 w-full resize-y rounded-xl border border-washi-300 bg-washi-50 px-4 py-3 text-base leading-7 text-sumi-950 outline-none transition focus:border-shu-500 focus:ring-2 focus:ring-shu-200"
+                  id="ocr-correction"
+                  lang="ja"
+                  onChange={(event) => setOcrResult(event.target.value)}
+                  rows={5}
+                  spellCheck={false}
+                  value={ocrResult}
+                />
+                <p className="mt-2 text-sm leading-6 text-sumi-600">
+                  {text.ocr.correctionHelp}
+                </p>
+              </div>
+            ) : ocrStatus === "empty" ? (
+              <div
+                aria-live="polite"
+                className={isFloatingOcrPanel ? "pr-10" : undefined}
+              >
+                <h3 className="text-lg font-bold text-sumi-950">
+                  {text.ocr.emptyTitle}
+                </h3>
+                <p className="mt-2 text-sm leading-6 text-sumi-600">
+                  {text.ocr.emptyDescription}
+                </p>
+              </div>
+            ) : ocrStatus === "error" && ocrFeedback ? (
+              <p
+                aria-live="polite"
+                className={`text-sm font-semibold text-red-700 ${
+                  isFloatingOcrPanel ? "pr-10" : ""
+                }`}
+                role="alert"
+              >
+                {ocrFeedback}
+              </p>
             ) : cropFeedback ? (
               <p
                 aria-live="polite"
@@ -462,7 +746,14 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
               </p>
             ) : null}
           </div>
-        ) : null}
+            ) : null;
+
+          return isFloatingOcrPanel &&
+            ocrPanel &&
+            typeof document !== "undefined"
+            ? createPortal(ocrPanel, document.body)
+            : ocrPanel;
+        })()}
 
         {isBookMode ? (
           <>

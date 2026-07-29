@@ -48,6 +48,12 @@ La aplicación dispone de:
 - selección rectangular de una región de la página mediante coordenadas
   porcentuales y generación local de un recorte temporal para OCR, sin
   persistencia de imágenes;
+- OCR japonés horizontal y vertical ejecutado bajo demanda en el navegador,
+  limitado al recorte seleccionado y sin enviar ni persistir imágenes;
+- modo experimental de OCR especializado en manga mediante un modelo ONNX de
+  aproximadamente 65 MB, distribuido bajo demanda como archivos estáticos
+  versionados de NihonAI, almacenado en la caché del navegador y ejecutado
+  localmente sin enviar el recorte;
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -179,10 +185,13 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 14. **Recorte temporal de imágenes — completada.** Generar localmente el recorte
     que consumirá el OCR y descartarlo después del procesamiento, sin almacenar
     imágenes en Supabase.
-15. **OCR japonés — pendiente.** Reconocer texto japonés únicamente dentro del
+15. **OCR japonés — completada.** Reconocer texto japonés únicamente dentro del
     recorte seleccionado.
-16. **Corrección del OCR — pendiente.** Mostrar el texto detectado y permitir
+16. **Corrección del OCR — completada.** Mostrar el texto detectado y permitir
     corregirlo antes de continuar.
+16.1. **Precisión local experimental — en evaluación.** Comparar el OCR actual
+    con Manga OCR Mobile ejecutado mediante ONNX Runtime Web, manteniendo el
+    procesamiento de imágenes dentro del navegador.
 17. **Minería de vocabulario — pendiente.** Analizar la oración, seleccionar
     una palabra y consultar JMdict en español e inglés para obtener forma de
     diccionario, lectura, significado y tipo.
@@ -205,7 +214,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 15: OCR japonés**.
+La siguiente fase oficial es la **fase 17: minería de vocabulario**.
 Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance
