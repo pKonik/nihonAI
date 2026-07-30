@@ -10,6 +10,7 @@ import {
 } from "react";
 
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
 import {
   isSupportedMangaImage,
   MANGA_IMPORT_LIMITS,
@@ -21,6 +22,7 @@ import {
 } from "@/components/manga/MangaReader";
 
 type MangaImporterProps = {
+  locale: Locale;
   text: Dictionary["read"];
 };
 
@@ -44,7 +46,7 @@ function formatTemplate(template: string, value: number): string {
   return template.replace("{count}", String(value));
 }
 
-export function MangaImporter({ text }: MangaImporterProps) {
+export function MangaImporter({ locale, text }: MangaImporterProps) {
   const [pages, setPages] = useState<MangaPage[]>([]);
   const [error, setError] = useState("");
   const [isImporting, setIsImporting] = useState(false);
@@ -321,7 +323,12 @@ export function MangaImporter({ text }: MangaImporterProps) {
       </section>
 
       {pages.length > 0 ? (
-        <MangaReader key={pages[0].url} pages={pages} text={text} />
+        <MangaReader
+          key={pages[0].url}
+          locale={locale}
+          pages={pages}
+          text={text}
+        />
       ) : null}
     </div>
   );

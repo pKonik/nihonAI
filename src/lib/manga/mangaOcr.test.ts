@@ -9,7 +9,7 @@ import {
   getDecoderPosition,
 } from "./mangaOcr.js";
 
-test("parallel model progress combines bytes from every asset", () => {
+test("model progress combines bytes from every asset", () => {
   const sizes = [10, 20, 30, 40];
   assert.equal(
     calculateCombinedModelDownloadProgress([1, 0, 0, 0], sizes),

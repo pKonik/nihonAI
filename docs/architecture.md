@@ -53,7 +53,10 @@ La aplicación dispone de:
 - modo experimental de OCR especializado en manga mediante un modelo ONNX de
   aproximadamente 65 MB, distribuido bajo demanda como archivos estáticos
   versionados de NihonAI, almacenado en la caché del navegador y ejecutado
-  localmente sin enviar el recorte;
+  localmente dentro de un trabajador descartable, sin enviar el recorte;
+- minería local del texto OCR corregido mediante análisis morfológico cargado
+  bajo demanda, selección accesible de palabras y consulta de JMdict en español
+  e inglés mediante fragmentos estáticos versionados y cacheables;
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -99,6 +102,7 @@ Actualmente el proyecto utiliza:
 - React 19
 - TypeScript
 - Tailwind CSS 4
+- Kuromoji
 - ESLint
 - Supabase Auth
 - Cliente SSR de Supabase
@@ -192,7 +196,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 16.1. **Precisión local experimental — en evaluación.** Comparar el OCR actual
     con Manga OCR Mobile ejecutado mediante ONNX Runtime Web, manteniendo el
     procesamiento de imágenes dentro del navegador.
-17. **Minería de vocabulario — pendiente.** Analizar la oración, seleccionar
+17. **Minería de vocabulario — completada.** Analizar la oración, seleccionar
     una palabra y consultar JMdict en español e inglés para obtener forma de
     diccionario, lectura, significado y tipo.
 18. **Integración del lector con vocabulario — pendiente.** Reutilizar el
@@ -214,7 +218,8 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 17: minería de vocabulario**.
+La siguiente fase oficial es la **fase 18: integración del lector con
+vocabulario**.
 Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance

@@ -1,0 +1,12 @@
+{
+  "attribution": "JMdict/EDICT Project, Electronic Dictionary Research and Development Group",
+  "date": "2026-07-27",
+  "entries": 495283,
+  "license": "CC BY-SA 4.0",
+  "licenseUrl": "https://www.edrdg.org/edrdg/licence.html",
+  "shards": 2048,
+  "sourceVersion": "3.6.2",
+  "terms": 464054,
+  "compression": "br",
+  "extension": ".json.br"
+}

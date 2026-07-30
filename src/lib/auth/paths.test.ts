@@ -3,7 +3,7 @@ import test from "node:test";
 
 import { isPublicPath } from "./paths.ts";
 
-test("mantiene públicas la landing, el acceso y los modelos estáticos", () => {
+test("mantiene públicos el acceso y los recursos lingüísticos estáticos", () => {
   assert.equal(isPublicPath("/"), true);
   assert.equal(isPublicPath("/login"), true);
   assert.equal(isPublicPath("/auth"), true);
@@ -13,6 +13,14 @@ test("mantiene públicas la landing, el acceso y los modelos estáticos", () => 
     isPublicPath(
       "/models/manga-ocr-mobile/revision/encoder.onnx",
     ),
+    true,
+  );
+  assert.equal(
+    isPublicPath("/dictionaries/jmdict/2026-07-27/566.json.br"),
+    true,
+  );
+  assert.equal(
+    isPublicPath("/vendor/kuromoji/0.1.2/base.dat.gz"),
     true,
   );
 });

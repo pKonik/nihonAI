@@ -11,6 +11,7 @@ import {
 import { createPortal } from "react-dom";
 
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
 import { createMangaCrop } from "@/lib/manga/crop";
 import { recognizeJapaneseCrop } from "@/lib/manga/ocr";
 import {
@@ -19,6 +20,7 @@ import {
   type Point,
   type SelectionRect,
 } from "@/lib/manga/selection";
+import { VocabularyMiner } from "@/components/manga/VocabularyMiner";
 
 export type MangaPage = {
   id: string;
@@ -27,6 +29,7 @@ export type MangaPage = {
 };
 
 type MangaReaderProps = {
+  locale: Locale;
   pages: readonly MangaPage[];
   text: Dictionary["read"];
 };
@@ -57,6 +60,11 @@ type PreparedCrop = {
   width: number;
 };
 
+type DeferredMangaImageProps = {
+  alt: string;
+  url: string;
+};
+
 type OcrStatus =
   | "idle"
   | "downloading"
@@ -65,6 +73,62 @@ type OcrStatus =
   | "success"
   | "empty"
   | "error";
+
+function DeferredMangaImage({
+  alt,
+  url,
+}: DeferredMangaImageProps) {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const [shouldLoad, setShouldLoad] = useState(false);
+  const [aspectRatio, setAspectRatio] = useState<number | null>(null);
+
+  useEffect(() => {
+    const frame = frameRef.current;
+    if (!frame || !("IntersectionObserver" in window)) {
+      setShouldLoad(true);
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => setShouldLoad(entry.isIntersecting),
+      { rootMargin: "1200px 0px" },
+    );
+    observer.observe(frame);
+
+    return () => observer.disconnect();
+  }, []);
+
+  return (
+    <div
+      className="relative w-full bg-washi-100/45"
+      ref={frameRef}
+      style={
+        aspectRatio
+          ? { aspectRatio }
+          : { minHeight: "min(70vh, 900px)" }
+      }
+    >
+      {shouldLoad ? (
+        // Local blob URLs have no build-time dimensions and never leave the browser.
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          alt={alt}
+          className="block h-auto w-full max-w-none"
+          draggable={false}
+          onLoad={(event) => {
+            const image = event.currentTarget;
+            if (image.naturalWidth > 0 && image.naturalHeight > 0) {
+              setAspectRatio(image.naturalWidth / image.naturalHeight);
+            }
+          }}
+          src={url}
+        />
+      ) : (
+        <span aria-label={alt} className="absolute inset-0" role="img" />
+      )}
+    </div>
+  );
+}
 
 function formatPosition(
   template: string,
@@ -76,7 +140,7 @@ function formatPosition(
     .replace("{total}", String(total));
 }
 
-export function MangaReader({ pages, text }: MangaReaderProps) {
+export function MangaReader({ locale, pages, text }: MangaReaderProps) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [readingMode, setReadingMode] = useState<ReadingMode>("book");
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
@@ -114,6 +178,7 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
     ocrGenerationRef.current += 1;
     ocrAbortRef.current?.abort();
     ocrAbortRef.current = null;
+    void mangaOcrDisposeRef.current?.();
     setPreparedCrop(null);
     setCropFeedback("");
     setCropStatus("idle");
@@ -258,11 +323,11 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
     if (!preparedCrop || isOcrBusy) return;
 
     let mangaOcrModule:
-      | typeof import("@/lib/manga/mangaOcr")
+      | typeof import("@/lib/manga/mangaOcrClient")
       | undefined;
     if (engine === "precise") {
       try {
-        mangaOcrModule = await import("@/lib/manga/mangaOcr");
+        mangaOcrModule = await import("@/lib/manga/mangaOcrClient");
         mangaOcrDisposeRef.current =
           mangaOcrModule.disposeMangaOcrRuntime;
         const isCached = await mangaOcrModule.isMangaOcrModelCached();
@@ -342,6 +407,10 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
         setOcrStatus("error");
       }
     } finally {
+      if (engine === "precise" && mangaOcrModule) {
+        await mangaOcrModule.disposeMangaOcrRuntime();
+      }
+
       if (ocrGenerationRef.current === generation) {
         ocrAbortRef.current = null;
         setPreparedCrop(null);
@@ -713,6 +782,12 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
                 <p className="mt-2 text-sm leading-6 text-sumi-600">
                   {text.ocr.correctionHelp}
                 </p>
+                <VocabularyMiner
+                  key={`${locale}-${ocrResult}`}
+                  locale={locale}
+                  sentence={ocrResult}
+                  text={text.mining}
+                />
               </div>
             ) : ocrStatus === "empty" ? (
               <div
@@ -839,14 +914,9 @@ export function MangaReader({ pages, text }: MangaReaderProps) {
                       onPointerUp={handleSelectionEnd}
                       style={{ width: `${zoom}%` }}
                     >
-                      {/* Local blob URLs have no build-time dimensions and never leave the browser. */}
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
+                      <DeferredMangaImage
                         alt={`${text.pageLabel} ${index + 1}: ${page.name}`}
-                        className="block h-auto w-full max-w-none"
-                        draggable={false}
-                        loading="lazy"
-                        src={page.url}
+                        url={page.url}
                       />
                       {selection?.pageId === page.id ? (
                         <span

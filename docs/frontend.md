@@ -273,20 +273,60 @@ nueva clave de caché sin repetir la transferencia. La petición contiene
 únicamente el modelo; el recorte permanece local y la inferencia se ejecuta
 mediante WebAssembly.
 
-Mientras espera la primera respuesta del servidor estático, la interfaz muestra un
-estado de conexión indeterminado. Después actualiza el porcentaje con los
+Mientras espera la primera respuesta del servidor estático, la interfaz muestra
+un estado de conexión indeterminado. Después actualiza el porcentaje con los
 bloques de bytes recibidos, en lugar de avanzar solo al terminar cada archivo.
-Los cuatro recursos se solicitan concurrentemente y su escritura en Cache
-Storage continúa en segundo plano para no bloquear el comienzo de la inferencia.
+Los recursos se leen y sus sesiones se crean de forma secuencial para evitar
+mantener simultáneamente todos los modelos en búfer. Su escritura en Cache
+Storage se completa antes de terminar el trabajador para evitar repetir una
+descarga.
 
 El modo preciso necesita memoria adicional. El OCR basado en Tesseract continúa
 disponible como respaldo durante la evaluación de compatibilidad. El
 usuario puede eliminar el modelo descargado borrando los datos del sitio desde
 su navegador. El modelo está publicado bajo licencia Apache-2.0.
 
+El OCR preciso se ejecuta en un trabajador aislado. Las sesiones ONNX y los
+tensores de salida se liberan después de cada intento y el trabajador termina,
+también al cancelar o cerrar el panel. Esto permite liberar incluso la memoria
+lineal de WebAssembly. Los archivos del modelo permanecen en Cache Storage, por
+lo que una ejecución posterior los prepara de nuevo sin repetir normalmente la
+transferencia.
+
+En modo scroll, las páginas alejadas de la ventana conservan su espacio en el
+documento, pero retiran temporalmente su imagen. Solo las páginas visibles y las
+cercanas permanecen decodificadas, reduciendo la memoria gráfica sin alterar la
+posición de lectura.
+
 El control de selección permanece fijo sobre el botón flotante de Ayuda para
 estar disponible al recorrer capítulos largos en modo scroll. La selección solo
 comienza cuando el puntero se arrastra dentro de los límites de una imagen.
+
+Después de corregir el texto OCR, el usuario puede iniciar explícitamente el
+análisis de vocabulario. El analizador japonés se carga únicamente en ese
+momento. La oración se presenta como palabras seleccionables: mantener el
+puntero durante un breve intervalo o enfocar una palabra muestra su ficha, y
+hacer clic o tocarla la mantiene abierta. La interacción funciona con ratón,
+teclado y pantallas táctiles.
+
+Los morfemas técnicos del analizador no se convierten directamente en objetivos
+de interacción. Una forma flexionada conserva juntos el predicado, las partículas
+conectivas y los auxiliares que forman su superficie; por ejemplo,
+`聞いてなかった` se presenta como una unidad y consulta la forma base `聞く`.
+Las partículas finales independientes permanecen separadas.
+
+La ficha consulta un fragmento estático de JMdict y muestra forma de diccionario,
+lectura, tipo y significados. Permite alternar entre español e inglés y señala
+el fallback inglés cuando no existe una acepción española. Una selección puede
+tener varias entradas léxicas, visibles cuando la ficha está fijada. La ficha
+incluye la atribución exigida por JMdict y no ofrece todavía una acción de
+guardado.
+
+La ficha reutiliza el lenguaje visual de la tarjeta de lectura de la landing y
+se muestra como una capa fija independiente. En modo scroll no forma parte de la
+tarjeta flotante del OCR, por lo que no modifica su altura, no queda recortada
+por su desplazamiento y no mueve la palabra que activó el hover. Al retirar el
+puntero desaparece; al hacer clic queda fijada y ofrece un cierre explícito.
 
 ## Evolución
 

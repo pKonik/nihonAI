@@ -147,9 +147,40 @@ Una traducción automática no debe mostrarse como si fuera una definición
 oficial. El proyecto deberá conservar las atribuciones y cumplir la licencia de
 JMdict y de cualquier fuente adicional.
 
-La forma concreta de distribuir e indexar el diccionario se decidirá durante la
-fase de minería, priorizando rendimiento, actualizaciones y uso eficiente de
-almacenamiento.
+JMdict se distribuye como un índice estático versionado y dividido en 2048
+fragmentos Brotli calculados mediante un hash estable del término. El navegador
+carga únicamente el fragmento necesario, lo descomprime de forma nativa, lo
+reutiliza mediante caché HTTP inmutable y no realiza consultas de diccionario a
+Supabase. Esta decisión reduce la transferencia de cada consulta nueva, mantiene
+el proyecto dentro de los límites gratuitos, evita duplicar el diccionario por
+usuario y permite actualizar la fuente sustituyendo una versión completa sin
+invalidar archivos anteriores.
+
+La versión incluida se genera desde la distribución multilingüe de
+`jmdict-simplified`. Cada resultado conserva la forma principal, lectura,
+categorías gramaticales y significados ingleses y españoles disponibles. Cuando
+una entrada no posee significado español, la interfaz muestra explícitamente la
+definición inglesa como fallback; no genera una traducción automática.
+
+El análisis morfológico usa Kuromoji bajo demanda para separar la oración y
+obtener la forma de diccionario. Sus archivos lingüísticos y los fragmentos de
+JMdict son recursos públicos versionados con caché inmutable. La atribución a
+EDRDG y el enlace a la licencia CC BY-SA 4.0 se muestran en cada ficha.
+
+El analizador preparado se libera después de dos minutos sin actividad. Una
+consulta posterior lo reconstruye desde los archivos ya almacenados por el
+navegador.
+
+La interfaz agrupa los morfemas de una misma flexión antes de mostrarlos. El
+verbo o adjetivo independiente actúa como núcleo y absorbe partículas conectivas,
+verbos no independientes y auxiliares consecutivos; la búsqueda conserva como
+clave la forma de diccionario del núcleo. Los sustantivos verbales seguidos de
+`する` se consultan como una única forma léxica.
+
+El índice se regenera desde un archivo `jmdict-all-*.json` mediante
+`npm run build:jmdict -- <ruta-al-json>`. El generador limita el contenido a los
+campos utilizados por la aplicación y publica un manifiesto con la fecha,
+versión y cantidad de términos.
 
 ---
 

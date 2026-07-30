@@ -123,7 +123,7 @@ async function readAsset(
       if (cachedBytes.byteLength === asset.expectedBytes) {
         throwIfAborted(signal);
         if (cache && usesLegacyCache) {
-          void cache
+          await cache
             .put(url, new Response(cachedBytes))
             .catch(() => {
               // Reusing the legacy entry must not depend on migration.
@@ -170,7 +170,7 @@ async function readAsset(
   }
 
   if (cache) {
-    void cache
+    await cache
       .put(
         url,
         new Response(bytes, {
@@ -277,40 +277,6 @@ async function createRuntime(
   let lastProgressReport = 0;
   let lastReportedProgress = 0;
   options.onProgress?.({ progress: 0, stage: "downloading" });
-  const buffers = await Promise.all(
-    orderedAssets.map((asset, index) =>
-      readAsset(
-        asset,
-        (assetProgress) => {
-          assetProgresses[index] = Math.max(
-            assetProgresses[index],
-            assetProgress,
-          );
-          const progress =
-            calculateCombinedModelDownloadProgress(assetProgresses);
-          const now = Date.now();
-          if (
-            progress === 1 ||
-            (progress - lastReportedProgress >= 0.001 &&
-              (lastProgressReport === 0 ||
-                now - lastProgressReport >= 100))
-          ) {
-            lastReportedProgress = progress;
-            lastProgressReport = now;
-            options.onProgress?.({
-              progress,
-              stage: "downloading",
-            });
-          }
-        },
-        options.signal,
-      ),
-    ),
-  );
-
-  throwIfAborted(options.signal);
-  options.onProgress?.({ progress: 0, stage: "loading" });
-
   const ort = await import("onnxruntime-web");
   ort.env.wasm.numThreads = 1;
   ort.env.wasm.simd = true;
@@ -321,29 +287,61 @@ async function createRuntime(
   };
   const sessions: InferenceSession[] = [];
 
+  async function readTrackedAsset(
+    asset: ModelAsset,
+    index: number,
+  ): Promise<ArrayBuffer> {
+    return readAsset(
+      asset,
+      (assetProgress) => {
+        assetProgresses[index] = Math.max(
+          assetProgresses[index],
+          assetProgress,
+        );
+        const progress =
+          calculateCombinedModelDownloadProgress(assetProgresses);
+        const now = Date.now();
+        if (
+          progress === 1 ||
+          (progress - lastReportedProgress >= 0.001 &&
+            (lastProgressReport === 0 ||
+              now - lastProgressReport >= 100))
+        ) {
+          lastReportedProgress = progress;
+          lastProgressReport = now;
+          options.onProgress?.({
+            progress,
+            stage: "downloading",
+          });
+        }
+      },
+      options.signal,
+    );
+  }
+
+  async function createSession(
+    asset: ModelAsset,
+    index: number,
+  ): Promise<InferenceSession> {
+    const bytes = await readTrackedAsset(asset, index);
+    throwIfAborted(options.signal);
+    return ort.InferenceSession.create(bytes, sessionOptions);
+  }
+
   try {
-    const encoder = await ort.InferenceSession.create(
-      buffers[0],
-      sessionOptions,
-    );
+    const encoder = await createSession(assets.encoder, 0);
     sessions.push(encoder);
-    options.onProgress?.({ progress: 1 / 3, stage: "loading" });
 
-    const decoderInit = await ort.InferenceSession.create(
-      buffers[1],
-      sessionOptions,
-    );
+    const decoderInit = await createSession(assets.decoderInit, 1);
     sessions.push(decoderInit);
-    options.onProgress?.({ progress: 2 / 3, stage: "loading" });
 
-    const decoderStep = await ort.InferenceSession.create(
-      buffers[2],
-      sessionOptions,
-    );
+    const decoderStep = await createSession(assets.decoderStep, 2);
     sessions.push(decoderStep);
 
+    const vocabularyBytes = await readTrackedAsset(assets.vocabulary, 3);
+    throwIfAborted(options.signal);
     const vocabulary = new TextDecoder()
-      .decode(buffers[3])
+      .decode(vocabularyBytes)
       .replace(/\r/g, "")
       .split("\n")
       .filter((token, index, allTokens) => {
@@ -376,9 +374,7 @@ async function preprocessImage(blob: Blob): Promise<Float32Array> {
   const bitmap = await createImageBitmap(blob);
 
   try {
-    const canvas = document.createElement("canvas");
-    canvas.width = IMAGE_SIZE;
-    canvas.height = IMAGE_SIZE;
+    const canvas = new OffscreenCanvas(IMAGE_SIZE, IMAGE_SIZE);
     const context = canvas.getContext("2d", { willReadFrequently: true });
     if (!context) throw new Error("No se pudo preparar el recorte.");
 
@@ -503,105 +499,127 @@ async function runInference(
   const input = await preprocessImage(blob);
   throwIfAborted(options.signal);
 
-  const encoderOutput = await runtime.encoder.run({
-    "serving_default_args_0:0": new ort.Tensor(
-      "float32",
-      input,
-      [1, 3, IMAGE_SIZE, IMAGE_SIZE],
-    ),
-  });
-  const encoderState = encoderOutput["StatefulPartitionedCall:0"];
-  if (!encoderState) throw new Error("El codificador no devolvió datos.");
+  let encoderOutput:
+    | Awaited<ReturnType<MangaOcrRuntime["encoder"]["run"]>>
+    | undefined;
+  let initialOutput:
+    | Awaited<ReturnType<MangaOcrRuntime["decoderInit"]["run"]>>
+    | undefined;
 
-  const initialOutput = await runtime.decoderInit.run({
-    encoder_hidden_states: encoderState,
-    input_ids: new ort.Tensor(
-      "int64",
-      new BigInt64Array([BigInt(CLS_TOKEN_ID)]),
-      [1, 1],
-    ),
-  });
-
-  const selfKey = new Float32Array(
-    DECODER_LAYERS *
-      ATTENTION_HEADS *
-      MAX_SEQUENCE_LENGTH *
-      HEAD_SIZE,
-  );
-  const selfValue = new Float32Array(selfKey.length);
-  const initialKey = initialOutput.self_k;
-  const initialValue = initialOutput.self_v;
-  const crossKey = initialOutput.cross_k;
-  const crossValue = initialOutput.cross_v;
-  const initialLogits = initialOutput.logits;
-
-  if (
-    !initialKey ||
-    !initialValue ||
-    !crossKey ||
-    !crossValue ||
-    !initialLogits
-  ) {
-    throw new Error("El decodificador no devolvió todos sus estados.");
-  }
-
-  copyDecoderState(requireFloatData(initialKey), selfKey, 0);
-  copyDecoderState(requireFloatData(initialValue), selfValue, 0);
-  const tokenIds: number[] = [];
-  let nextToken = findHighestLogit(requireFloatData(initialLogits));
-
-  for (
-    let position = 1;
-    position < MAX_SEQUENCE_LENGTH && nextToken !== SEP_TOKEN_ID;
-    position += 1
-  ) {
-    throwIfAborted(options.signal);
-    tokenIds.push(nextToken);
-    options.onProgress?.({
-      progress: position / MAX_SEQUENCE_LENGTH,
-      stage: "recognizing",
+  try {
+    encoderOutput = await runtime.encoder.run({
+      "serving_default_args_0:0": new ort.Tensor(
+        "float32",
+        input,
+        [1, 3, IMAGE_SIZE, IMAGE_SIZE],
+      ),
     });
+    const encoderState = encoderOutput["StatefulPartitionedCall:0"];
+    if (!encoderState) throw new Error("El codificador no devolvió datos.");
 
-    const stepOutput = await runtime.decoderStep.run({
+    initialOutput = await runtime.decoderInit.run({
       encoder_hidden_states: encoderState,
       input_ids: new ort.Tensor(
         "int64",
-        new BigInt64Array([BigInt(nextToken)]),
+        new BigInt64Array([BigInt(CLS_TOKEN_ID)]),
         [1, 1],
       ),
-      position_ids: new ort.Tensor(
-        "int64",
-        new BigInt64Array([BigInt(getDecoderPosition(position))]),
-        [1, 1],
-      ),
-      self_k_cache: new ort.Tensor(
-        "float32",
-        selfKey,
-        [DECODER_LAYERS, 1, ATTENTION_HEADS, MAX_SEQUENCE_LENGTH, HEAD_SIZE],
-      ),
-      self_v_cache: new ort.Tensor(
-        "float32",
-        selfValue,
-        [DECODER_LAYERS, 1, ATTENTION_HEADS, MAX_SEQUENCE_LENGTH, HEAD_SIZE],
-      ),
-      cross_k_cache: crossKey,
-      cross_v_cache: crossValue,
     });
 
-    const logits = stepOutput.logits;
-    const nextKey = stepOutput.self_k_slice;
-    const nextValue = stepOutput.self_v_slice;
-    if (!logits || !nextKey || !nextValue) {
-      throw new Error("El decodificador devolvió datos incompletos.");
+    const selfKey = new Float32Array(
+      DECODER_LAYERS *
+        ATTENTION_HEADS *
+        MAX_SEQUENCE_LENGTH *
+        HEAD_SIZE,
+    );
+    const selfValue = new Float32Array(selfKey.length);
+    const initialKey = initialOutput.self_k;
+    const initialValue = initialOutput.self_v;
+    const crossKey = initialOutput.cross_k;
+    const crossValue = initialOutput.cross_v;
+    const initialLogits = initialOutput.logits;
+
+    if (
+      !initialKey ||
+      !initialValue ||
+      !crossKey ||
+      !crossValue ||
+      !initialLogits
+    ) {
+      throw new Error("El decodificador no devolvió todos sus estados.");
     }
 
-    copyDecoderState(requireFloatData(nextKey), selfKey, position);
-    copyDecoderState(requireFloatData(nextValue), selfValue, position);
-    nextToken = findHighestLogit(requireFloatData(logits));
-  }
+    copyDecoderState(requireFloatData(initialKey), selfKey, 0);
+    copyDecoderState(requireFloatData(initialValue), selfValue, 0);
+    const tokenIds: number[] = [];
+    let nextToken = findHighestLogit(requireFloatData(initialLogits));
 
-  options.onProgress?.({ progress: 1, stage: "recognizing" });
-  return decodeMangaTokens(tokenIds, runtime.vocabulary);
+    for (
+      let position = 1;
+      position < MAX_SEQUENCE_LENGTH && nextToken !== SEP_TOKEN_ID;
+      position += 1
+    ) {
+      throwIfAborted(options.signal);
+      tokenIds.push(nextToken);
+      options.onProgress?.({
+        progress: position / MAX_SEQUENCE_LENGTH,
+        stage: "recognizing",
+      });
+
+      const stepOutput = await runtime.decoderStep.run({
+        encoder_hidden_states: encoderState,
+        input_ids: new ort.Tensor(
+          "int64",
+          new BigInt64Array([BigInt(nextToken)]),
+          [1, 1],
+        ),
+        position_ids: new ort.Tensor(
+          "int64",
+          new BigInt64Array([BigInt(getDecoderPosition(position))]),
+          [1, 1],
+        ),
+        self_k_cache: new ort.Tensor(
+          "float32",
+          selfKey,
+          [DECODER_LAYERS, 1, ATTENTION_HEADS, MAX_SEQUENCE_LENGTH, HEAD_SIZE],
+        ),
+        self_v_cache: new ort.Tensor(
+          "float32",
+          selfValue,
+          [DECODER_LAYERS, 1, ATTENTION_HEADS, MAX_SEQUENCE_LENGTH, HEAD_SIZE],
+        ),
+        cross_k_cache: crossKey,
+        cross_v_cache: crossValue,
+      });
+
+      try {
+        const logits = stepOutput.logits;
+        const nextKey = stepOutput.self_k_slice;
+        const nextValue = stepOutput.self_v_slice;
+        if (!logits || !nextKey || !nextValue) {
+          throw new Error("El decodificador devolvió datos incompletos.");
+        }
+
+        copyDecoderState(requireFloatData(nextKey), selfKey, position);
+        copyDecoderState(requireFloatData(nextValue), selfValue, position);
+        nextToken = findHighestLogit(requireFloatData(logits));
+      } finally {
+        for (const tensor of Object.values(stepOutput)) {
+          tensor.dispose();
+        }
+      }
+    }
+
+    options.onProgress?.({ progress: 1, stage: "recognizing" });
+    return decodeMangaTokens(tokenIds, runtime.vocabulary);
+  } finally {
+    for (const tensor of Object.values(initialOutput ?? {})) {
+      tensor.dispose();
+    }
+    for (const tensor of Object.values(encoderOutput ?? {})) {
+      tensor.dispose();
+    }
+  }
 }
 
 export async function isMangaOcrModelCached(): Promise<boolean> {

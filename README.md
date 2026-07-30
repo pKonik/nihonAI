@@ -49,6 +49,10 @@ Abre [http://localhost:3000](http://localhost:3000) en el navegador para ver la
 presentación pública. Next.js actualizará la página al guardar cambios en el
 código.
 
+El proyecto utiliza el empaquetador Webpack incluido en Next.js porque el OCR
+preciso se ejecuta en un Web Worker descartable. En la versión actual,
+Turbopack trata ese worker TypeScript como un archivo estático sin transpilar.
+
 Para detener el servidor, vuelve a la terminal y pulsa `Ctrl + C`.
 
 Tras iniciar sesión, `/inicio` abre el espacio privado y su navegación separa
@@ -72,9 +76,25 @@ El lector incluye además un modo **OCR preciso** experimental basado en Manga
 OCR Mobile y ONNX Runtime Web, configurado como motor principal. Sus archivos se
 distribuyen de forma estática junto con NihonAI, pero no se cargan al visitar la
 web: el primer uso descarga, con confirmación previa, unos 65 MB y los conserva
-en la caché del navegador. La descarga no contiene el recorte: tanto la imagen
-como la inferencia permanecen en el dispositivo. Tesseract continúa disponible
-temporalmente como respaldo de compatibilidad.
+en la caché del navegador. Las sesiones de inferencia se liberan después de cada
+intento para reducir la memoria en reposo; volver a utilizarlo reconstruye el
+motor desde esa caché. La descarga no contiene el recorte: tanto la imagen como
+la inferencia permanecen en el dispositivo. Tesseract continúa disponible como
+respaldo de compatibilidad.
+
+Tras corregir el texto OCR, el lector permite analizar la oración y consultar
+cada palabra mediante hover, foco, clic o toque. La ficha muestra la forma de
+diccionario, lectura, tipo y significados de JMdict en español o inglés. El
+analizador de unos 18 MB se carga únicamente al usar esta función, y JMdict se
+sirve bajo demanda en 2048 fragmentos Brotli con caché inmutable, sin ocupar la
+base de datos gratuita de Supabase. Esta fase todavía no guarda la palabra; esa
+integración corresponde a la fase siguiente.
+
+Los datos léxicos proceden del
+[proyecto JMdict/EDICT](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project)
+y se distribuyen bajo
+[CC BY-SA 4.0](https://www.edrdg.org/edrdg/licence.html).
+
 Las demás áreas se completarán siguiendo el roadmap de
 [`docs/architecture.md`](docs/architecture.md).
 
@@ -88,7 +108,7 @@ npm run build
 ```
 
 - `test` ejecuta las pruebas unitarias de cuenta, rutas públicas, idiomas, kana,
-  importación y OCR de manga, y vocabulario.
+  importación, OCR y minería de manga, y vocabulario.
 - `lint` revisa problemas de calidad y convenciones.
 - `typecheck` comprueba los tipos de TypeScript sin generar archivos.
 - `build` crea y valida la versión optimizada para producción.

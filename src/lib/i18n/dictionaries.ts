@@ -537,6 +537,51 @@ const spanishDictionary = {
           "El OCR preciso no está disponible en este navegador. Puedes continuar con el OCR rápido.",
       },
     },
+    mining: {
+      title: "Minería de vocabulario",
+      description:
+        "Analiza el texto corregido y consulta una palabra sin guardar todavía ninguna entrada.",
+      analyzeAction: "Analizar vocabulario",
+      analyzing: "Preparando análisis…",
+      analyzeHelp:
+        "La primera vez se carga bajo demanda el analizador japonés (unos 18 MB). Después permanece en la caché del navegador.",
+      tokenHelp:
+        "Pasa el cursor, enfoca o toca una palabra para consultar su ficha. Haz clic para mantenerla abierta.",
+      tokensLabel: "Palabras detectadas en la oración",
+      cardLabel: "Texto seleccionado",
+      closeCard: "Cerrar ficha de vocabulario",
+      loadingEntry: "Consultando JMdict…",
+      noEntry: "JMdict no contiene una entrada para esta selección.",
+      meanings: "Significados",
+      meaningLanguage: "Idioma del significado",
+      englishFallback:
+        "JMdict no ofrece significado en español para esta entrada; se muestra la definición inglesa.",
+      hoverHelp: "Retira el cursor para cerrar la ficha.",
+      pinnedHelp: "La ficha está fijada. Pulsa de nuevo la palabra para cerrarla.",
+      attribution: "Datos de JMdict · CC BY-SA 4.0",
+      parts: {
+        noun: "sustantivo",
+        verb: "verbo",
+        adjective: "adjetivo",
+        adverb: "adverbio",
+        particle: "partícula",
+        expression: "expresión",
+        auxiliary: "auxiliar",
+        conjunction: "conjunción",
+        interjection: "interjección",
+        pronoun: "pronombre",
+        prefix: "prefijo",
+        suffix: "sufijo",
+        counter: "contador",
+        other: "otro",
+      },
+      errors: {
+        analysisFailed:
+          "No se pudo analizar el texto. Comprueba la conexión y vuelve a intentarlo.",
+        dictionaryFailed:
+          "No se pudo consultar JMdict. Vuelve a intentarlo.",
+      },
+    },
     bookKeyboardHelp:
       "Atajos: ←/→ cambia de página, +/− ajusta el zoom y 0 vuelve al 75 %.",
     scrollKeyboardHelp:
@@ -1224,6 +1269,51 @@ const englishDictionary: Dictionary = {
           "Precise OCR could not complete recognition and the crop was removed. Check the connection or available storage and try again.",
         preciseUnavailable:
           "Precise OCR is not available in this browser. You can continue with fast OCR.",
+      },
+    },
+    mining: {
+      title: "Vocabulary mining",
+      description:
+        "Analyze the corrected text and inspect a word without saving an entry yet.",
+      analyzeAction: "Analyze vocabulary",
+      analyzing: "Preparing analysis…",
+      analyzeHelp:
+        "On first use, the Japanese analyzer loads on demand (about 18 MB). It then remains in the browser cache.",
+      tokenHelp:
+        "Hover, focus, or tap a word to inspect its card. Click it to keep the card open.",
+      tokensLabel: "Words detected in the sentence",
+      cardLabel: "Selected text",
+      closeCard: "Close vocabulary card",
+      loadingEntry: "Looking up JMdict…",
+      noEntry: "JMdict does not contain an entry for this selection.",
+      meanings: "Meanings",
+      meaningLanguage: "Meaning language",
+      englishFallback:
+        "JMdict has no Spanish meaning for this entry, so the English definition is shown.",
+      hoverHelp: "Move the pointer away to close the card.",
+      pinnedHelp: "The card is pinned. Press the word again to close it.",
+      attribution: "JMdict data · CC BY-SA 4.0",
+      parts: {
+        noun: "noun",
+        verb: "verb",
+        adjective: "adjective",
+        adverb: "adverb",
+        particle: "particle",
+        expression: "expression",
+        auxiliary: "auxiliary",
+        conjunction: "conjunction",
+        interjection: "interjection",
+        pronoun: "pronoun",
+        prefix: "prefix",
+        suffix: "suffix",
+        counter: "counter",
+        other: "other",
+      },
+      errors: {
+        analysisFailed:
+          "The text could not be analyzed. Check your connection and try again.",
+        dictionaryFailed:
+          "JMdict could not be queried. Try again.",
       },
     },
     bookKeyboardHelp:
