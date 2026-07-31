@@ -8,7 +8,7 @@
     "build:jmdict": "node --max-old-space-size=2048 scripts/build-jmdict.mjs",
     "start": "next start",
     "lint": "eslint",
-    "test": "tsc -p tsconfig.test.json && node --test .next/tests/lib/account/validation.test.js .next/tests/lib/auth/paths.test.js .next/tests/lib/i18n/config.test.js .next/tests/lib/kana/catalog.test.js .next/tests/lib/kana/quiz.test.js .next/tests/lib/kana/stats.test.js .next/tests/lib/manga/crop.test.js .next/tests/lib/manga/files.test.js .next/tests/lib/manga/mangaOcr.test.js .next/tests/lib/manga/ocr.test.js .next/tests/lib/manga/selection.test.js .next/tests/lib/mining/dictionary.test.js .next/tests/lib/mining/tokens.test.js .next/tests/lib/vocabulary/domain.test.js",
+    "test": "tsc -p tsconfig.test.json && node --test .next/tests/lib/account/validation.test.js .next/tests/lib/auth/paths.test.js .next/tests/lib/i18n/config.test.js .next/tests/lib/kana/catalog.test.js .next/tests/lib/kana/quiz.test.js .next/tests/lib/kana/stats.test.js .next/tests/lib/manga/crop.test.js .next/tests/lib/manga/files.test.js .next/tests/lib/manga/mangaOcr.test.js .next/tests/lib/manga/ocr.test.js .next/tests/lib/manga/selection.test.js .next/tests/lib/mining/dictionary.test.js .next/tests/lib/mining/tokens.test.js .next/tests/lib/mining/vocabulary.test.js .next/tests/lib/vocabulary/domain.test.js",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

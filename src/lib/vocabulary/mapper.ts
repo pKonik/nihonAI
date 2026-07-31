@@ -1,5 +1,6 @@
 import type {
   JlptLevel,
+  MeaningLanguage,
   VocabularyDraft,
   VocabularyEntry,
   WordType,
@@ -10,6 +11,7 @@ export type VocabularyRow = {
   word: string;
   reading: string;
   meaning: string;
+  meaning_language: MeaningLanguage;
   part_of_speech: WordType;
   jlpt_level: JlptLevel;
   example: string | null;
@@ -22,6 +24,7 @@ export type VocabularyWrite = {
   word: string;
   reading: string;
   meaning: string;
+  meaning_language: MeaningLanguage;
   part_of_speech: WordType;
   jlpt_level: JlptLevel;
   example: string | null;
@@ -36,6 +39,7 @@ export function toVocabularyEntry(
     word: row.word,
     reading: row.reading,
     meaning: row.meaning,
+    meaningLanguage: row.meaning_language,
     partOfSpeech: row.part_of_speech,
     jlptLevel: row.jlpt_level,
     example: row.example ?? "",
@@ -52,6 +56,7 @@ export function toVocabularyWrite(
     word: draft.word,
     reading: draft.reading,
     meaning: draft.meaning,
+    meaning_language: draft.meaningLanguage,
     part_of_speech: draft.partOfSpeech,
     jlpt_level: draft.jlptLevel,
     example: draft.example || null,

@@ -57,6 +57,9 @@ La aplicación dispone de:
 - minería local del texto OCR corregido mediante análisis morfológico cargado
   bajo demanda, selección accesible de palabras y consulta de JMdict en español
   e inglés mediante fragmentos estáticos versionados y cacheables;
+- guardado de palabras minadas desde el lector mediante el formulario común de
+  vocabulario, conservando la oración, la acepción elegida y su idioma sin
+  persistir imágenes;
 
 La interfaz conserva únicamente estado interactivo confirmado por Supabase. La
 capa de acceso a datos traduce entre el dominio TypeScript y las columnas de
@@ -199,7 +202,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 17. **Minería de vocabulario — completada.** Analizar la oración, seleccionar
     una palabra y consultar JMdict en español e inglés para obtener forma de
     diccionario, lectura, significado y tipo.
-18. **Integración del lector con vocabulario — pendiente.** Reutilizar el
+18. **Integración del lector con vocabulario — completada.** Reutilizar el
     formulario de Añadir y guardar la palabra, la oración reconocida y los datos
     lingüísticos confirmados sin persistir el recorte, conservando el significado
     elegido y su idioma.
@@ -218,8 +221,7 @@ hasta que la anterior esté verificada y el usuario apruebe continuar.
 24. **Despliegue — pendiente.** Preparar producción, variables de entorno,
     observabilidad, rendimiento y verificaciones finales.
 
-La siguiente fase oficial es la **fase 18: integración del lector con
-vocabulario**.
+La siguiente fase oficial es la **fase 19: biblioteca de vocabulario**.
 Desde la fase 6.6,
 toda funcionalidad nueva que muestre texto deberá entregar sus versiones en
 español e inglés dentro de la misma fase. Cada fase debe mantener un alcance

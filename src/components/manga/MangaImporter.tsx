@@ -24,6 +24,7 @@ import {
 type MangaImporterProps = {
   locale: Locale;
   text: Dictionary["read"];
+  vocabularyText: Dictionary["vocabulary"];
 };
 
 const MIME_BY_EXTENSION: Record<string, string> = {
@@ -46,7 +47,11 @@ function formatTemplate(template: string, value: number): string {
   return template.replace("{count}", String(value));
 }
 
-export function MangaImporter({ locale, text }: MangaImporterProps) {
+export function MangaImporter({
+  locale,
+  text,
+  vocabularyText,
+}: MangaImporterProps) {
   const [pages, setPages] = useState<MangaPage[]>([]);
   const [error, setError] = useState("");
   const [isImporting, setIsImporting] = useState(false);
@@ -328,6 +333,7 @@ export function MangaImporter({ locale, text }: MangaImporterProps) {
           locale={locale}
           pages={pages}
           text={text}
+          vocabularyText={vocabularyText}
         />
       ) : null}
     </div>

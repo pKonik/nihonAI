@@ -44,6 +44,7 @@ Cada fila contiene:
 - `id`: identificador UUID generado por PostgreSQL;
 - `user_id`: propietario relacionado con `auth.users(id)`;
 - `word`, `reading` y `meaning`: textos obligatorios y no vacíos;
+- `meaning_language`: idioma `es` o `en` de la acepción conservada;
 - `part_of_speech`: uno de los tipos de palabra admitidos por el dominio;
 - `jlpt_level`: nivel entre `N5` y `N1`, o `Sin clasificar`;
 - `example` y `source`: textos opcionales;
@@ -81,6 +82,8 @@ La aplicación dispone de:
 - confirmación integrada antes de eliminar;
 - estados de carga y errores comprensibles;
 - estado vacío cuando no existen palabras.
+- creación desde el lector con el formulario compartido, precargado a partir de
+  la entrada de JMdict y la oración OCR confirmadas.
 
 El estado local de React se actualiza únicamente con resultados confirmados por
 Supabase. Recargar la página conserva las entradas creadas, editadas o
@@ -135,8 +138,8 @@ lecturas, formas de diccionario, tipos de palabra y significados en español e
 inglés. El diccionario completo no se duplicará dentro del vocabulario de cada
 usuario.
 
-Al guardar una palabra se conservarán el significado elegido por el usuario y
-el idioma de ese significado. La consulta seguirá esta prioridad:
+Al guardar una palabra se conservan el significado elegido por el usuario y el
+idioma de ese significado. La consulta sigue esta prioridad:
 
 1. definición de JMdict en el idioma seleccionado;
 2. definición inglesa de JMdict cuando no exista una definición española;

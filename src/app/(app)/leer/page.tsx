@@ -12,5 +12,11 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ReadMangaPage() {
   const { locale, dictionary } = await getI18n();
 
-  return <MangaImporter locale={locale} text={dictionary.read} />;
+  return (
+    <MangaImporter
+      locale={locale}
+      text={dictionary.read}
+      vocabularyText={dictionary.vocabulary}
+    />
+  );
 }

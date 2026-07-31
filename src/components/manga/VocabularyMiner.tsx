@@ -11,6 +11,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 
+import { MinedVocabularyDialog } from "@/components/manga/MinedVocabularyDialog";
 import type { Locale } from "@/lib/i18n/config";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
 import {
@@ -18,11 +19,14 @@ import {
   type DictionaryEntry,
 } from "@/lib/mining/dictionary";
 import type { MiningToken } from "@/lib/mining/runtime";
+import { createMinedVocabularyDraft } from "@/lib/mining/vocabulary";
+import type { VocabularyDraft } from "@/types/vocabulary";
 
 type VocabularyMinerProps = {
   locale: Locale;
   sentence: string;
   text: Dictionary["read"]["mining"];
+  vocabularyText: Dictionary["vocabulary"];
 };
 
 type AnalysisStatus = "idle" | "loading" | "ready" | "error";
@@ -62,6 +66,7 @@ export function VocabularyMiner({
   locale,
   sentence,
   text,
+  vocabularyText,
 }: VocabularyMinerProps) {
   const [analysisStatus, setAnalysisStatus] =
     useState<AnalysisStatus>("idle");
@@ -73,6 +78,10 @@ export function VocabularyMiner({
   const [entries, setEntries] = useState<readonly DictionaryEntry[]>([]);
   const [entryIndex, setEntryIndex] = useState(0);
   const [meaningLocale, setMeaningLocale] = useState<Locale>(locale);
+  const [meaningIndex, setMeaningIndex] = useState(0);
+  const [minedDraft, setMinedDraft] =
+    useState<VocabularyDraft | null>(null);
+  const [saveFeedback, setSaveFeedback] = useState("");
   const [cardPosition, setCardPosition] =
     useState<CardPosition | null>(null);
   const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -170,6 +179,8 @@ export function VocabularyMiner({
     setEntries([]);
     setEntryIndex(0);
     setMeaningLocale(locale);
+    setMeaningIndex(0);
+    setSaveFeedback("");
     const generation = lookupGeneration.current + 1;
     lookupGeneration.current = generation;
 
@@ -258,6 +269,9 @@ export function VocabularyMiner({
   const localizedEntry = selectedEntry
     ? localizeDictionaryEntry(selectedEntry, meaningLocale)
     : null;
+  const selectedMeaning = localizedEntry?.meanings[meaningIndex] ?? "";
+  const selectedMeaningLanguage =
+    localizedEntry?.fallbackToEnglish ? "en" : meaningLocale;
   const partLabels = selectedEntry
     ? [
         ...new Set(
@@ -400,7 +414,7 @@ export function VocabularyMiner({
                             {selectedEntry.r}
                           </p>
                           <p className="mt-1 text-lg font-bold leading-snug text-sumi-950">
-                            {localizedEntry.meanings[0]}
+                            {selectedMeaning}
                           </p>
                         </div>
                       </div>
@@ -422,7 +436,10 @@ export function VocabularyMiner({
                                   : "text-sumi-500 hover:text-sumi-900"
                               }`}
                               key={language}
-                              onClick={() => setMeaningLocale(language)}
+                              onClick={() => {
+                                setMeaningLocale(language);
+                                setMeaningIndex(0);
+                              }}
                               type="button"
                             >
                               {language.toUpperCase()}
@@ -432,13 +449,29 @@ export function VocabularyMiner({
                       </div>
 
                       {localizedEntry.meanings.length > 1 ? (
-                        <ul className="mt-3 space-y-1 text-sm leading-6 text-sumi-700">
+                        <div
+                          aria-label={text.meanings}
+                          className="mt-3 space-y-1"
+                          role="group"
+                        >
                           {localizedEntry.meanings
-                            .slice(1, 4)
-                            .map((meaning) => (
-                              <li key={meaning}>· {meaning}</li>
+                            .slice(0, 4)
+                            .map((meaning, index) => (
+                              <button
+                                aria-pressed={meaningIndex === index}
+                                className={`block w-full rounded-lg px-3 py-2 text-left text-sm leading-5 transition ${
+                                  meaningIndex === index
+                                    ? "bg-shu-50 font-semibold text-shu-900"
+                                    : "text-sumi-700 hover:bg-washi-100"
+                                }`}
+                                key={meaning}
+                                onClick={() => setMeaningIndex(index)}
+                                type="button"
+                              >
+                                {meaning}
+                              </button>
                             ))}
-                        </ul>
+                        </div>
                       ) : null}
 
                       {localizedEntry.fallbackToEnglish ? (
@@ -457,13 +490,44 @@ export function VocabularyMiner({
                                   : "border-washi-200 text-sumi-500 hover:border-shu-200 hover:text-sumi-800"
                               }`}
                               key={entry.i}
-                              onClick={() => setEntryIndex(index)}
+                              onClick={() => {
+                                setEntryIndex(index);
+                                setMeaningIndex(0);
+                              }}
                               type="button"
                             >
                               {entry.w} · {entry.r}
                             </button>
                           ))}
                         </div>
+                      ) : null}
+
+                      {pinnedIndex !== null && selectedMeaning ? (
+                        <button
+                          className="mt-4 w-full rounded-xl bg-shu-700 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-sumi-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-shu-600"
+                          onClick={() =>
+                            setMinedDraft(
+                              createMinedVocabularyDraft({
+                                entry: selectedEntry,
+                                meaning: selectedMeaning,
+                                meaningLanguage: selectedMeaningLanguage,
+                                sentence,
+                              }),
+                            )
+                          }
+                          type="button"
+                        >
+                          {text.prepareToSave}
+                        </button>
+                      ) : null}
+
+                      {saveFeedback ? (
+                        <p
+                          className="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm font-semibold text-emerald-800"
+                          role="status"
+                        >
+                          {saveFeedback}
+                        </p>
                       ) : null}
                     </>
                   ) : null}
@@ -488,6 +552,18 @@ export function VocabularyMiner({
               )
             : null}
         </div>
+      ) : null}
+
+      {minedDraft ? (
+        <MinedVocabularyDialog
+          draft={minedDraft}
+          onClose={() => setMinedDraft(null)}
+          onSaved={() => {
+            setMinedDraft(null);
+            setSaveFeedback(text.saved);
+          }}
+          text={vocabularyText}
+        />
       ) : null}
     </section>
   );

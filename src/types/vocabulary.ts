@@ -16,13 +16,17 @@ export const JLPT_LEVELS = [
   "Sin clasificar",
 ] as const;
 
+export const MEANING_LANGUAGES = ["es", "en"] as const;
+
 export type WordType = (typeof WORD_TYPES)[number];
 export type JlptLevel = (typeof JLPT_LEVELS)[number];
+export type MeaningLanguage = (typeof MEANING_LANGUAGES)[number];
 
 export type VocabularyDraft = {
   word: string;
   reading: string;
   meaning: string;
+  meaningLanguage: MeaningLanguage;
   partOfSpeech: WordType;
   jlptLevel: JlptLevel;
   example: string;

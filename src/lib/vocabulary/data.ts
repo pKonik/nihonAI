@@ -18,7 +18,7 @@ import type {
 } from "@/types/vocabulary";
 
 const ENTRY_COLUMNS =
-  "id, word, reading, meaning, part_of_speech, jlpt_level, example, source, created_at, updated_at";
+  "id, word, reading, meaning, meaning_language, part_of_speech, jlpt_level, example, source, created_at, updated_at";
 
 type AuthenticatedContext = {
   supabase: SupabaseClient;

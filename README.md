@@ -87,8 +87,10 @@ cada palabra mediante hover, foco, clic o toque. La ficha muestra la forma de
 diccionario, lectura, tipo y significados de JMdict en español o inglés. El
 analizador de unos 18 MB se carga únicamente al usar esta función, y JMdict se
 sirve bajo demanda en 2048 fragmentos Brotli con caché inmutable, sin ocupar la
-base de datos gratuita de Supabase. Esta fase todavía no guarda la palabra; esa
-integración corresponde a la fase siguiente.
+base de datos gratuita de Supabase. Al fijar una ficha se puede elegir una
+acepción y abrir el formulario común de vocabulario con la palabra, lectura,
+tipo, oración, significado e idioma ya preparados. Solo esos datos textuales se
+guardan en Supabase; el recorte nunca forma parte de la entrada.
 
 Los datos léxicos proceden del
 [proyecto JMdict/EDICT](https://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project)

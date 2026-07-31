@@ -37,6 +37,8 @@
     "src/lib/mining/dictionary.test.ts",
     "src/lib/mining/tokens.ts",
     "src/lib/mining/tokens.test.ts",
+    "src/lib/mining/vocabulary.ts",
+    "src/lib/mining/vocabulary.test.ts",
     "src/types/vocabulary.ts",
     "src/lib/vocabulary/collection.ts",
     "src/lib/vocabulary/domain.test.ts",

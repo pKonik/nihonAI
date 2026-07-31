@@ -1,7 +1,9 @@
 import {
   JLPT_LEVELS,
+  MEANING_LANGUAGES,
   WORD_TYPES,
   type JlptLevel,
+  type MeaningLanguage,
   type VocabularyDraft,
   type WordType,
 } from "../../types/vocabulary.ts";
@@ -40,6 +42,10 @@ function isJlptLevel(value: string): value is JlptLevel {
   return JLPT_LEVELS.some((level) => level === value);
 }
 
+function isMeaningLanguage(value: string): value is MeaningLanguage {
+  return MEANING_LANGUAGES.some((language) => language === value);
+}
+
 export function parseVocabularyDraft(value: unknown): ValidationResult {
   if (!isRecord(value)) {
     return {
@@ -51,6 +57,7 @@ export function parseVocabularyDraft(value: unknown): ValidationResult {
   const word = readText(value.word);
   const reading = readText(value.reading);
   const meaning = readText(value.meaning);
+  const meaningLanguage = readText(value.meaningLanguage);
   const partOfSpeech = readText(value.partOfSpeech);
   const jlptLevel = readText(value.jlptLevel);
   const example = readText(value.example);
@@ -63,7 +70,11 @@ export function parseVocabularyDraft(value: unknown): ValidationResult {
     };
   }
 
-  if (!isWordType(partOfSpeech) || !isJlptLevel(jlptLevel)) {
+  if (
+    !isMeaningLanguage(meaningLanguage) ||
+    !isWordType(partOfSpeech) ||
+    !isJlptLevel(jlptLevel)
+  ) {
     return {
       success: false,
       error: "invalidEnums",
@@ -89,6 +100,7 @@ export function parseVocabularyDraft(value: unknown): ValidationResult {
       word,
       reading,
       meaning,
+      meaningLanguage,
       partOfSpeech,
       jlptLevel,
       example,

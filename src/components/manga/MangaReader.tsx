@@ -32,6 +32,7 @@ type MangaReaderProps = {
   locale: Locale;
   pages: readonly MangaPage[];
   text: Dictionary["read"];
+  vocabularyText: Dictionary["vocabulary"];
 };
 
 const MIN_ZOOM = 50;
@@ -140,7 +141,12 @@ function formatPosition(
     .replace("{total}", String(total));
 }
 
-export function MangaReader({ locale, pages, text }: MangaReaderProps) {
+export function MangaReader({
+  locale,
+  pages,
+  text,
+  vocabularyText,
+}: MangaReaderProps) {
   const [currentPageIndex, setCurrentPageIndex] = useState(0);
   const [readingMode, setReadingMode] = useState<ReadingMode>("book");
   const [zoom, setZoom] = useState(DEFAULT_ZOOM);
@@ -787,6 +793,7 @@ export function MangaReader({ locale, pages, text }: MangaReaderProps) {
                   locale={locale}
                   sentence={ocrResult}
                   text={text.mining}
+                  vocabularyText={vocabularyText}
                 />
               </div>
             ) : ocrStatus === "empty" ? (

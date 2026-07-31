@@ -9,8 +9,10 @@ import type { Dictionary } from "@/lib/i18n/dictionaries";
 import { VOCABULARY_FIELD_LIMITS } from "@/lib/vocabulary/validation";
 import {
   JLPT_LEVELS,
+  MEANING_LANGUAGES,
   WORD_TYPES,
   type JlptLevel,
+  type MeaningLanguage,
   type VocabularyDraft,
   type VocabularyEntry,
   type WordType,
@@ -21,19 +23,11 @@ type VocabularyFormProps = {
   editingEntry: VocabularyEntry | null;
   isDisabled: boolean;
   isSaving: boolean;
+  initialDraft: VocabularyDraft;
   onCancelEdit: () => void;
   onSave: (draft: VocabularyDraft) => Promise<string | null>;
+  onSaved?: () => void;
   text: Dictionary["vocabulary"];
-};
-
-const INITIAL_VALUES: VocabularyDraft = {
-  word: "",
-  reading: "",
-  meaning: "",
-  partOfSpeech: "Sustantivo",
-  jlptLevel: "N5",
-  example: "",
-  source: "",
 };
 
 const FIELD_CLASSES =
@@ -41,13 +35,15 @@ const FIELD_CLASSES =
 
 function getInitialValues(
   editingEntry: VocabularyEntry | null,
+  initialDraft: VocabularyDraft,
 ): VocabularyDraft {
-  if (!editingEntry) return INITIAL_VALUES;
+  if (!editingEntry) return initialDraft;
 
   return {
     word: editingEntry.word,
     reading: editingEntry.reading,
     meaning: editingEntry.meaning,
+    meaningLanguage: editingEntry.meaningLanguage,
     partOfSpeech: editingEntry.partOfSpeech,
     jlptLevel: editingEntry.jlptLevel,
     example: editingEntry.example,
@@ -60,12 +56,14 @@ export function VocabularyForm({
   editingEntry,
   isDisabled,
   isSaving,
+  initialDraft,
   onCancelEdit,
   onSave,
+  onSaved,
   text,
 }: VocabularyFormProps) {
   const [values, setValues] = useState<VocabularyDraft>(() =>
-    getInitialValues(editingEntry),
+    getInitialValues(editingEntry, initialDraft),
   );
   const [error, setError] = useState("");
   const headingRef = useRef<HTMLHeadingElement>(null);
@@ -117,9 +115,10 @@ export function VocabularyForm({
       }
 
       if (!editingEntry) {
-        setValues(INITIAL_VALUES);
+        setValues(initialDraft);
       }
       setError("");
+      onSaved?.();
     } catch {
       setError(text.errors.operationFailed);
     }
@@ -189,6 +188,34 @@ export function VocabularyForm({
             placeholder="べんきょう"
             required
           />
+        </div>
+
+        <div>
+          <label
+            className="mb-2 block text-sm font-medium text-sumi-800"
+            htmlFor="meaningLanguage"
+          >
+            {text.form.meaningLanguage}
+          </label>
+          <select
+            className={FIELD_CLASSES}
+            disabled={isFormDisabled}
+            id="meaningLanguage"
+            name="meaningLanguage"
+            value={values.meaningLanguage}
+            onChange={(event) =>
+              updateField(
+                "meaningLanguage",
+                event.target.value as MeaningLanguage,
+              )
+            }
+          >
+            {MEANING_LANGUAGES.map((language) => (
+              <option key={language} value={language}>
+                {text.form.meaningLanguages[language]}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div>

@@ -25,6 +25,7 @@ const validDraft = {
   word: " 勉強 ",
   reading: " べんきょう ",
   meaning: " estudio ",
+  meaningLanguage: "es",
   partOfSpeech: "Sustantivo",
   jlptLevel: "N5",
   example: " 毎日、日本語を勉強します。 ",
@@ -40,6 +41,7 @@ test("normaliza una entrada válida", () => {
       word: "勉強",
       reading: "べんきょう",
       meaning: "estudio",
+      meaningLanguage: "es",
       partOfSpeech: "Sustantivo",
       jlptLevel: "N5",
       example: "毎日、日本語を勉強します。",
@@ -58,14 +60,32 @@ test("rechaza campos obligatorios vacíos", () => {
 });
 
 test("rechaza enumeraciones manipuladas", () => {
-  const result = parseVocabularyDraft({
-    ...validDraft,
-    partOfSpeech: "Administrador",
-  });
+  assert.deepEqual(
+    parseVocabularyDraft({
+      ...validDraft,
+      partOfSpeech: "Administrador",
+    }),
+    {
+      success: false,
+      error: "invalidEnums",
+    },
+  );
+  assert.deepEqual(
+    parseVocabularyDraft({
+      ...validDraft,
+      meaningLanguage: "jp",
+    }),
+    {
+      success: false,
+      error: "invalidEnums",
+    },
+  );
+});
 
-  assert.deepEqual(result, {
+test("rechaza datos no estructurados", () => {
+  assert.deepEqual(parseVocabularyDraft(null), {
     success: false,
-    error: "invalidEnums",
+    error: "invalidData",
   });
 });
 
@@ -95,6 +115,7 @@ test("mapea una fila sin exponer user_id", () => {
     word: "勉強",
     reading: "べんきょう",
     meaning: "estudio",
+    meaning_language: "es",
     part_of_speech: "Sustantivo",
     jlpt_level: "N5",
     example: null,
@@ -108,6 +129,7 @@ test("mapea una fila sin exponer user_id", () => {
     word: "勉強",
     reading: "べんきょう",
     meaning: "estudio",
+    meaningLanguage: "es",
     partOfSpeech: "Sustantivo",
     jlptLevel: "N5",
     example: "",
@@ -130,6 +152,7 @@ test("convierte campos opcionales vacíos a null", () => {
     word: "勉強",
     reading: "べんきょう",
     meaning: "estudio",
+    meaning_language: "es",
     part_of_speech: "Sustantivo",
     jlpt_level: "N5",
     example: null,
@@ -158,6 +181,7 @@ test("actualiza la colección solo con entradas confirmadas", () => {
     word: "猫",
     reading: "ねこ",
     meaning: "gato",
+    meaningLanguage: "es" as const,
     partOfSpeech: "Sustantivo" as const,
     jlptLevel: "N5" as const,
     example: "",

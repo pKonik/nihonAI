@@ -319,8 +319,11 @@ La ficha consulta un fragmento estático de JMdict y muestra forma de diccionari
 lectura, tipo y significados. Permite alternar entre español e inglés y señala
 el fallback inglés cuando no existe una acepción española. Una selección puede
 tener varias entradas léxicas, visibles cuando la ficha está fijada. La ficha
-incluye la atribución exigida por JMdict y no ofrece todavía una acción de
-guardado.
+incluye la atribución exigida por JMdict. Cuando permanece fijada, el usuario
+puede elegir una acepción y abrir el formulario compartido de vocabulario,
+precargado con la forma de diccionario, lectura, tipo, oración, significado e
+idioma. Antes de guardar puede corregir cualquier campo. Solo se envían esos
+datos textuales; el recorte y la página permanecen fuera de la persistencia.
 
 La ficha reutiliza el lenguaje visual de la tarjeta de lectura de la landing y
 se muestra como una capa fija independiente. En modo scroll no forma parte de la

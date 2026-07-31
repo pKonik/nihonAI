@@ -15,6 +15,7 @@ import {
   replaceVocabularyEntry,
 } from "@/lib/vocabulary/collection";
 import type { Dictionary } from "@/lib/i18n/dictionaries";
+import type { Locale } from "@/lib/i18n/config";
 import type {
   VocabularyDraft,
   VocabularyEntry,
@@ -23,6 +24,7 @@ import type {
 type VocabularyAppProps = {
   initialEntries: VocabularyEntry[];
   initialLoadError: string | null;
+  locale: Locale;
   text: Dictionary["vocabulary"];
 };
 
@@ -34,6 +36,7 @@ type DeleteError = {
 export function VocabularyApp({
   initialEntries,
   initialLoadError,
+  locale,
   text,
 }: VocabularyAppProps) {
   const [entries, setEntries] =
@@ -136,6 +139,16 @@ export function VocabularyApp({
         editingEntry={editingEntry}
         isDisabled={initialLoadError !== null || deletingId !== null}
         isSaving={isSaving}
+        initialDraft={{
+          word: "",
+          reading: "",
+          meaning: "",
+          meaningLanguage: locale,
+          partOfSpeech: "Sustantivo",
+          jlptLevel: "N5",
+          example: "",
+          source: "",
+        }}
         key={editingEntry?.id ?? "create"}
         onCancelEdit={() => setEditingEntry(null)}
         onSave={saveEntry}

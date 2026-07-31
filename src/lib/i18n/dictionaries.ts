@@ -540,7 +540,7 @@ const spanishDictionary = {
     mining: {
       title: "Minería de vocabulario",
       description:
-        "Analiza el texto corregido y consulta una palabra sin guardar todavía ninguna entrada.",
+        "Analiza el texto corregido, confirma una acepción y guárdala con su contexto.",
       analyzeAction: "Analizar vocabulario",
       analyzing: "Preparando análisis…",
       analyzeHelp:
@@ -554,6 +554,8 @@ const spanishDictionary = {
       noEntry: "JMdict no contiene una entrada para esta selección.",
       meanings: "Significados",
       meaningLanguage: "Idioma del significado",
+      prepareToSave: "Preparar para guardar",
+      saved: "Palabra guardada en tu vocabulario.",
       englishFallback:
         "JMdict no ofrece significado en español para esta entrada; se muestra la definición inglesa.",
       hoverHelp: "Retira el cursor para cerrar la ficha.",
@@ -676,7 +678,7 @@ const spanishDictionary = {
       requiredFields:
         "Completa la palabra, la lectura y el significado.",
       invalidEnums:
-        "Selecciona un tipo de palabra y un nivel JLPT válidos.",
+        "Selecciona un idioma, tipo de palabra y nivel JLPT válidos.",
       fieldTooLong: "Uno o más campos superan la longitud permitida.",
       invalidEntry: "La entrada seleccionada no es válida.",
       authExpired:
@@ -691,7 +693,12 @@ const spanishDictionary = {
       requiredHelp: "Los campos marcados con * son obligatorios.",
       word: "Palabra en japonés *",
       reading: "Lectura *",
-      meaning: "Significado en español *",
+      meaning: "Significado *",
+      meaningLanguage: "Idioma del significado",
+      meaningLanguages: {
+        es: "Español",
+        en: "Inglés",
+      },
       wordType: "Tipo de palabra",
       jlpt: "Nivel JLPT",
       example: "Frase de ejemplo",
@@ -1274,7 +1281,7 @@ const englishDictionary: Dictionary = {
     mining: {
       title: "Vocabulary mining",
       description:
-        "Analyze the corrected text and inspect a word without saving an entry yet.",
+        "Analyze the corrected text, confirm a meaning, and save it with its context.",
       analyzeAction: "Analyze vocabulary",
       analyzing: "Preparing analysis…",
       analyzeHelp:
@@ -1288,6 +1295,8 @@ const englishDictionary: Dictionary = {
       noEntry: "JMdict does not contain an entry for this selection.",
       meanings: "Meanings",
       meaningLanguage: "Meaning language",
+      prepareToSave: "Prepare to save",
+      saved: "Word saved to your vocabulary.",
       englishFallback:
         "JMdict has no Spanish meaning for this entry, so the English definition is shown.",
       hoverHelp: "Move the pointer away to close the card.",
@@ -1405,7 +1414,8 @@ const englishDictionary: Dictionary = {
         "Reload the page to recover your collection before saving changes.",
       invalidData: "No valid vocabulary data was received.",
       requiredFields: "Complete the word, reading, and meaning.",
-      invalidEnums: "Select a valid word type and JLPT level.",
+      invalidEnums:
+        "Select a valid language, word type, and JLPT level.",
       fieldTooLong: "One or more fields exceed the allowed length.",
       invalidEntry: "The selected entry is not valid.",
       authExpired: "Your session is no longer valid. Sign in again.",
@@ -1419,7 +1429,12 @@ const englishDictionary: Dictionary = {
       requiredHelp: "Fields marked with * are required.",
       word: "Japanese word *",
       reading: "Reading *",
-      meaning: "Meaning in English *",
+      meaning: "Meaning *",
+      meaningLanguage: "Meaning language",
+      meaningLanguages: {
+        es: "Spanish",
+        en: "English",
+      },
       wordType: "Word type",
       jlpt: "JLPT level",
       example: "Example sentence",

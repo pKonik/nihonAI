@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function AddVocabularyPage() {
-  const { dictionary } = await getI18n();
+  const { dictionary, locale } = await getI18n();
   const text = dictionary.vocabulary;
   let initialEntries: VocabularyEntry[] = [];
   let initialLoadError: string | null = null;
@@ -49,6 +49,7 @@ export default async function AddVocabularyPage() {
       <VocabularyApp
         initialEntries={initialEntries}
         initialLoadError={initialLoadError}
+        locale={locale}
         text={text}
       />
     </div>
